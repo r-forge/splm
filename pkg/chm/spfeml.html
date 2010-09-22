@@ -1,0 +1,245 @@
+<html><head><title>Spatial Panel Fixed Effects Models Estimation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>spfeml(splm)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   spfeml">
+<param name="keyword" value=" Spatial Panel Fixed Effects Models Estimation">
+</object>
+
+
+<h2>Spatial Panel Fixed Effects Models Estimation</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Maximum likelihood (ML) estimation of spatial panel
+fixed effects models
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+spfeml(formula, data, index=NULL,listw, model=c("lag","error"),
+effects=c('pooled','spfe','tpfe','sptpfe'), method="eigen",
+na.action=na.fail,quiet=TRUE,zero.policy = FALSE,
+ interval = c(-1, 0.999), tol.solve = 1e-10, tol.opt = .Machine$double.eps^0.5)
+## S3 method for class 'spfeml':
+print(object, ...)
+## S3 method for class 'spfeml':
+summary(object, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>formula</code></td>
+<td>
+a description of the model to be fit </td></tr>
+<tr valign="top"><td><code>data</code></td>
+<td>
+an object of class <code><a onclick="findlink('base', 'data.frame.html')" style="text-decoration: underline; color: blue; cursor: hand">data.frame</a></code>. An optional data frame containing the variables
+in the model. The first two columns may contain the indexes. see <code>index</code></td></tr>
+<tr valign="top"><td><code>index</code></td>
+<td>
+if not NULL (default), a vector containing the individual and time indexes</td></tr>
+<tr valign="top"><td><code>listw</code></td>
+<td>
+an object of class <code>listw</code> created for example by <code>nb2listw</code></td></tr>
+<tr valign="top"><td><code>model</code></td>
+<td>
+may be set to "lag" or "error" </td></tr>
+<tr valign="top"><td><code>effects</code></td>
+<td>
+one of "pooled" (no spatial effects, i.e. OLS on the pooled model),
+"spfe" (only spatial fixed effects), "tpfe" (only time period fixed effects),
+"sptpfe" (both time period and spatial fixed effects)</td></tr>
+<tr valign="top"><td><code>method</code></td>
+<td>
+"eigen" (default) - the Jacobian is computed as
+<i>prod_{i=1}^N (1 - rhoomega_i)</i> (with <i>omega_i</i> the eigenvalues of the spatial
+weigths matrix) using <code>eigenw</code>, and "spam" or "Matrix" using code from the spam or Matrix
+packages to calculate the determinant (see <code>lagsarlm</code> for details)</td></tr>
+<tr valign="top"><td><code>na.action</code></td>
+<td>
+a function (default na.fail), can also be na.omit or na.exclude with consequences
+for residuals and fitted values - (see <code>lagsarlm</code> for details)</td></tr>
+<tr valign="top"><td><code>zero.policy</code></td>
+<td>
+if TRUE assign zero to the lagged value of zones without neighbours,
+if FALSE (default) assign NA - causing <code>spfeml</code> to terminate with an error</td></tr>
+<tr valign="top"><td><code>interval</code></td>
+<td>
+search interval for spatial parameter when not using method="eigen";
+default is c(-1,1); method="Matrix" will attempt to search for an appropriate interval</td></tr>
+<tr valign="top"><td><code>tol.solve</code></td>
+<td>
+tolerance for detecting linear dependence in the columns of matrices to be inverted
+(default= 1.0e-10)- (see <code>lagsarlm</code> for details)</td></tr>
+<tr valign="top"><td><code>tol.opt</code></td>
+<td>
+desired accuracy for optimization
+(default=square root of double precision machine tolerance)</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The function deals with both fixed effects spatial lag and error models, of the form:
+</p>
+<p align="center"><i> y = &lambda; (I_T otimes W_N)y + (iota_T otimes &alpha;) + X&beta; + &epsilon; </i></p>
+<p>
+where <i>&lambda;</i> is called the spatial autoregressive coefficient, and:
+</p><p align="center"><i> y =  (iota_T otimes &alpha;) + X&beta; + u </i></p><p align="center"><i> u =  rho (iota_T otimes W_N)u + &epsilon;</i></p>
+<p>
+respectively, where <i>rho</i> is the spatial autocorrelation coefficient.
+Both <i>&lambda;</i> and <i>rho</i> are found by <code><a onclick="findlink('stats', 'optimize.html')" style="text-decoration: underline; color: blue; cursor: hand">optimize</a></code>,
+and the model parameters by a feasible GLS procedure.
+</p>
+<p>
+The asymptotic standard error of
+<i>&lambda;</i> is only computed when
+<code>method=eigen</code>, because the full matrix
+operations involved would be costly for
+dimensions associated with the choice of "spam" or "Matrix".
+The same applies to the coefficient covariance matrix.
+</p>
+<p>
+The model variables are first transformed depending on the
+typology of fixed effects. As an example, if time period
+fixed effects are considered, the demeaned form is obtained
+by subtracting the average for each cross-sectional unit computed over the time
+dimension.
+</p>
+<p>
+The transformed variables are then used in a concentrated likelihood
+approach to estimate the spatial parameters.
+</p>
+<p>
+Once the spatial parameters are obtained, the model parameters are
+then estimated by a feasible GLS procedure.
+</p>
+<p>
+Fixed effects can then be extracted using the function <code><a onclick="findlink('stats', 'effects.html')" style="text-decoration: underline; color: blue; cursor: hand">effects</a></code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+An object of class <code>"splm"</code>.
+</p>
+<table summary="R argblock">
+<tr valign="top"><td><code>coefficients</code></td>
+<td>
+coefficients estimate of the model parameters </td></tr>
+<tr valign="top"><td><code>vcov</code></td>
+<td>
+the asymptotic variance covariance matrix of the estimated coefficients (when calculated)</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+'fixed effects spatial lag (or error) model'</td></tr>
+<tr valign="top"><td><code>spat.coeff</code></td>
+<td>
+the spatial coefficients <i>rho</i> or <i>&lambda;</i> </td></tr>
+<tr valign="top"><td><code>residuals</code></td>
+<td>
+the GLS residuals</td></tr>
+<tr valign="top"><td><code>fitted.values</code></td>
+<td>
+difference between response variable and residuals</td></tr>
+<tr valign="top"><td><code>sigma2</code></td>
+<td>
+GLS residuals variance</td></tr>
+<tr valign="top"><td><code>model</code></td>
+<td>
+the matrix of the data used</td></tr>
+<tr valign="top"><td><code>call</code></td>
+<td>
+the call used to create the object</td></tr>
+<tr valign="top"><td><code>logLik</code></td>
+<td>
+the value of the log likelihood function at the optimum </td></tr>
+<tr valign="top"><td><code>method</code></td>
+<td>
+the method used to calculate the Jacobian</td></tr>
+<tr valign="top"><td><code>effects</code></td>
+<td>
+the typology of effects included in the model</td></tr>
+<tr valign="top"><td><code>res.eff</code></td>
+<td>
+a list whose elements are the fixed effects (see <code><a onclick="findlink('stats', 'effects.html')" style="text-decoration: underline; color: blue; cursor: hand">effects</a></code>)</td></tr>
+</table>
+
+<h3>Author(s)</h3>
+
+<p>
+Gianfranco Piras <a href="mailto:gpiras@mac.com">gpiras@mac.com</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Elhorst, J.P. (2003)
+Specification and estimation of spatial panel data models,
+<EM>International Regional Science Review</EM>, <B>26</B>, pages 244&ndash;268.
+</p>
+<p>
+Elhorst, J.P. (2009)
+Spatial panel data models,
+<EM>In</EM> Fischer, M.M. and Getis, A. (eds),
+<EM>Handbook of Applied Spatial Analysis</EM> Springer, Berlin.
+</p>
+<p>
+Anselin, L. and Le Gallo, J. and Jayet, H. (2008)
+Spatial Panel Econometrics, <EM>In</EM>
+Matyas, L. and Sevestre, P. (eds), <EM>The econometrics of Panel
+Data, Fundamentals and Recent Developments in Theory and Practice (3rd
+Edition)</EM>, pages 624&ndash;660. Springer-Verlag, Berlin Heidelberg.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="spreml.html">spreml</a></code>, <code><a href="spregm.html">spregm</a></code>, <code>lagsarlm</code>,
+<code>errorsarlm</code>, <code><a onclick="findlink('stats', 'effects.html')" style="text-decoration: underline; color: blue; cursor: hand">effects</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(Produc, package = "Ecdat")
+data(usaww)
+Produc &lt;- Produc[Produc$year&lt;1975, ]
+fm &lt;- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
+lag &lt;- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "sptpfe", method = "eigen", quiet = TRUE)
+summary(lag)
+eff &lt;- effects(lag)
+err &lt;- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "error", effects = "tpfe", method = "eigen", quiet = TRUE)
+summary(err)
+eff &lt;- effects(err)
+summary(eff)
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>splm</em> version 0.1-1 <a href="00Index.html">Index]</a></div>
+
+</body></html>

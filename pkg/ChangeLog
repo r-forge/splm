@@ -1,0 +1,7 @@
+Changes in Version 0.2-01
+
+  o spregm: modified to allow for additional endogenous variables and lag of the dependent variable
+  o Added spfegm 
+  o Added spseml
+  o spsegm: improved substantially and now reads a list of formulas. 
+  

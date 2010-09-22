@@ -1,0 +1,119 @@
+<html><head><title>Baltagi, Song and Koh LM test for spatial panels</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>bsktest(splm)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   bsktest">
+<param name="keyword" value="R:   bsktest.formula">
+<param name="keyword" value="R:   bsktest.lm">
+<param name="keyword" value="R:   bsktest.panelmodel">
+<param name="keyword" value=" Baltagi Song and Koh LM test for spatial panels">
+</object>
+
+
+<h2>Baltagi Song and Koh LM test for spatial panels</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Baltagi, Song and Koh marginal or conditional LM test for
+spatial error correlation or random effects in panel models
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+bsktest(x, w, ...)
+## S3 method for class 'formula':
+bsktest(x, data, w, test=c("SLM1","SLM2","LMJOINT","CLMlambda","CLMmu"), index=NULL, ...)
+## S3 method for class 'lm':
+bsktest(x, w, index, test=c("SLM1","SLM2","LMJOINT"), ...)
+## S3 method for class 'splm':
+bsktest(x, w, index, test=c("CLMlambda","CLMmu"), ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+an object whose class is one of <code>formula</code> or <code>lm</code> or <code>splm</code> </td></tr>
+<tr valign="top"><td><code>data</code></td>
+<td>
+an object of class <code><a onclick="findlink('base', 'data.frame.html')" style="text-decoration: underline; color: blue; cursor: hand">data.frame</a></code>. An optional
+data frame containing the variables in the model.The first two columns may contain the indexes. See <code>index</code></td></tr>
+<tr valign="top"><td><code>index</code></td>
+<td>
+if not NULL (default), a vector containing the individual and time indexes</td></tr>
+<tr valign="top"><td><code>w</code></td>
+<td>
+an object of class <code>listw</code> created for example by <code>nb2listw</code> </td></tr>
+<tr valign="top"><td><code>test</code></td>
+<td>
+one of "SLM1","SLM2","LMJOINT","CLMlambda","CLMmu", the test to be performed</td></tr>
+</table>
+
+<h3>Value</h3>
+
+<p>
+an object of class <code>'htest'</code></p>
+
+<h3>Author(s)</h3>
+
+<p>
+Gianfranco Piras
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Baltagi, B.H., Song, S.H. and Koh, W. (2003)
+Testing panel data regression models with spatial error correlation.
+<EM>Journal of Econometrics</EM>, <B>117</B>, 123&ndash;150.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="bsjktest.html">bsjktest</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(Produc, package="Ecdat")
+Produc &lt;- Produc[Produc$year&lt;1975, ]
+data(usaww)
+fm &lt;- log(gsp)~log(pcap)+log(pc)+log(emp)+unemp
+test1&lt;-bsktest(fm,data=Produc, w=mat2listw(usaww),
+  test="SLM1")
+class(test1)
+test1
+#ml2 &lt;- spfeml(fm, data = Produc, , mat2listw(usaww), model = "error", effects = "pooled")
+#class(ml2)
+#test5bis&lt;-bsktest(ml2, w=mat2listw(usaww),index=Produc[,c(1,2)] ,test="CLMmu")
+#summary(test5bis)
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>splm</em> version 0.1-1 <a href="00Index.html">Index]</a></div>
+
+</body></html>
