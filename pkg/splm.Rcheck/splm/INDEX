@@ -1,0 +1,20 @@
+bsjktest                Baltagi, Song, Jung and Koh LM test for spatial
+                        panels
+bsktest                 Baltagi, Song and Koh LM test for spatial
+                        panels
+effects.splm            method for extracting fixed effects
+listw2dgCMatrix         Interface between Matrix class objects and
+                        weights list
+print.effects.splm      method for printing fixed effects from objects
+                        of class effects.splm
+print.splm              print method for class splm
+spfegm                  GM estimator for spatial panel data models
+spfeml                  Spatial Panel Fixed Effects Models Estimation
+splm-package            Spatial panel models: estimation and testing
+spregm                  GM estimator for spatial panel data models
+spreml                  Spatial Panel Random Effects Model Estimation
+spsegm                  Spatial Simultaneous Equations
+spseml                  Spatial SUR - Lag and Error
+summary.splm            summary method for class splm
+usaww                   Spatial weights matrix - US states
+write.effects.splm      method for writing a table with fixed effects

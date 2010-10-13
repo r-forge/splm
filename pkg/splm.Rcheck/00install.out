@@ -1,0 +1,78 @@
+* install options are ' --no-html'
+
+* installing *source* package ‘splm’ ...
+** R
+** data
+** inst
+** preparing package for lazy loading
+Loading required package: sp
+Loading required package: boot
+Loading required package: Matrix
+Loading required package: lattice
+
+Attaching package: 'lattice'
+
+The following object(s) are masked from 'package:boot':
+
+    melanoma
+
+
+Attaching package: 'Matrix'
+
+The following object(s) are masked from 'package:base':
+
+    det
+
+Loading required package: maptools
+Loading required package: foreign
+
+	Note: polygon geometry computations in maptools
+ 	depend on the package gpclib, which has a
+ 	restricted licence. It is disabled by default;
+ 	to enable gpclib, type gpclibPermit()
+
+Checking rgeos availability as gpclib substitute:
+FALSE 
+Loading required package: deldir
+deldir 0.0-12 
+
+     Please note: The process for determining duplicated points
+     has changed from that used in version 0.0-9 (and previously).
+
+Loading required package: coda
+Loading required package: kinship
+Loading required package: survival
+Loading required package: splines
+
+Attaching package: 'survival'
+
+The following object(s) are masked from 'package:boot':
+
+    aml
+
+[1] "kinship is loaded"
+Loading required package: Formula
+Loading required package: sandwich
+Loading required package: zoo
+Package 'spam' is loaded. Spam version 0.23-0 (2010-09-01).
+Type demo( spam) for some demos, help( Spam) for an overview
+of this package.
+Help for individual functions is optained by adding the
+suffix '.spam' to the function name, e.g. 'help(chol.spam)'.
+
+Attaching package: 'spam'
+
+The following object(s) are masked from 'package:Matrix':
+
+    norm
+
+The following object(s) are masked from 'package:base':
+
+    backsolve, forwardsolve, norm
+
+** help
+*** installing help indices
+** building package indices ...
+** testing if installed package can be loaded
+
+* DONE (splm)
