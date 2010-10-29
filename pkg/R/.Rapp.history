@@ -1,0 +1,19 @@
+system.time()
+help(time)
+proc.time()
+proc.time()
+proc.time()
+proc.time()
+date()
+date()[4]
+sys.time()
+Sys.time()
+p1<-Sys.time()
+p2<-Sys.time()
+p2-p1
+lagsarlm
+library(spdep)
+lagsarlm
+proc.time()
+help(Matrix)
+    p0
