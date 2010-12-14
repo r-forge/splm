@@ -1,10 +1,15 @@
-spreml<-function (formula, data, index = NULL, w, lag = FALSE, errors = c("semsrre", 
-    "semsr", "srre", "semre", "re", "sr", "sem"), pvar = FALSE, 
-    hess = FALSE, quiet = TRUE, initval = c("zeros", "estimate"), 
-    x.tol = 1.5e-18, rel.tol = 1e-15, ...) 
+spreml <-
+function (formula, data, index = NULL, w, w2=w, lag = FALSE,
+          errors = c("semsrre", "semsr", "srre", "semre",
+          "re", "sr", "sem","ols", "sem2re"),
+          pvar = FALSE, hess = FALSE, quiet = TRUE,
+          initval = c("zeros", "estimate"),
+          x.tol = 1.5e-18, rel.tol = 1e-15, ...)
 {
+    ## added call to "sem2re" error structure (KKP)
+
     trace <- as.numeric(!quiet)
-    if (pvar) 
+    if (pvar)
         print("<implement pvar>")
     if (!is.null(index)) {
         require(plm)
@@ -23,7 +28,7 @@ spreml<-function (formula, data, index = NULL, w, lag = FALSE, errors = c("semsr
             stop("w has to be either a 'matrix' or a 'listw' object")
         }
     }
-    if (dim(data)[[1]] != length(index)) 
+    if (dim(data)[[1]] != length(index))
         stop("Non conformable arguments")
     X <- model.matrix(formula, data = data)
     y <- model.response(model.frame(formula, data = data))
@@ -39,13 +44,13 @@ spreml<-function (formula, data, index = NULL, w, lag = FALSE, errors = c("semsr
     k <- dim(X)[[2]]
     t <- max(tapply(X[, 1], ind, length))
     nT <- length(ind)
-    if (dim(w)[[1]] != n) 
+    if (dim(w)[[1]] != n)
         stop("Non conformable spatial weights")
     balanced <- n * t == nT
-    if (!balanced) 
+    if (!balanced)
         stop("Estimation method unavailable for unbalanced panels")
-    sv.length <- switch(match.arg(errors), semsrre = 3, semsr = 2, 
-        srre = 2, semre = 2, re = 1, sr = 1, sem = 1)
+    sv.length <- switch(match.arg(errors), semsrre = 3, semsr = 2,
+        srre = 2, semre = 2, re = 1, sr = 1, sem = 1, ols = 0, sem2re = 2)
     errors. <- match.arg(errors)
     if (is.numeric(initval)) {
         if (length(initval) != sv.length) {
@@ -62,32 +67,51 @@ spreml<-function (formula, data, index = NULL, w, lag = FALSE, errors = c("semsr
             }
             coef0 <- NULL
             if (grepl("re", errors.)) {
-                REmodel <- REmod(X, y, ind, tind, n, k, t, nT, 
-                  w, coef0 = 0, hess = FALSE, trace = trace, 
+                REmodel <- REmod(X, y, ind, tind, n, k, t, nT,
+                  w, coef0 = 0, hess = FALSE, trace = trace,
                   x.tol = 1.5e-18, rel.tol = 1e-15, ...)
                 coef0 <- c(coef0, REmodel$errcomp)
             }
             if (grepl("sr", errors.)) {
-                ARmodel <- ssrmod(X, y, ind, tind, n, k, t, nT, 
-                  w, coef0 = 0, hess = FALSE, trace = trace, 
+                ARmodel <- ssrmod(X, y, ind, tind, n, k, t, nT,
+                  w, coef0 = 0, hess = FALSE, trace = trace,
                   x.tol = 1.5e-18, rel.tol = 1e-15, ...)
                 coef0 <- c(coef0, ARmodel$errcomp)
             }
             if (grepl("sem", errors.)) {
-                SEMmodel <- semmod(X, y, ind, tind, n, k, t, 
-                  nT, w, coef0 = 0, hess = FALSE, trace = trace, 
+                SEMmodel <- semmod(X, y, ind, tind, n, k, t,
+                  nT, w, coef0 = 0, hess = FALSE, trace = trace,
                   x.tol = 1.5e-18, rel.tol = 1e-15, ...)
                 coef0 <- c(coef0, SEMmodel$errcomp)
             }
         })
     }
-    if (lag) 
-        stop("Method not yet implemented")
-    else {
+    if (lag) {
         est.fun <- switch(match.arg(errors), semsrre = {
-            semarREmod
+            saremsrREmod
         }, semsr = {
-            semarmod
+            saremsrmod
+        }, srre = {
+            sarsrREmod
+        }, semre = {
+            saremREmod
+        }, re = {
+            sarREmod
+        }, sr = {
+            sarsrmod
+        }, sem = {
+            saremmod
+        }, ols = {
+            sarmod
+        }, sem2re = {
+            sarem2REmod
+        })
+	  coef0 <- c(coef0, 0)
+    } else {
+        est.fun <- switch(match.arg(errors), semsrre = {
+            semsrREmod
+        }, semsr = {
+            semsrmod
         }, srre = {
             ssrREmod
         }, semre = {
@@ -98,11 +122,17 @@ spreml<-function (formula, data, index = NULL, w, lag = FALSE, errors = c("semsr
             ssrmod
         }, sem = {
             semmod
+        }, ols = {
+            olsmod
+            #stop("No lag and no covariance parameters selected: use lm()")
+        }, sem2re = {
+            sem2REmod
         })
         arcoef <- NULL
     }
-    RES <- est.fun(X, y, ind, tind, n, k, t, nT, w = w, coef0 = coef0, 
-        hess = hess, trace = trace, x.tol = x.tol, rel.tol = rel.tol)
+    RES <- est.fun(X, y, ind, tind, n, k, t, nT, w = w, w2 = w2,
+                   coef0 = coef0, hess = hess, trace = trace,
+                   x.tol = x.tol, rel.tol = rel.tol)
     y.hat <- as.vector(X %*% RES$betas)
     res <- y - y.hat
     nam.rows <- dimnames(X)[[1]]
@@ -112,10 +142,10 @@ spreml<-function (formula, data, index = NULL, w, lag = FALSE, errors = c("semsr
     dimnames(model.data)[[1]] <- nam.rows
     type <- "random effects ML"
     sigma2 <- list(one = 3, idios = 2, id = 1)
-    spmod <- list(coefficients = RES$betas, arcoef = RES$arcoef, 
-        errcomp = RES$errcomp, vcov = RES$covB, vcov.arcoef = RES$covAR, 
-        vcov.errcomp = RES$covPRL, residuals = res, fitted.values = y.hat, 
-        sigma2 = sigma2, model = model.data, type = type, call = cl, 
+    spmod <- list(coefficients = RES$betas, arcoef = RES$arcoef,
+        errcomp = RES$errcomp, vcov = RES$covB, vcov.arcoef = RES$covAR,
+        vcov.errcomp = RES$covPRL, residuals = res, fitted.values = y.hat,
+        sigma2 = sigma2, model = model.data, type = type, call = cl,
         errors = errors, logLik = RES$ll)
     class(spmod) <- "splm"
     return(spmod)

@@ -1,160 +1,178 @@
-`sarREmod` <-
-function(X,y,ind,tind,n,k,t,nT,w,coef0=NULL,
-                   quiet=TRUE,hess=FALSE,
-                   tol=10e-03,ltol=1000,...) {
-  ## spatial autoregressive, random effects panel model estimation
-  ## based on general framework, spatial filter on y plus RE structure on errors
+sarREmod <-
+function (X, y, ind, tind, n, k, t, nT, w, w2, coef0 = rep(0, 2),
+    hess = FALSE, trace = trace, x.tol = 1.5e-18, rel.tol = 1e-15,
+    ...)
+{
 
-  ## based on (spatial/spatialpanel/AR/g/) sarREmodg()
-  ## version 3 (efficient lag on y)
+    ## extensive function rewriting, Giovanni Millo 29/09/2010
+    ## structure:
+    ## a) specific part
+    ## - set names, bounds and initial values for parms
+    ## - define building blocks for likelihood and GLS as functions of parms
+    ## - define likelihood
+    ## b) generic part(independent from ll.c() and #parms)
+    ## - fetch covariance parms from max lik
+    ## - calc last GLS step
+    ## - fetch betas
+    ## - calc final covariances
+    ## - make list of results
 
-  ## Giovanni Millo, Trieste; this version: 25/2/2009.
+    ## change this to 'bdsmatrix'
+    require(kinship)
 
-  require(nlme) # for numerical hessians
+    # mark
+    #print("uso versione 1") # fixed vcov.arcoef, was missing
 
-  ## preliminary stuff removed
+    ## set names for final parms vectors
+    nam.beta <- dimnames(X)[[2]]
+    nam.errcomp <- c("phi", "psi")
 
-  ## some useful pieces:
-    Jt<-matrix(1,ncol=t,nrow=t)
-    In<-diag(1,n)
-    It<-diag(1,t)
-    Jbart<-Jt/t
-    Et<-It-Jbart
+    ## initialize values for optimizer
+    myparms0 <- coef0
+    ## set bounds for optimizer
+    lower.bounds <- c(1e-08, -0.999)      # lag-specific line (2nd parm)
+    upper.bounds <- c(1e08, 0.999)        # lag-specific line (idem)
 
-  ## inverse of Sigma (Random Effects)
-    invSigma <- function(phi, n, t) {
-			 invSigma <- 1/(t*phi+1) * kronecker(Jt/t, In) + kronecker(Et, In)
-                   invSigma
-                   }
+    ## here first y is lagged using the data as sent from spreml()
+    ## then observations are reordered like in standard panels, to exploit
+    ## the fact that in this case the vcov matrix is block-diagonal
 
-  ## specific for spatial lag: ##
+    ## calc. Wy (spatial lag of y)
+    Wy <- function(y, w, tind) {                  # lag-specific line
+        wy<-list()                                # lag-specific line
+        for (j in 1:length(unique(tind))) {       # lag-specific line
+             yT<-y[tind==unique(tind)[j]]         # lag-specific line
+             wy[[j]] <- w %*% yT                  # lag-specific line
+             }                                    # lag-specific line
+        return(unlist(wy))                        # lag-specific line
+    }                                             # lag-specific line
 
-  ## spatial lag operator
-    A<-function(psi) diag(1,n)-psi*w
+    ## lag y once for all
+    wy <- Wy(y, w2, tind)                         # lag-specific line
 
-  ## determinant of A
-    detA<-function(psi) det(A(psi)) # use more efficient versions from Elhorst
+    ## the sigma matrix is inverted during the GLS step and not before as
+    ## in the other cases, to take advantage of specialized methods in the
+    ## 'kinship' (migrate to --> 'bdsmatrix'!) package
 
-  ## calc. Wy (spatial lag of y)
-    wy<-list()
-    for (j in 1:length(unique(tind))) {
-      yT<-y[tind==unique(tind)[j]]
-      wy[[j]] <- w %*% yT
-      }
-    wy<-unlist(wy)
+    ## GLS step function for bdsmatrices
+    GLSstepBDS <- function(X, y, sigma) {
+        b.hat <- solve(crossprod(X, solve(sigma, X)), crossprod(X,
+            solve(sigma, y)))
+        ehat <- y - X %*% b.hat
+        sigma2ehat <- crossprod(ehat, solve(sigma, ehat))/(n * t)
+        return(list(betahat=b.hat, ehat=ehat, sigma2=sigma2ehat))
+    }
 
-  ## beta_hat as GLS estimator and error variance estimator
-  ## *spatial-filter-on-y version*
-    bhat<-function(y,X,psi,phi,n,t) {
+    ## rearranging module
+    ## save this for eventually re-rearranging output
+    oo.0 <- order(tind, ind)
+    ## reorder as stacked time series, as in std. panels
+    oo <- order(ind, tind)
+    X <- X[oo, ]
+    y <- y[oo]
+    wy <- wy[oo]
+    ind <- ind[oo]
+    tind <- tind[oo]
 
-            ## spatial filter on y: Ay=Ay(psi)
-            Ay<-y-psi*wy
-
-            ## invert Sigma: given n,t: Sigma.1=Sigma.1(phi)
-            sigma.1<-invSigma(phi,n,t)
-
-            ## GLS step
-            b.hat<-solve( crossprod(X,sigma.1)%*%X, crossprod(X,sigma.1)%*%Ay )
-            ehat<-Ay-X%*%b.hat
-            sigma2ehat<-crossprod(ehat,sigma.1)%*%ehat/(n*t)
-
-            bhat<-list(betahat=b.hat,e=ehat,sigma2=sigma2ehat,sigma.1=sigma.1)
-            bhat
-            }
-
-  ## end: specific for spatial lag ##
-
-  ## concentrated likelihood: SAR with RE
-    ll.c<-function(theta) {
-            psi<-theta[1]
-            phi<-theta[2]
-
-            ## the concentrated likelihood needs to include
-            ## the spatial filtering step, as Ay=Ay(psi)
-
-            beta<-bhat(y,X,psi,phi,n,t)
-            b.hat<-beta$b.hat
-            e<-beta$e
-            s2e<-beta$sigma2
-            sigma.1<-beta$sigma.1
-
-            uno <- t*log(detA(psi))
-            due <- -n*t/2*log(s2e)
-            tre <- -n/2*log(t*phi+1)
-            quattro <- -1/(2*s2e)*crossprod(e,sigma.1)%*%e
-
-            ll.c<-uno+due+tre+quattro
-            }
-
-  ## iterate (=traballa) until convergence:
-
-  ## init mybhat as beta OLS, ll parms as (0.5,1)
-  mybhat<-solve(crossprod(X),crossprod(X,y))
-  mytheta<-c(0.5,1)
-
-    ## initialize values
-    i<-0
-    mytol<-1
-    beta<-bhat(y,X,mytheta[1],mytheta[2],n,t)
-
-    ## iterate
-    while(abs(mytol)>tol) {
-      beta0<-beta
-      mytheta0<-mytheta
-
-      beta<-bhat(y,X,mytheta[1],mytheta[2],n,t)
-
-      mytheta<-optim(mytheta,ll.c,method="L-BFGS-B",
-                        lower=c(-0.9,1e-08),upper=c(0.9,10e8),
-                        control=list(fnscale=-1,factr=ltol))$par
-
-      i<-i+1
-      if(!quiet) {
-        print(paste("Iteration no.",i))
-        print(beta[1])
-        print(mytheta)
-        }
-
-      ## update tolerance condition
-      mytol<-max(max(abs(beta[[1]]-beta0[[1]])),max(abs(mytheta-mytheta0)))
-      }
-
-  ## now beta and phirholambda are optimal values
-  ## calc. the log-likelihood:
-  myll <- ll.c(mytheta)
+    ## modules for likelihood
+    B <- function(lambda, w) diag(1, ncol(w)) - lambda * w
+    detB <- function(lambda, w) det(B(lambda, w))
+    bSigma <- function(phipsi, n, t, w) {
+        ## single block of the original
+        ## maintain w for homogeneity with generic part
+        Jt <- matrix(1, ncol = t, nrow = t)
+        It <- diag(1, t)
+        ## retrieve parms
+        phi <- phipsi[1]
+        ## psi not used: here passing 2 parms, but works anyway
+        ## because psi is last one
+        ## calc inverse
+        bSigma <- phi * Jt + It
+        bSigma
+    }
+    detSigma <- function(phi, n, t) {
+        detSigma <- -n/2 * log(t * phi + 1)
+        detSigma
+    }
+    fullSigma <- function(phipsi, n, t, w) {
+        sigma.i <- bSigma(phipsi, n, t, w)
+        fullSigma <- bdsmatrix(rep(t, n), rep(as.numeric(sigma.i),
+            n))
+        fullSigma
+    }
 
 
-  ## optimal values of parms:
-  psi<-mytheta[1]
-  phi<-mytheta[2]
+    ## likelihood function, both steps included
+    ll.c <- function(phipsi, y, X, n, t, w, w2, wy) {
+        ## retrieve parms
+        phi <- phipsi[1]
+        psi <- phipsi[2]                          # lag-specific line
+        ## calc sigma (here not inverted)
+        sigma <- fullSigma(phipsi, n, t, w)
+        ## lag y
+        Ay <- y - psi * wy                        # lag-specific line
+        ## do GLS step to get e, s2e
+        glsres <- GLSstepBDS(X, Ay, sigma)        # lag-specific line (Ay for y)
+        e <- glsres[["ehat"]]
+        s2e <- glsres[["sigma2"]]
+        ## calc ll
+        zero <- t*log(detB(psi, w2))              # lag-specific line (else zero <- 0)
+        due <- detSigma(phi, n, t)
+        tre <- -(n * t)/2 * log(s2e)
+        cinque <- -1/(2 * s2e) * crossprod(e, solve(sigma, e))
+        const <- -(n * t)/2 * log(2 * pi)
+        ll.c <- const + zero + due + tre + cinque
+        ## invert sign for minimization
+        llc <- -ll.c
+    }
 
-  ## names for coefs and error comp.s
-  nam.beta <- dimnames(X)[[2]]
-  nam.arcoef <- "psi"
-  nam.errcomp <- "phi"
+    ## generic-ssr from here
 
-  ## calc. cov(b) by GLS
-  covB<-as.numeric(beta[[3]])*solve(crossprod(X,invSigma(phi, n, t))%*%X)
-  dimnames(covB) <- list(nam.beta, nam.beta)
+    ## max likelihood
+    optimum <- nlminb(start = myparms0, objective = ll.c,
+                      gradient = NULL, hessian = NULL,
+                      y = y, X = X, n = n, t = t, w = w, w2 = w2, wy = wy,
+                      scale = 1, control = list(x.tol = x.tol,
+                                 rel.tol = rel.tol, trace = trace),
+                      lower = lower.bounds, upper = upper.bounds)
 
-  ## calc. cov(psi, phi) by numerical Hessian
-  covTheta <- solve(-fdHess(mytheta,ll.c)$Hessian)
-  covAR <- covTheta[1,1,drop=FALSE]
-  covPRL <- covTheta[2,2,drop=FALSE]
-  dimnames(covAR) <- list(nam.arcoef, nam.arcoef)
-  dimnames(covPRL) <- list(nam.errcomp, nam.errcomp)
+    ## log likelihood at optimum (notice inverted sign)
+    myll <- -optimum$objective
+    ## retrieve optimal parms
+    myparms <- optimum$par
 
-  ## make (separate) coefficients' vectors
-  betas <- as.vector(beta[[1]])
-  arcoef <- psi
-  errcomp <- phi
-  names(betas) <- nam.beta
-  names(arcoef) <- nam.arcoef
-  names(errcomp) <- nam.errcomp
+    ## one last GLS step at optimal vcov parms
+    sigma <- fullSigma(myparms, n, t)
+    Ay <- y - myparms[length(myparms)] * wy       # lag-specific line
+    beta <- GLSstepBDS(X, Ay, sigma)
 
-  RES <- list(betas=betas, arcoef=arcoef, errcomp=errcomp,
-              covB=covB, covAR=covAR, covPRL=covPRL, ll=myll)
+    ## final vcov(beta)
+    covB <- as.numeric(beta[[3]]) *
+        solve(crossprod(X, solve(sigma, X)))
+    ## final vcov(errcomp)
+    covTheta <- solve(-fdHess(myparms, function(x) -ll.c(x,
+        y, X, n, t, w, w2, wy))$Hessian)          # lag-specific line: wy
+    nvcovpms <- length(nam.errcomp) - 1
+    covAR <- covTheta[nvcovpms+1, nvcovpms+1, drop=FALSE]
+    covPRL <- covTheta[1:nvcovpms, 1:nvcovpms, drop=FALSE]
 
-  return(RES)
-  }
+    ## final parms
+    betas <- as.vector(beta[[1]])
+    arcoef <- myparms[which(nam.errcomp=="psi")]  # lag-specific line
+    errcomp <- myparms[which(nam.errcomp!="psi")]
+    names(betas) <- nam.beta
+    names(arcoef) <- "psi"                        # lag-specific line
+    names(errcomp) <- nam.errcomp[which(nam.errcomp!="psi")]
 
+    dimnames(covB) <- list(nam.beta, nam.beta)
+    dimnames(covAR) <- list(names(arcoef), names(arcoef))
+    dimnames(covPRL) <- list(names(errcomp), names(errcomp))
+
+    ## remember to rearrange any output as x <- x[oo.0]
+
+    ## result
+    RES <- list(betas = betas, arcoef=arcoef, errcomp = errcomp,
+                covB = covB, covAR=covAR, covPRL = covPRL, ll = myll)
+
+    return(RES)
+}

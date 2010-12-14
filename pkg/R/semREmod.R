@@ -1,114 +1,135 @@
-`semREmod` <-
-function(X, y, ind, tind, n, k, t, nT, w, coef0=c(0,0),
-         hess=FALSE, trace=trace, x.tol=1.5e-18, rel.tol=1e-15, ...) {
+semREmod <-
+function (X, y, ind, tind, n, k, t, nT, w, w2, coef0 = rep(0, 3),
+    hess = FALSE, trace = trace, x.tol = 1.5e-18, rel.tol = 1e-15,
+    ...)
+{
 
-  ## spatial error random effects panel model estimation
-  ## based on general framework, spatial structure on errors
-  ## (see likelihood and Sigmas in Baltagi et al.)
+    ## extensive function rewriting, Giovanni Millo 29/09/2010
+    ## structure:
+    ## a) specific part
+    ## - set names, bounds and initial values for parms
+    ## - define building blocks for likelihood and GLS as functions of parms
+    ## - define likelihood
+    ## b) generic part(independent from ll.c() and #parms)
+    ## - fetch covariance parms from max lik
+    ## - calc last GLS step
+    ## - fetch betas
+    ## - calc final covariances
+    ## - make list of results
 
-  ## some useful pieces:
-    Jt<-matrix(1,ncol=t,nrow=t)
-    In<-diag(1,n)
-    It<-diag(1,t)
-    Jbart<-Jt/t
-    Et<-It-Jbart
+    ## set names for final parms vectors
+    nam.beta <- dimnames(X)[[2]]
+    nam.errcomp <- c("phi", "lambda")
 
-  ## spatial lag operator
-    B<-function(lambda) diag(1,n)-lambda*w
+    ## initialize values for optimizer
+    myparms0 <- coef0
+    ## set bounds for optimizer
+    lower.bounds <- c(1e-08, -0.999)
+    upper.bounds <- c(1e+09, 0.999)
 
-  ## determinant of A
-    detB<-function(lambda) det(B(lambda)) # use more efficient versions from Elhorst
+    ## modules for likelihood
+    B <- function(lambda, w) diag(1, ncol(w)) - lambda * w
+    detB <- function(lambda, w) det(B(lambda, w))
+    invSigma <- function(philambda, n, t, w) {
+        Jt <- matrix(1, ncol = t, nrow = t)
+        In <- diag(1, n)
+        It <- diag(1, t)
+        Jbart <- Jt/t
+        Et <- It - Jbart
+        ## retrieve parms
+        phi <- philambda[1]
+        lambda <- philambda[2]
+        ## psi not used: here passing 4 parms, but works anyway
+        ## because psi is last one
+        ## calc inverse
+        BB <- crossprod(B(lambda, w))
+        invSigma <- kronecker(Jbart, solve(t * phi * In + solve(BB))) +
+            kronecker(Et, BB)
+        invSigma
+    }
+    detSigma <- function(phi, lambda, n, t, w) {
+        In <- diag(1, n)
+        detSigma <- -1/2 * log(det(t * phi * In +
+                                   solve(crossprod(B(lambda, w))))) +
+                                       (t - 1) * log(detB(lambda, w))
+        detSigma
+    }
 
-  ## inverse of Sigma (Spatial error and Random Effects)
-    invSigma <- function(phi, lambda, n, t) { # use more efficient algebra here
-			 BB <- crossprod(B(lambda))
-                   invSigma <- kronecker(Jbart, solve(t*phi*In + solve(BB))) + kronecker(Et, BB)
-                   invSigma
-                   }
+    ## likelihood function, both steps included
+    ll.c <- function(philambda, y, X, n, t, w, w2, wy) {
+        ## retrieve parms
+        phi <- philambda[1]
+        lambda <- philambda[2]
+        ## calc inverse sigma
+        sigma.1 <- invSigma(philambda, n, t, w)
+        ## do GLS step to get e, s2e
+        glsres <- GLSstep(X, y, sigma.1)
+        e <- glsres[["ehat"]]
+        s2e <- glsres[["sigma2"]]
+        ## calc ll
+        due <- detSigma(phi, lambda, n, t, w)
+        tre <- -n * t/2 * log(s2e)
+        quattro <- -1/(2 * s2e) * crossprod(e, sigma.1) %*% e
+        const <- -(n * t)/2 * log(2 * pi)
+        ll.c <- const + due + tre + quattro
+        ## invert sign for minimization
+        llc <- -ll.c
+    }
 
-  ## determinant of Sigma (Spatial error and Random Effects)
-    detSigma <- function(phi, lambda, n, t) { # use more efficient algebra here
-                  detSigma <- -1/2*log( det( t*phi*In +
-                              solve(crossprod(B(lambda))) ) ) +
-                              (t-1)*log(detB(lambda))
-                  detSigma
-                  }
+    ## generic from here
 
-  ## concentrated likelihood: random effects SEM
-    ll.c<-function(philambda, y, X, n, t, w) {
-            phi<-philambda[1]
-            lambda<-philambda[2]
+    ## GLS step function
+    GLSstep <- function(X, y, sigma.1) {
+        b.hat <- solve(crossprod(X, sigma.1) %*% X,
+                       crossprod(X, sigma.1) %*% y)
+        ehat <- y - X %*% b.hat
+        sigma2ehat <- (crossprod(ehat, sigma.1) %*% ehat)/(n * t)
+        return(list(betahat=b.hat, ehat=ehat, sigma2=sigma2ehat))
+    }
 
-            ## perform GLS
+    ## lag y parm kept for compatibility
+    wy <- NULL
 
-            ## invert Sigma:
-            sigma.1<-invSigma(phi, lambda, n, t)
+    ## max likelihood
+    optimum <- nlminb(start = myparms0, objective = ll.c,
+                      gradient = NULL, hessian = NULL,
+                      y = y, X = X, n = n, t = t, w = w, w2 = w2, wy = wy,
+                      scale = 1, control = list(x.tol = x.tol,
+                                 rel.tol = rel.tol, trace = trace),
+                      lower = lower.bounds, upper = upper.bounds)
 
-            ## GLS step
-            b.hat<-solve( crossprod(X,sigma.1)%*%X, crossprod(X,sigma.1)%*%y )
-            ehat<-y-X%*%b.hat
-            sigma2ehat<-crossprod(ehat,sigma.1)%*%ehat/(n*t)
+    ## log likelihood at optimum (notice inverted sign)
+    myll <- -optimum$objective
+    ## retrieve optimal parms
+    myparms <- optimum$par
 
-            bhat<-list(betahat=b.hat,e=ehat,sigma2=sigma2ehat,sigma.1=sigma.1)
+    ## one last GLS step at optimal vcov parms
+    sigma.1 <- invSigma(myparms, n, t, w)
+    beta <- GLSstep(X, y, sigma.1)
 
-            e <- bhat[[2]]
-            s2e <- bhat[[3]]
+    ## final vcov(beta)
+    covB <- as.numeric(beta[[3]]) *
+        solve(crossprod(X, sigma.1) %*% X)
 
-            due <- detSigma(phi, lambda, n, t)
-            tre <- -n*t/2*log(s2e)
-            quattro <- -1/(2*s2e)*crossprod(e,sigma.1)%*%e
+    ## final vcov(errcomp)
+    covTheta <- solve(-fdHess(myparms, function(x) -ll.c(x,
+        y, X, n, t, w, w2, wy))$Hessian)          # lag-specific line: wy
+    covAR <- NULL
+    covPRL <- covTheta
 
-            const <- -(n*t)/2*log(2*pi)
-            ll.c <- const+due+tre+quattro
-            llc <- - ll.c
-            }
+    ## final parms
+    betas <- as.vector(beta[[1]])
+    arcoef <- NULL
+    errcomp <- myparms[which(nam.errcomp!="psi")]
+    names(betas) <- nam.beta
+    names(errcomp) <- nam.errcomp
 
-  ## iterate (=traballa) until convergence:
+    dimnames(covB) <- list(nam.beta, nam.beta)
+    dimnames(covPRL) <- list(names(errcomp), names(errcomp))
 
-  myphilambda0 <- coef0
+    ## result
+    RES <- list(betas = betas, arcoef=arcoef, errcomp = errcomp,
+                covB = covB, covAR=covAR, covPRL = covPRL, ll = myll)
 
-  optimum<-nlminb(myphilambda0, ll.c,
-                  lower=c(1e-08, -0.999), upper=c(1e08, 0.999),
-                  control=list(x.tol=x.tol, rel.tol=rel.tol, trace=trace),
-                  y=y, X=X, n=n, t=t, w=w, ...)
-
-
-  myphilambda<-optimum$par
-  myll <- optimum$objective
-
-  ## optimal values of parms:
-  phi<-myphilambda[1]
-  lambda<-myphilambda[2]
-
-  ## perform GLS
-            ## invert Sigma: given n,t: Sigma.1=Sigma.1(phi)
-            sigma.1<-invSigma(phi, lambda, n, t)
-            ## GLS step
-            b.hat<-solve( crossprod(X,sigma.1)%*%X, crossprod(X,sigma.1)%*%y )
-            ehat<-y-X%*%b.hat
-            sigma2ehat<-crossprod(ehat,sigma.1)%*%ehat/(n*t)
-            beta<-list(betahat=b.hat,e=ehat,sigma2=sigma2ehat,sigma.1=sigma.1)
-
-  ## names for coefs and error comp.s
-  nam.beta <- dimnames(X)[[2]]
-  nam.errcomp <- c("phi", "lambda")
-
-  ## calc. cov(b) by GLS
-  covB<-as.numeric(beta[[3]])*solve(crossprod(X,invSigma(phi, lambda, n, t))%*%X)
-  dimnames(covB) <- list(nam.beta, nam.beta)
-
-  covPRL <- solve(-fdHess(myphilambda, function(x) -ll.c(x,y,X,n,t,w))$Hessian)
-  dimnames(covPRL) <- list(nam.errcomp, nam.errcomp)
-
-  ## make (separate) coefficients' vectors
-  betas <- as.vector(beta[[1]])
-  errcomp <- c(phi, lambda)
-  names(betas) <- nam.beta
-  names(errcomp) <- nam.errcomp
-
-  RES <- list(betas=betas, errcomp=errcomp,
-              covB=covB, covPRL=covPRL, ll=myll)
-
-  return(RES)
-  }
-
+    return(RES)
+}
