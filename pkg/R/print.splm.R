@@ -21,6 +21,15 @@ function(x, digits = max(3, getOption("digits") - 3), ...) {
     else cat("No error covariance parameters\n")
     cat("\n")
 
+    ## add printing of spatial autoregressive parameter
+    ar <- x$arcoef
+    if (length(ar)) {
+        cat("\n")
+        cat("Spatial autoregressive parameter:\n")
+        print.default(format(ar, digits = digits), print.gap = 2,
+                      quote = FALSE)
+    }
+
     invisible(x)
 }
 

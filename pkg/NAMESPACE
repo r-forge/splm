@@ -7,7 +7,9 @@ importFrom(MASS,ginv)
 
 export(bsjktest, bsktest, 
 effects.splm, print.effects.splm, write.effects.splm, 
-print.splm,spfeml,spregm,spreml,spsegm,summary.splm, spseml, spsegm, spreml, spfeml, spregm, spfegm,listw2dgCMatrix)
+print.splm,spfeml,spregm,spreml,spsegm,summary.splm,
+spseml, spsegm, spreml, spfeml, spregm, spfegm,
+lrtest.splm, sphtest, listw2dgCMatrix)
 
 
 
@@ -19,3 +21,6 @@ S3method(print,effects.splm)
 S3method(bsktest,formula)
 S3method(bsktest,lm)
 S3method(bsktest, splm)
+S3method(sphtest,formula)
+S3method(sphtest, splm)
+

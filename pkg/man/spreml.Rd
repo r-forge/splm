@@ -23,8 +23,9 @@ specifications.
 
 
 \usage{
-spreml(formula, data, index = NULL, w, lag=FALSE,
-           errors = c("semsrre","semsr","srre","semre","re","sr","sem"),
+spreml(formula, data, index = NULL, w, w2=w, lag=FALSE,
+           errors = c("semsrre","semsr","srre","semre",
+                      "re", "sr", "sem","ols", "sem2re"),
            pvar = FALSE, hess=FALSE, quiet=TRUE,
            initval = c("zeros", "estimate"),
            x.tol=1.5e-18, rel.tol=1e-15,
@@ -36,8 +37,9 @@ spreml(formula, data, index = NULL, w, lag=FALSE,
   in the model. When the obect is a \code{\link{data.frame}}, the first two columns may contain the indexes. See \code{index}}
   \item{index}{if not NULL (default), a character vector to identify the indexes among the columns of the \code{\link{data.frame}}}
   \item{w}{an object of class \code{listw} or a \code{matrix}}
-  \item{lag}{default=\code{FALSE}. If \code{TRUE}, a spatial lag of the dependent variable is added: Not yet implemented}
-  \item{errors}{one of \code{c("semsrre","semsr","srre","semre","re","sr","sem")}. See details.}
+  \item{w2}{an object of class \code{listw} or a \code{matrix}}
+  \item{lag}{default=\code{FALSE}. If \code{TRUE}, a spatial lag of the dependent variable is added.}
+  \item{errors}{one of \code{c("semsrre","semsr","srre","semre","re","sr","sem", "ols", "sem2re")}. See details.}
   \item{pvar}{if \code{TRUE} the \code{pvar} function is called}
   \item{hess}{if \code{TRUE} use numerical Hessian instead of GLS for the standard errors of the estimates}
   \item{quiet}{if \code{FALSE} report function and parameters values during optimization}
@@ -59,7 +61,10 @@ spreml(formula, data, index = NULL, w, lag=FALSE,
   \code{"semre"} individual random effects and spatial correlation;
   \code{"re"} individual random effects;
   \code{"sr"} serial correlation;
-  \code{"sem"} spatial correlation.  
+  \code{"sem"} spatial correlation.
+  \code{"ols"} none (spherical residuals).
+  \code{"sem2re"} spatial correlation in both individual random effects
+    and idiosncratic errors (Kapoor, Kelejian and Prucha's specification).
 }
 \value{
   An object of class \code{"splm"}.
@@ -95,8 +100,13 @@ data(Produc, package = "Ecdat")
 data(usaww)
 Produc <- Produc[Produc$year<1974, ]
 fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
+## the two standard specifications:
+## random effects panel with spatial errors
 respaterr <- spreml(fm, data = Produc, w = usaww, errors="semre")
 summary(respaterr)
+## random effects panel with spatial lag
+respatlag <- spreml(fm, data = Produc, w = usaww, errors="re", lag=TRUE)
+summary(respatlag)
 }
 
 \keyword{spatial}
