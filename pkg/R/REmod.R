@@ -29,7 +29,7 @@ function (X, y, ind, tind, n, k, t, nT, w, w2, coef0 = rep(0, 2),
     ## - make list of results
 
     ## change this to 'bdsmatrix'
-    require(kinship)
+    #require(kinship)
 
     ## set names for final parms vectors
     nam.beta <- dimnames(X)[[2]]

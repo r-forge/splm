@@ -18,7 +18,7 @@ function (X, y, ind, tind, n, k, t, nT, w, w2, coef0 = rep(0, 2),
     ## - make list of results
 
     ## change this to 'bdsmatrix'
-    require(kinship)
+    #require(kinship)
 
     # mark
     #print("uso versione 1") # fixed vcov.arcoef, was missing

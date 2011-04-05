@@ -1,3 +1,6 @@
+Changes in Version 0.2-04
+  o dependency changed from kinship to bdsmatrix; removed require(kinship) from all functions
+
 Changes in Version 0.2-02
   o spfeml: Added methods for Jacobian
 
