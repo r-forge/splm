@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HEAD></HEAD><HTML><BODY>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Package splm:  Contents">
+<param name="Local" value="00Index.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Package splm:  R objects">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="splm-package">
+<param name="Local" value="splm-package.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="bsjktest">
+<param name="Local" value="bsjktest.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="bsjktest.formula">
+<param name="Local" value="bsjktest.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="bsktest">
+<param name="Local" value="bsktest.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="bsktest.formula">
+<param name="Local" value="bsktest.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="bsktest.lm">
+<param name="Local" value="bsktest.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="bsktest.panelmodel">
+<param name="Local" value="bsktest.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="effects.splm">
+<param name="Local" value="effects.splm.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="print.splm">
+<param name="Local" value="print.splm.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="spfeml">
+<param name="Local" value="spfeml.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="splm">
+<param name="Local" value="splm-package.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="spregm">
+<param name="Local" value="spregm.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="spreml">
+<param name="Local" value="spreml.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="spsegm">
+<param name="Local" value="spsegm.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="summary.splm">
+<param name="Local" value="summary.splm.html">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Package splm:  Titles">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Baltagi, Song and Koh LM test for spatial panels">
+<param name="Local" value="bsktest.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Baltagi, Song, Jung and Koh LM test for spatial panels">
+<param name="Local" value="bsjktest.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="GM estimator for spatial panel data models">
+<param name="Local" value="spregm.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="method for extracting fixed effects">
+<param name="Local" value="effects.splm.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="print method for class splm">
+<param name="Local" value="print.splm.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Spatial Panel Fixed Effects Models Estimation">
+<param name="Local" value="spfeml.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Spatial panel models: estimation and testing ">
+<param name="Local" value="splm-package.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Spatial Panel Random Effects Model Estimation">
+<param name="Local" value="spreml.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Spatial Simultaneous Equations">
+<param name="Local" value="spsegm.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="summary method for class splm">
+<param name="Local" value="summary.splm.html">
+</OBJECT>
+</UL>
+</UL>
+</BODY></HTML>
