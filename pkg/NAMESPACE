@@ -7,9 +7,8 @@ importFrom(MASS,ginv)
 
 export(bsjktest, bsktest, 
 effects.splm, print.effects.splm, write.effects.splm, 
-print.splm,spfeml,spregm,spreml,spsegm,summary.splm,
-spseml, spsegm, spreml, spfeml, spregm, spfegm,
-lrtest.splm, sphtest, listw2dgCMatrix)
+print.splm, spfeml, spgm, spreml, summary.splm,
+spseml, spsegm, lrtest.splm, sphtest, listw2dgCMatrix)
 
 
 

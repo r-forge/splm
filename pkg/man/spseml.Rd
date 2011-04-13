@@ -83,7 +83,7 @@ Spatial Econometrics: Methods and Models,
 \author{Gianfranco Piras\email{gpiras@mac.com}}
 
 \seealso{
-\code{\link{spregm}}
+\code{\link{spgm}}
 }
 \examples{
 data(Produc, package = "Ecdat")

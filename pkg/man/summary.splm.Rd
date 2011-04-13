@@ -38,8 +38,7 @@ An object of class \code{'summary.splm'}
 }
 
 \seealso{
-  \code{\link{spreml}}, \code{\link{spregm}}, 
- \code{\link{spreml}}, \code{\link{effects}}
+  \code{\link{spreml}}, \code{\link{spgm}}, \code{\link{effects}}
 }
 \author{ Giovanni Millo \email{Giovanni\_Millo@Generali.com}, Gianfranco Piras\email{gpiras@mac.com}}
 
@@ -47,7 +46,7 @@ An object of class \code{'summary.splm'}
 data(Produc, package = "Ecdat") 
 data(usaww)
 Produc <- Produc[Produc$year<1975, ] 
-GM<-spregm(log(gsp)~log(pcap)+log(pc)+log(emp)+unemp, data=Produc,w=usaww,method="fulweigh")
+GM<-spgm(log(gsp)~log(pcap)+log(pc)+log(emp)+unemp, data=Produc, listw = usaww, moments = "fullweights", spatial.error = TRUE)
 summary(GM)
 }
 

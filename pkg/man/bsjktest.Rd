@@ -44,8 +44,8 @@ data(Produc, package="Ecdat")
 Produc <- Produc[Produc$year<1975, ]
 data(usaww)
 fm <- log(gsp)~log(pcap)+log(pc)+log(emp)+unemp
-test1<-bsjktest(fm,data=Produc, w=usaww,
-  test="C.1")
-test1
+\dontrun{test1<-bsjktest(fm,data=Produc, w=usaww,
+  test="C.1")}
+\dontrun{test1}
 }
 \keyword{htest}

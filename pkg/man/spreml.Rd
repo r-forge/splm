@@ -93,7 +93,7 @@ Testing panel data regression models with spatial and serial error correlation.
 
 \author{Giovanni Millo}
 
-\seealso{\code{\link{spregm}}, \code{\link{spfeml}}}
+\seealso{\code{\link{spgm}}, \code{\link{spfeml}}}
 
 \examples{
 data(Produc, package = "Ecdat")
@@ -105,8 +105,8 @@ fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
 respaterr <- spreml(fm, data = Produc, w = usaww, errors="semre")
 summary(respaterr)
 ## random effects panel with spatial lag
-respatlag <- spreml(fm, data = Produc, w = usaww, errors="re", lag=TRUE)
-summary(respatlag)
+\dontrun{respatlag <- spreml(fm, data = Produc, w = usaww, errors="re", lag=TRUE)}
+\dontrun{summary(respatlag)}
 }
 
 \keyword{spatial}

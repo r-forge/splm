@@ -36,7 +36,7 @@ A csv file containing the fixed effects and the intercept (when present)
 }
 
 \seealso{
-  \code{\link{spreml}}, \code{\link{spregm}}, \code{\link{lagsarlm}},
+  \code{\link{spreml}}, \code{\link{lagsarlm}},
   \code{\link{errorsarlm}}, \code{\link{spreml}}, \code{\link{effects}}
 }
 \author{Gianfranco Piras\email{gpiras@mac.com}}

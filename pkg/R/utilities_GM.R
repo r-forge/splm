@@ -14,7 +14,22 @@ function (rhopar, v, verbose = FALSE)
 `arg` <-
 function (rhopar, v, verbose = verbose) 
 {
+	
+	#print(v$bigG)
     vv <-  v$bigG %*% c(rhopar[1], rhopar[1]^2, rhopar[2]) - v$smallg
+    value <- sum(vv^2)
+    if (verbose) 
+        cat("function:", value, "rho:", rhopar[1], "sig2:", 
+            rhopar[2], "\n")
+    value
+}
+
+
+`argmod` <-
+function (rhopar,  v,rhoin,sig, verbose = verbose) 
+{
+#	print(v$bigG)
+    vv <-  v$GG %*% c(rhoin, rhoin^2, sig,rhopar[1]) - v$gg
     value <- sum(vv^2)
     if (verbose) 
         cat("function:", value, "rho:", rhopar[1], "sig2:", 
@@ -58,6 +73,45 @@ function (rhopar, v, ss,SS,T,TW, verbose = verbose)
 }
 
 
+#`arg1` <-
+#function (rhopar, v, T, verbose = verbose) 
+#{
+##	Ga<-cbind( (1/(T-1))*ss^2,0)
+#	Ga<-cbind( (1/(T-1))*rhopar[2]^2,0)
+##	Gb<-cbind( 0, SS^2)
+#	Gb<-cbind( 0, rhopar[3]^2)
+#	Gc<-rbind(Ga,Gb)
+#	Gamma<-kronecker(Gc,diag(3)) 
+#	Gammainv<-solve(Gamma)
+#    vv <-  v$GG %*% c(rhopar[1], rhopar[1]^2, rhopar[2], rhopar[3]) - v$gg
+#    value <- t(vv)%*% Gammainv %*% vv
+#    if (verbose) 
+#	cat("function:", value, "rho:", rhopar[1], "sig2:", 
+#		rhopar[2], "\n")
+#    value
+#}
+#
+#
+#
+#`arg2` <-
+#function (rhopar, v, T,TW, verbose = verbose) 
+#{
+#	Ga<-cbind( (1/(T-1))*rhopar[2]^2,0)
+##	Gb<-cbind( 0, SS^2)
+#	Gb<-cbind( 0, rhopar[3]^2)
+#	Gc<-rbind(Ga,Gb)
+#	Gamma<-kronecker(Gc,TW) 
+#
+#	Gammainv<-solve(Gamma)
+#    vv <-  v$GG %*% c(rhopar[1], rhopar[1]^2, rhopar[2], rhopar[3]) - v$gg
+#    value <- t(vv)%*% Gammainv %*% vv
+#    if (verbose) 
+#	cat("function:", value, "rho:", rhopar[1], "sig2:", 
+#		rhopar[2], "\n")
+#    value
+#}
+
+
 
 
 `arg3` <-
@@ -81,18 +135,10 @@ function(listw,u,N,T){
 	ind<-seq(1,T)
 	inde<-rep(ind,each=N)
 	NT<-N*T
-#ub<-matrix(,NT,1)
-#for (i in 1:T) ub[(N*i-N+1):(N*i),]<-lag.listw(listw,u[(N*i-N+1):(N*i)])
-#ubb<-matrix(,NT,1)
-#for (i in 1:T) ubb[(N*i-N+1):(N*i),]<-lag.listw(listw,ub[(N*i-N+1):(N*i)])
-#ubmt<-matrix(,N,1)
-#for (i in 1:N) ubmt[i,]<-mean(ub[seq.int(from=i,to=NT,by=N)])
-#ubbmt<-matrix(,N,1)		
-#for (i in 1:N) ubbmt[i,]<-mean(ubb[seq.int(from=i,to=NT,by=N)])
-#umt<-matrix(,N,1)		
-#for (i in 1:N) umt[i,]<-mean(u[seq.int(from=i,to=NT,by=N)])
-	ub<-unlist(tapply(u,inde, function(TT) lag.listw(listw,TT), simplify=TRUE))###Wu
-	ubb<-unlist(tapply(ub,inde, function(TT) lag.listw(listw,TT), simplify=TRUE))###WWu
+	
+	ub<-lag.listwpanel(listw, u, inde)	
+	ubb<-lag.listwpanel(listw, ub, inde)
+	
 	ind1<-seq(1,N)
 	inde1<-rep(ind1,T)
 	umt<-tapply(u, inde1, mean) 
@@ -111,18 +157,48 @@ function(listw,u,N,T){
 	uQ0u<-crossprod(u,Q0u)
 	ubbQ0ub<-crossprod(ubb,Q0ub)
 	uQ0ubb<-crossprod(u,Q0ubb)
-	tr <- matrix(0, N, 1)
-	for (i in 1:N) {
-        tr[i] <- sum(listw$weights[[i]]^2)
-	}      
-	trwpw <- sum(tr)
+	trwpw<-sum(unlist(listw$weights)^2)
 	G1c<-(1/(N*(T-1)))*rbind(2*uQ0ub, 2*ubbQ0ub,(uQ0ubb+ubQ0ub) )
 	G2c<- (-1/(N*(T-1)))* rbind(ubQ0ub,ubbQ0ubb,ubQ0ubb)
 	G3c<- rbind(1,trwpw/N, 0)
 	G<-cbind(G1c,G2c,G3c)	
 	g<-(1/(N*(T-1)))*rbind(uQ0u,ubQ0ub,uQ0ub)
+#	print(G)
+#	print(g)
 	output<-list(bigG=G, smallg=g, Q1u=umNT,Q1ub=ubmNT,Q1ubb=ubbmNT, ub=ub,ubb=ubb,TR=trwpw)
 }
+
+`fswithin` <-
+function(listw,u,N,T){
+	ind<-seq(1,T)
+	inde<-rep(ind,each=N)
+	NT<-N*T
+	ub<-lag.listwpanel(listw, u, inde)
+	ubb<-lag.listwpanel(listw, ub, inde)
+
+	uu<-crossprod(u)
+	uub<-crossprod(u, ub)
+	uubb<-crossprod(u, ubb)
+	ububb<-crossprod(ub, ubb)
+	ubbubb<-crossprod(ubb)
+	ubub<-crossprod(ub)
+	ubbu<-crossprod(ubb, u)
+	ubu<-crossprod(ub, u)
+	ubbub<-crossprod(ubb, ub)
+
+	trwpw<-sum(unlist(listw$weights)^2)
+	G1c<-(1/(N*(T-1)))*rbind(2*uub, 2*ubbub,(uubb+ ubub))
+	G2c<- (-1/(N*(T-1)))* rbind(ubub,ubbubb, ububb)
+	G3c<- rbind(1,trwpw/N, 0)
+
+	G<-cbind(G1c,G2c,G3c)	
+	g<-(1/(N*(T-1)))*rbind(uu, ubub, uub)
+	
+#	print(G)
+#	print(g)
+	output<-list(bigG=G, smallg=g,TR=trwpw)
+}
+
 
 `Ggsararsp` <-
 function (W, u, zero.policy = FALSE) 
@@ -188,6 +264,30 @@ function(bigG, smallg, Q1u,Q1ub,Q1ubb, u, ub,ubb,N, TR){
 	out<-list(GG=GG,gg=gg)
 }
 
+
+`pwbetween` <-
+function(bigG, smallg, u, N, T,TR,listw){
+
+	ub<-lag.listw(listw, u)
+	ubb<-lag.listw(listw, ub)
+
+	uQ1u<-crossprod(u,u)
+	uQ1ub<-crossprod(u,ub)
+	ubbQ1ub<-crossprod(ubb,ub)
+	ubbQ1ubb<-crossprod(ubb,ubb)
+	uQ1ubb<-crossprod(u,ubb)
+	ubQ1ub<-crossprod(ub,ub)
+	ubQ1ubb<-crossprod(ub,ubb)
+	G1c1<-rbind(2*uQ1ub, 2*ubbQ1ub,  (uQ1ubb + ubQ1ub))/N
+	G1c2<-rbind(ubQ1ub, ubbQ1ubb, ubQ1ubb)/-N
+	G1c3<-rbind(1,TR/N,0)
+	G1c<-cbind(G1c1,G1c2,rep(0,3),G1c3)
+	g1<-rbind(uQ1u, ubQ1ub, uQ1ub)/N
+	GG<-rbind(cbind(bigG,rep(0,3)),G1c)
+	#print(GG)
+	gg<-rbind(smallg,g1)
+	out<-list(GG=GG,gg=gg)
+}
 
 
 `tslssp` <-

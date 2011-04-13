@@ -105,7 +105,7 @@ Edition)}, pages 624--660. Springer-Verlag, Berlin Heidelberg.
 \author{ Gianfranco Piras \email{gpiras@mac.com}}
 
 \seealso{
-  \code{\link{spreml}}, \code{\link{spregm}}, \code{\link{effects}}
+  \code{\link{spreml}}, \code{\link{spgm}}, \code{\link{effects}}
 }
 \examples{
 data(Produc, package = "Ecdat")

@@ -75,7 +75,7 @@ data(Produc, package = "Ecdat")
 data(usaww)
 Produc <- Produc[Produc$year<1975, ] 
 fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
-GM<-spregm(log(gsp)~log(pcap)+log(pc)+log(emp)+unemp, data=Produc,w=usaww,method="fulweigh")
+GM<-spgm(log(gsp)~log(pcap)+log(pc)+log(emp) + unemp, data = Produc, listw = usaww, moments = "fullweights", spatial.error = TRUE)
 summary(GM)
 respaterr <- spreml(fm, data = Produc, w = usaww, errors="semre")
 summary(respaterr)
