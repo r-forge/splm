@@ -1,0 +1,373 @@
+)
+etr_mom <- trW(eWs, m = 24, type = "moments")
+summary.connection
+eW <- as(as_dgRMatrix_listw(elw), "CsparseMatrix")
+set.seed(100831)
+system.time(etr_MC <- trW(eW, m = 24, type = "MC"))#
+system.time(etr_mult <- trW(eW, m = 24, type = "mult"))
+eWs <- spdep:::listw2U_Matrix(spdep:::similar.listw_Matrix(elw))
+eWs
+system.time(etr_mom <- trW(eWs, m = 24, type = "moments"))
+etr_mom <- trW(eWs, m = 24, type = "moments")
+2007 - 1963
+map('state', "west virginia", fill = TRUE, col="#FFCC00", bg="#003366")
+par(mfrow=c(2,2))
+map('state', "west virginia", fill = TRUE, col="#FFCC00", bg="#003366")
+library(maps)
+install.packages("maps")
+library(maps)
+map('state', "west virginia", fill = TRUE, col="#FFCC00", bg="#003366")
+map('state', "west virginia", fill = TRUE, col="#003366", bg="#FFCC00")
+map('state', "west virginia", fill = TRUE, col="blue", bg="gold")
+map('state', "west virginia", fill = TRUE, col="gold", bg="blue")
+map('state', "west virginia")
+par(mfrow=c(2,2))#
+map('state', "west virginia", fill = TRUE, col="#FFCC00", bg="#003366")#
+map('state', "west virginia", fill = TRUE, col="#003366", bg="#FFCC00")#
+map('state', "west virginia", fill = TRUE, col="blue", bg="gold")#
+map('state', "west virginia", fill = TRUE, col="gold", bg="blue")
+col="#FFCC00"
+map('state', "west virginia", fill = TRUE, col="#FFCC00", bg="#003366")
+library(splm)
+help(splm)
+spfeml
+help(spdep)
+sacsarlm
+lagsarlm
+sacsarlm
+spdep
+spdep:::sacsar.f
+spdep:::sacsar_sse
+spfeml
+spdep:::sacsar_sse
+		wyt<-wy-wysm
+		w2yt<-w2y - w2ysm - w2ytm + rep(mean(w2y),NT)
+spfeml
+splaglm
+splm:::splaglm
+splm:::sperrorlm
+sarpanelerror
+splm:::sarpanelerror
+spfeml
+sacsarlm
+eigen.setup
+spdep:::eigen.setup
+spdep:::eigen_setup
+lagsarlm
+        W2 <- as(as_dgRMatrix_listw(listw2), "CsparseMatrix")
+spdep:::sacsar.f
+spdep:::sacsar.sse
+spdep:::sacsar_sse
+spfeml
+sacsarlm
+N=3
+Diagonal(3)
+getVmatsac
+spdep:::getVmatsac
+spdep:::f_sac_hess
+spdep:::sar_sac_hess_sse
+spregm
+spreml
+source("spfeml")
+source("likelihoodsFE.R")
+source("spfeml.R")
+data(Produc, package = "Ecdat")#
+data(usaww)#
+Produc <- Produc[Produc$year<1975, ]#
+fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "sptpfe", method = "eigen", quiet = TRUE)
+source("spfeml.R")
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "sptpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "sptpfe", method = "eigen", quiet = TRUE)
+source("fixed_effects")
+source("fixed_effects.R")
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "sptpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "sptpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "sptpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")
+source("spfeml.R")
+source("fixed_effects.R")
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "sptpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "sptpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "sptpfe", method = "eigen", quiet = TRUE)
+summary(lag)
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "spfe", method = "eigen", quiet = TRUE)
+summary(lag)
+err <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "error", effects = "tpfe", method = "eigen", quiet = TRUE)#
+summary(err)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "sptpfe", method = "eigen", quiet = TRUE)
+summary(lag)
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "spfe", method = "eigen", quiet = TRUE)
+summary(lag)
+err <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "error", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "spfe", method = "eigen", quiet = TRUE)
+summary(lag)
+err <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "error", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "spfe", method = "eigen", quiet = TRUE)
+summary(lag)
+err <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "error", effects = "tpfe", method = "eigen", quiet = TRUE)
+summary(err)
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "spfe", method = "eigen", quiet = TRUE)
+err <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "error", effects = "tpfe", method = "eigen", quiet = TRUE)
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+sacsarlm
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+sacsarlm
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+summary(sarar)
+summary(lag)
+summary(err)
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "spfe", method = "eigen", quiet = TRUE)
+summary(sarar)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "spfe", method = "eigen", quiet = TRUE)
+summary(lag)
+err <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "error", effects = "tpfe", method = "eigen", quiet = TRUE)
+summary(err)
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+summary(sarar)
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "pooled", method = "eigen", quiet = TRUE)
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+summary(sarar)
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "sptpfe", method = "eigen", quiet = TRUE)
+summary(sarar)
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = TRUE)
+summary(sarar)
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "spfe", method = "eigen", quiet = TRUE)
+summary(sarar)
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "spfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "spfe", method = "eigen", quiet = TRUE)
+summary(sarar)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "spfe", method = "eigen", quiet = TRUE)
+summary(lag)
+err <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "error", effects = "tpfe", method = "eigen", quiet = TRUE)
+summary(err)
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "spfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "spfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "spfe", method = "eigen", quiet = TRUE)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "spfe", method = "eigen", quiet = TRUE)
+summary(sarar)
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "sptpfe", method = "eigen", quiet = TRUE)
+summary(sarar)
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "pooled", method = "eigen", quiet = TRUE)
+summary(sarar)
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "spfe", method = "eigen", quiet = TRUE)
+summary(sarar)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "spfe", method = "eigen", quiet = TRUE)
+summary(sarar)
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "spfe", method = "eigen", quiet = TRUE)
+summary(lag)
+err <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "error", effects = "spfe", method = "eigen", quiet = TRUE)
+summary(err)
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "spfe", method = "eigen", quiet = TRUE)
+summary(sarar)
+spgm(fm, data=Produc,  listw = mat2listw(usaww),
+ lag=TRUE, spatial.error=TRUE, effects = "fixed", control = list())
+sarargm<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag=TRUE, spatial.error=TRUE, effects = "fixed", control = list())
+summary(sarargm)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")#
+data(Produc, package = "Ecdat")#
+data(usaww)#
+Produc <- Produc[Produc$year<1975, ]#
+fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp#
+#
+#
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "spfe", method = "eigen", quiet = TRUE)#
+summary(lag)#
+#
+err <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "error", effects = "spfe", method = "eigen", quiet = TRUE)#
+summary(err)#
+#
+#
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "spfe", method = "eigen", quiet = TRUE)#
+summary(sarar)#
+#
+#
+#
+sarargm<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag=TRUE, spatial.error=TRUE, effects = "fixed", control = list())#
+summary(sarargm)
+library(splm)
+help(spdep)
+source("likelihoodsFE.R")#
+source("spfeml.R")#
+source("fixed_effects.R")#
+data(Produc, package = "Ecdat")
+data(usaww)#
+Produc <- Produc[Produc$year<1975, ]#
+fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
+lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "spfe", method = "eigen", quiet = TRUE)
+summary(lag)
+err <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "error", effects = "spfe", method = "eigen", quiet = TRUE)
+summary(err)
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "spfe", method = "eigen", quiet = TRUE)
+summary(sarar)
+sarargm<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag=TRUE, spatial.error=TRUE, effects = "fixed", control = list())
+summary(sarargm)
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "spfe", method = "eigen", quiet = FALSE)
+sarargm<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag=TRUE, spatial.error=TRUE, effects = "fixed", control = list(), quite = FALSE)
+sarargm<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag=TRUE, spatial.error=TRUE, effects = "fixed", control = list())
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "spfe", method = "eigen", quiet = FALSE)
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "tpfe", method = "eigen", quiet = FALSE)
+summary(sarar)
+sarar <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "sarar", effects = "spfe", method = "eigen", quiet = FALSE)
+library(splm)
+help(sacsarlm)
