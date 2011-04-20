@@ -1,0 +1,103 @@
+<html><head><title>summary method for class splm</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>summary.splm(splm)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   summary.splm">
+<param name="keyword" value=" summary method for class splm">
+</object>
+
+
+<h2>summary method for class splm</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Methods used for presenting the results of objects of class 'splm'
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+
+## S3 method for class 'splm':
+summary(object,...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>object</code></td>
+<td>
+an object of class 'splm'</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The summary function summary.splm 
+returns an objects of class 'splm' 
+organized in a coefficient matrix.
+</p>
+<p>
+Also a matrix for the error components, 
+or the spatial coefficient will be generated 
+depending on the estimated model. 
+</p>
+<p>
+When the 'splm' objects comes from 
+the function 'spsegm', the summary 
+will be generated looping over the number
+of equations in the system.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+An object of class 'summary.splm'</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Giovanni Millo <a href="mailto:Giovanni_Millo@Generali.com">Giovanni_Millo@Generali.com</a>, Gianfranco Piras<a href="mailto:gpiras@mac.com">gpiras@mac.com</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="spreml.html">spreml</a></code>, <code><a href="spregm.html">spregm</a></code>, <code>lagsarlm</code>,
+<code>errorsarlm</code>, <code><a href="spreml.html">spreml</a></code>, <code><a onclick="findlink('stats', 'effects.html')" style="text-decoration: underline; color: blue; cursor: hand">effects</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(Produc, package = "Ecdat") 
+data(usaww)
+Produc &lt;- Produc[Produc$year&lt;1975, ] 
+GM&lt;-spregm(log(gsp)~log(pcap)+log(pc)+log(emp)+unemp, data=Produc,w=usaww,method="fulweigh")
+summary(GM)
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>splm</em> version 0.1-1 <a href="00Index.html">Index]</a></div>
+
+</body></html>
