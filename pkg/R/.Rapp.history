@@ -1,0 +1,365 @@
+elag_ML_eigen <- lagsarlm(eform, data = elect80, listw = elw, method = "eigen")
+summary(elag_ML_eigen)
+system.time(elag_ML_eigen <- lagsarlm(eform, data = elect80, listw = elw, method = "eigen"))
+system.time(elag_ML_Matrix <- lagsarlm(eform, data = elect80, listw = elw,method = "Matrix"))
+Matrix()
+system.time(elag_ML_Matrix <- lagsarlm(eform, data = elect80, listw = elw,method = "Matrix"))
+summary(elag_ML_Matrix)
+eW <- as(as_dgRMatrix_listw(elw), "CsparseMatrix")
+eW
+set.seed(100831)
+etr_MC <- trW(eW, m = 24, type = "MC")
+etr_mult <- trW(eW, m = 24, type = "mult")
+eWs <- spdep:::listw2U_Matrix(spdep:::similar.listw_Matrix(elw))
+etr_mom <- trW(eWs, m = 24, type = "moments")
+cl <- makeSOCKcluster(4)
+library(snow)
+cl <- makeSOCKcluster(4)
+set.ClusterOption(cl)
+etr_mom1 <- trW(eWs, m = 24, type = "moments")
+stopCluster(cl)
+all.equal(etr_mom, etr_mom1, check.attributes = FALSE)
+system.time(etr_MC <- trW(eW, m = 24, type = "MC"))
+system.time(etr_mult <- trW(eW, m = 24, type = "mult"))
+system.time(etr_mom <- trW(eWs, m = 24, type = "moments"))
+eWs <- spdep:::listw2U_Matrix(spdep:::similar.listw_Matrix(elw))
+system.time(etr_mom <- trW(eWs, m = 24, type = "moments"))
+eW <- as(as_dgRMatrix_listw(elw), "CsparseMatrix")#
+set.seed(100831)#
+#
+system.time(etr_MC <- trW(eW, m = 24, type = "MC"))#
+system.time(etr_mult <- trW(eW, m = 24, type = "mult"))#
+#
+eWs <- spdep:::listw2U_Matrix(spdep:::similar.listw_Matrix(elw))
+system.time(etr_mom <- trW(eWs, m = 24, type = "moments"))
+etr_mom
+tr.W
+trW
+system.time(etr_mom <- trW(eWs, m = 24, type = "moments")
+)
+etr_mom <- trW(eWs, m = 24, type = "moments")
+summary.connection
+eW <- as(as_dgRMatrix_listw(elw), "CsparseMatrix")
+set.seed(100831)
+system.time(etr_MC <- trW(eW, m = 24, type = "MC"))#
+system.time(etr_mult <- trW(eW, m = 24, type = "mult"))
+eWs <- spdep:::listw2U_Matrix(spdep:::similar.listw_Matrix(elw))
+eWs
+system.time(etr_mom <- trW(eWs, m = 24, type = "moments"))
+etr_mom <- trW(eWs, m = 24, type = "moments")
+2007 - 1963
+map('state', "west virginia", fill = TRUE, col="#FFCC00", bg="#003366")
+par(mfrow=c(2,2))
+map('state', "west virginia", fill = TRUE, col="#FFCC00", bg="#003366")
+library(maps)
+install.packages("maps")
+library(maps)
+map('state', "west virginia", fill = TRUE, col="#FFCC00", bg="#003366")
+map('state', "west virginia", fill = TRUE, col="#003366", bg="#FFCC00")
+map('state', "west virginia", fill = TRUE, col="blue", bg="gold")
+map('state', "west virginia", fill = TRUE, col="gold", bg="blue")
+map('state', "west virginia")
+par(mfrow=c(2,2))#
+map('state', "west virginia", fill = TRUE, col="#FFCC00", bg="#003366")#
+map('state', "west virginia", fill = TRUE, col="#003366", bg="#FFCC00")#
+map('state', "west virginia", fill = TRUE, col="blue", bg="gold")#
+map('state', "west virginia", fill = TRUE, col="gold", bg="blue")
+col="#FFCC00"
+map('state', "west virginia", fill = TRUE, col="#FFCC00", bg="#003366")
+library(splm)
+help(spfeml)
+spfeml
+help(sphtest)
+help(spreml)
+data(Produc, package = "Ecdat")
+data(usaww)
+Produc <- Produc[Produc$year<1975, ]
+fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
+sarargm<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag= TRUE, spatial.error=TRUE, effects = "fixed", control = list())
+summary(sarargm)
+sarargm<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag= TRUE, spatial.error=TRUE, effects = "random", control = list())
+sarargmfe<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag= TRUE, spatial.error=TRUE, effects = "fixed", control = list())#
+summary(sarargmfe)#
+#
+sarargmre<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag= TRUE, spatial.error=TRUE, effects = "random", control = list())#
+summary(sarargmre)
+coef(sarargmfe)
+coef(sarargmre)
+vcov(sarargmfe)
+sarargmfe$vcov
+sarargmre$vcov
+spgm
+library(splm)
+data(Produc, package = "Ecdat")#
+data(usaww)
+Produc <- Produc[Produc$year<1975, ]#
+fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
+sarargmfe<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag= TRUE, spatial.error=TRUE, effects = "fixed", control = list())#
+summary(sarargmfe)
+sarargmre<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag= TRUE, spatial.error=TRUE, effects = "random", control = list())#
+summary(sarargmre)
+coef(sarargmfe)
+sarargmfe$vcov
+coef(sarargmre)
+sarargmre$vcov
+sarargmre$legacy
+sarargmfe$legacy
+all.equal(sarargmfe$legacy, sarargmre$legacy)
+sarargmre$effects
+sarargmre$ef.sph
+x$ef.sph == x2$ef.sph
+sarargmre$ef.sph == sarargmfe$ef.sph
+names(coef(sarargmre))
+match(names(coef(sarargmre)), names(coef(sarargmre)) )
+names(coef(sarargmre))
+ names(coef(sarargmre))
+match(names(coef(sarargmfe)), names(coef(sarargmre)) )
+x$ef.sph
+names(coef(sarargmre$ef.sph
+)
+sarargmre$ef.sph
+match("random", c(sarargmfe$ef.sph, sarargmre$ef.sph))
+    tc <- match(names(coef(xwith)), names(coef(xbetw)) )
+x <- sarargmfe
+x2 <- sarargmre
+if (!all.equal(x$legacy, x2$legacy)) stop("The model are different")
+if(x$ef.sph == x2$ef.sph) stop("Effects should be different")
+    ran <- match("random", c(x$ef.sph, x2$ef.sph))
+    ran
+	xwith <- x#
+	xbetw <- x2
+    tc <- match(names(coef(xwith)), names(coef(xbetw)) )
+    coef.wi <- coef(xwith)
+    coef.re <- coef(xbetw)[tc]
+    vcov.wi <- xwith$vcov
+    vcov.re <- xbetw$vcov[tc,tc]
+    coef.wi
+    coef.re
+    vcov.wi
+    vcov.re
+    dbeta <- coef.wi - coef.re
+    dbeta
+    df <- length(dbeta)
+    dvcov <- vcov.re - vcov.wi
+    stat <- abs(t(dbeta) %*% solve(dvcov) %*% dbeta)
+    pval <- pchisq(stat, df = df, lower.tail = FALSE)
+    names(stat) <- "chisq"#
+    parameter <- df#
+    names(parameter) <- "df"#
+    data.name <- paste(deparse(x$call$formula))
+    alternative <- "one model is inconsistent"#
+    res <- list(statistic = stat, p.value = pval, parameter = parameter,#
+        method = "Hausman test for spatial models", data.name = data.name, alternative = alternative)#
+    class(res) <- "htest"
+    res
+library(splm)#
+data(Produc, package = "Ecdat")#
+data(usaww)#
+Produc <- Produc[Produc$year<1975, ]#
+fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
+sarargmfe<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag= TRUE, spatial.error=TRUE, effects = "fixed", control = list())#
+summary(sarargmfe)
+sarargmre<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag= TRUE, spatial.error=TRUE, effects = "random", control = list())#
+summary(sarargmre)
+sphtest(sarargmfe, sarargmre)
+sarargmfe<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag= FALSE, spatial.error=TRUE, effects = "fixed", control = list())#
+summary(sarargmfe)#
+#
+sarargmre<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag= FALSE, spatial.error=TRUE, effects = "random", control = list())#
+summary(sarargmre)
+sphtest(sarargmfe, sarargmre)
+    tc <- match(names(coef(xwith)), names(coef(xbetw)) )
+if (!all.equal(x$legacy, x2$legacy)) stop("The model are different")#
+if(x$ef.sph == x2$ef.sph) stop("Effects should be different")
+x<-sarargmfe
+x2<-sarargmre
+if (!all.equal(x$legacy, x2$legacy)) stop("The model are different")#
+if(x$ef.sph == x2$ef.sph) stop("Effects should be different")
+    ran <- match("random", c(x$ef.sph, x2$ef.sph))
+    ran
+	xwith <- x2#
+	xbetw <- x
+	xwith <- x#
+	xbetw <- x2
+	xwith
+	xbetw
+    tc <- match(names(coef(xwith)), names(coef(xbetw)) )
+    tc
+names(coef(xwith)
+)
+names(coef(xbetw))
+xbetw <- x2
+xbetw
+names(coef(xbetw))
+class(coef(xbetw))
+names(coef(as.numeric(xbetw)))
+as.numeric(coef(xbetw))
+names(as.numeric(coef(xbetw)))
+coef(xbetw)
+attr(coef(xbetw), names)
+attr(coef(xbetw), names, colnames(coef(xbetween)))
+attr(coef(xbetw), names, colnames(coef(xbetw)))
+help(attr)
+attr(coef(xbetw), "names")
+attr(coef(xbetw), "names")<-colnames(coef(xbetw))
+names(as.numeric(coef(xbetw))) <- colnames(coef(xbetw))
+as.numeric(coef(xbetw))
+attr(as.numeric(coef(xbetw)), "names")<-colnames(coef(xbetw))
+colnames(coef(xbetw))
+rownames(coef(xbetw))
+attr(as.numeric(coef(xbetw)), "names")<-rownames(coef(xbetw))
+coef <- as.numeric(coef(xbetw))
+coef
+names(coef)<-rownames(coef(xbetw))
+library(splm)#
+data(Produc, package = "Ecdat")#
+data(usaww)#
+Produc <- Produc[Produc$year<1975, ]#
+fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
+sarargmfe<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag= FALSE, spatial.error=TRUE, effects = "fixed", control = list())#
+summary(sarargmfe)
+sarargmre<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag= FALSE, spatial.error=TRUE, effects = "random", control = list())#
+summary(sarargmre)
+sphtest(sarargmfe, sarargmre)
+sarargmfe<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag= TRUE, spatial.error=TRUE, effects = "fixed", control = list())#
+summary(sarargmfe)#
+#
+sarargmre<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag= TRUE, spatial.error=TRUE, effects = "random", control = list())#
+summary(sarargmre)
+sarargmfe<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag= TRUE, spatial.error=FALSE, effects = "fixed", control = list())#
+summary(sarargmfe)#
+#
+sarargmre<-spgm(fm, data=Produc,  listw = mat2listw(usaww),  lag= TRUE, spatial.error=FALSE, effects = "random", control = list())#
+summary(sarargmre)
+sphtest(sarargmfe, sarargmre)
+help(tapply)
+spgm
+library(splm)
+spgm
+Ws<-Matrix(,7,7)
+Ws
+Ws<-Matrix(1,7,7)
+Ws
+Diagonal(Ws)
+help(Diagonal)
+Ws<-Matrix(0,7,7)
+Diagonal(Ws)<-1
+diagonal(Ws)<-1
+diag(Ws)<-1
+Ws
+diag(Ws)
+Diagonal(30)
+library(splm)#
+data(Produc, package = "Ecdat")#
+data(usaww)#
+Produc <- Produc[Produc$year<1975, ]#
+fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
+	ml <- spfeml(formula, data=data, index=index, listw, model="error", effects="pooled")
+	ml <- spfeml(fm, data=data, index = NULL, listw= mat2listw(usaww), model="error", effects="pooled")
+	ml <- spfeml(fm, data=Produc, index = NULL, listw= mat2listw(usaww), model="error", effects="pooled")
+summary(ml)
+data = Produc
+  index <- data[,1]#
+  tindex <- data[,2]#
+  X<-model.matrix(formula,data=data)
+formula = fm
+  index <- data[,1]#
+  tindex <- data[,2]#
+  X<-model.matrix(formula,data=data)
+  y<-model.response(model.frame(formula,data=data))#
+  names(index)<-row.names(data)#
+  ind<-index[which(names(index)%in%row.names(X))]#
+  tind<-tindex[which(names(index)%in%row.names(X))]#
+  oo<-order(tind,ind)#
+  X<-X[oo,]#
+  y<-y[oo]#
+  ind<-ind[oo]#
+  tind<-tind[oo]#
+  N<-length(unique(ind))#
+  k<-dim(X)[[2]]#
+  T<-max(tapply(X[,1],ind,length))#
+  NT<-length(ind)
+	indic<-seq(1,T)#
+	inde<-as.numeric(rep(indic,each=N)) #
+	ind1<-seq(1,N)#
+	inde1<-as.numeric(rep(ind1,T))#
+#
+	lambda<-ml$spat.coef#
+	eML<-residuals(ml)#
+#
+ 	Ws<-listw2dgCMatrix(listw) #
+	Wst<-t(Ws)  #
+	B<- Diagonal(N)-lambda*Ws
+listw<- mat2listw(usaww)
+	indic<-seq(1,T)#
+	inde<-as.numeric(rep(indic,each=N)) #
+	ind1<-seq(1,N)#
+	inde1<-as.numeric(rep(ind1,T))#
+#
+	lambda<-ml$spat.coef#
+	eML<-residuals(ml)#
+#
+ 	Ws<-listw2dgCMatrix(listw) #
+	Wst<-t(Ws)  #
+	B<- Diagonal(N)-lambda*Ws
+	BpB<-crossprod(B)#
+	BpB2 <- BpB %*% BpB#
+	BpBi<- solve(BpB)#
+tr<-function(R) sum(diag(R))#
+	trBpB<-tr(BpB)
+	eme<-tapply(eML,inde1,mean)#
+	emme<-eML - rep(eme,T)#
+	sigmav2<-crossprod(eML,emme)/(N*(T-1))	sigmav4<-sigmav2^2
+	sigmav2<-crossprod(eML,emme)/(N*(T-1)#
+	sigmav4<-sigmav2^2
+	sigmav2<-crossprod(eML,emme)/(N*(T-1))
+	sigmav4<-sigmav2^2
+	sigmav2
+	sigmav4
+yybis<-function(q){ #
+	wq<-rep(q,T)#
+	tmp<-wq%*%eML#
+					}
+	BBu<-apply(BpB2,1,yybis)#
+	BBu<-rep(BBu,T)
+	upBBu<-crossprod(eML,BBu)
+	BBu
+	upBBu<-crossprod(eML,BBu)
+	upBBu
+	Dmu<- -(T/(2*sigmav2))*trBpB + (1/(2*sigmav4))*upBBu
+	Dmu
+	WpB<-Wst%*%B#
+	BpW<-crossprod(B, Ws)#
+	WpBplBpW <-WpB + BpW#
+	G<-WpBplBpW %*% BpBi
+	g<-tr(G)
+	g
+	WpB<-Wst%*%B#
+	BpW<-crossprod(B, Ws)#
+	WpBplBpW <-WpB + BpW#
+	bigG<-WpBplBpW %*% BpBi
+	smalle<-tr(BpB2)#
+	smalld<-tr(WpBplBpW)#
+	smallh<-trBpB#
+	smallg<-tr(bigG)#
+	smallc<-tr(bigG%*%bigG)
+	NUM<- ((2*sigmav4)/T)*((N*sigmav4*smallc)-(sigmav4*smallg^2))   ###equation 2.30 in the paper
+	NUM
+	NUM<- ((2 * sigmav4)/T) * ((N*sigmav4*smallc)-(sigmav4*smallg^2))   ###equation 2.30 in the paper
+	NUM
+	DENft<- NT*sigmav4* smalle * smallc
+	DENft
+	DENst<- N*sigmav4* smalld^2
+	DENtt<- T*sigmav4* smallg^2 * smalle
+DENtt
+DENst
+DENfot<- 2* sigmav4 *smallg * smallh* smalld
+DENfot
+	DENfit<- sigmav4 * smallh^2* smallc
+DENfit
+	DEN<- DENft - DENst - DENtt + DENfot - DENfit
+DEN
+	LMmu <- Dmu^2*NUM / DEN
+LMmu
+	LMmustar<- sqrt(LMmu)
+LMmustar
