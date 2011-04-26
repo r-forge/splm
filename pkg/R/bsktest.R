@@ -156,7 +156,7 @@ SLM1<-((G+1)- Ed1)/sqrt(Vd1)
 
 STAT2<- qnorm(0.95,lower.tail=TRUE)
 	statistics<-SLM1
-  pval <- pnorm(SLM1, lower.tail=FALSE)
+  pval <- 2*pnorm(SLM1, lower.tail=FALSE)
 	
   names(statistics)="SLM1"
 	method<- "Baltagi, Song and Koh SLM1 marginal test"
@@ -251,7 +251,7 @@ fun2<-function(Q) unlist(tapply(Q,inde,lag))
 
 STAT2<- qnorm(0.95,lower.tail=TRUE)
 	statistics<-SLM2
-  pval <- pnorm(SLM2, lower.tail=FALSE)
+  pval <- 2*pnorm(SLM2, lower.tail=FALSE)
 
   names(statistics)="SLM2"
 	method<- "Baltagi, Song and Koh SLM2 marginal test"
@@ -444,7 +444,7 @@ tr<-function(R) sum(diag(R))
 
 	LMlstar<-sqrt(LMl1) 
 	statistics<-LMlstar
-  pval <- pnorm(LMlstar, lower.tail=FALSE)
+  pval <- 2*pnorm(LMlstar, lower.tail=FALSE)
 
   names(statistics)="LM*-lambda"
 	method<- "Baltagi, Song and Koh LM*-lambda conditional LM test (assuming sigma^2_mu >= 0)"
@@ -556,7 +556,7 @@ yybis<-function(q){
 	LMmustar<- sqrt(LMmu)
   
   statistics<-LMmustar
-  pval <- pnorm(LMmustar, lower.tail=FALSE)
+  pval <- 2*pnorm(LMmustar, lower.tail=FALSE)
 
   names(statistics)="LM*-mu"
 	method<- "Baltagi, Song and Koh LM*- mu conditional LM test (assuming lambda may or may not be = 0)"
@@ -654,7 +654,7 @@ SLM1<-((G+1)- Ed1)/sqrt(Vd1)
 
 STAT2<- qnorm(0.95,lower.tail=TRUE)
 	statistics<-SLM1
-  pval <- pnorm(SLM1, lower.tail=FALSE)
+  pval <- 2*pnorm(SLM1, lower.tail=FALSE)
 	
   names(statistics)="SLM1"
 	method<- "Baltagi, Song and Koh SLM1 marginal test"
@@ -748,7 +748,7 @@ fun2<-function(Q) unlist(tapply(Q,inde,lag))
 
 STAT2<- qnorm(0.95,lower.tail=TRUE)
 	statistics<-SLM2
-  pval <- pnorm(SLM2, lower.tail=FALSE)
+  pval <- 2*pnorm(SLM2, lower.tail=FALSE)
 
   names(statistics)="SLM2"
 	method<- "Baltagi, Song and Koh SLM2 marginal test"
@@ -929,7 +929,7 @@ tr<-function(R) sum(diag(R))
 
 	LMlstar<-sqrt(LMl1) 
 	statistics<-LMlstar
-  pval <- pnorm(LMlstar, lower.tail=FALSE)
+  pval <- 2*pnorm(LMlstar, lower.tail=FALSE)
 
   names(statistics)="LM*-lambda"
 	method<- "Baltagi, Song and Koh LM*-lambda conditional LM test (assuming sigma^2_mu >= 0)"
@@ -1040,7 +1040,7 @@ yybis<-function(q){
 	LMmustar<- sqrt(LMmu)
   
   statistics<-LMmustar
-  pval <- pnorm(LMmustar, lower.tail=FALSE)
+  pval <- 2*pnorm(LMmustar, lower.tail=FALSE)
 
   names(statistics)="LM*-mu"
 	method<- "Baltagi, Song and Koh LM*- mu conditional LM test (assuming lambda may or may not be = 0)"
