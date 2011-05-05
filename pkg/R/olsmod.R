@@ -40,7 +40,7 @@ function (X, y, ind, tind, n, k, t, nT, w, w2, coef0 = rep(0, dim(X)[[2]]),
     ## (none)
 
     ## likelihood function, both steps included
-    ll.c <- function(betas, y, X, n, t, w, w2, wy) {
+    ll.c <- function(betas, y, X, n, t, w, w2) {
         ## get e, s2e as function of betas
         e <- y - X %*% betas                # lag-specific line (Ay for y)
         s2e <- crossprod(e)/(n*t)
@@ -59,7 +59,7 @@ function (X, y, ind, tind, n, k, t, nT, w, w2, coef0 = rep(0, dim(X)[[2]]),
     ## max likelihood
     optimum <- nlminb(start = myparms0, objective = ll.c,
                       gradient = NULL, hessian = NULL,
-                      y = y, X = X, n = n, t = t, w = w, w2 = w2, wy = wy,
+                      y = y, X = X, n = n, t = t, w = w, w2 = w2,
                       scale = 1, control = list(x.tol = x.tol,
                                  rel.tol = rel.tol, trace = trace),
                       lower = lower.bounds, upper = upper.bounds)
