@@ -1,3 +1,8 @@
+Changes in Version 0.8-03
+  o fixed the joint bsktest, pvalue comes now from pchibar{ibdreg}; added dependency on 'ibdreg' but nothing in NAMESPACE because 'ibdreg' doesn't have one
+Changes in Version 0.8-02
+  o fixed the bsktest, now only formula methods and correct pvals
+	
 Changes in Version 0.8-01
   o added the spatial hausman test
   o deleted bsjk test and corrected the bsk tests

@@ -439,6 +439,8 @@ STAT2<- qnorm(0.95,lower.tail=TRUE)
 `LMHtest` <-
 function(formula, data, index=NULL, listw, ...){
     ## depends on listw2dgCMatrix.R
+  require(ibdreg) # for mixed chisquare distribution
+
   if(!is.null(index)) { ####can be deleted when using the wrapper
     require(plm)
     data <- plm.data(data, index)
@@ -512,17 +514,9 @@ if (LM1<=0){
 		if (LM2<=0) JOINT<-LM1^2
 		else JOINT<-LM1^2 + LM2^2
 		}
-		
-STAT<- qchisq(0.05,1,lower.tail=FALSE)
-STAT1<- qchisq(0.05,2,lower.tail=FALSE)
-if (JOINT>=2.952) {
-		if (JOINT<7.289 & JOINT>=4.321) pval<-0.05
-		if (JOINT >= 7.289) pval<-0.01
-		if (JOINT<= 4.321)	pval<-0.1
-	}
-else pval<-1
-
-	statistics<-JOINT
+  statistics<-JOINT
+  pval <- 1 - pchibar(statistics, df=0:2, wt=c(0.25,0.5,0.25))
+    
 
   names(statistics)="LM-H"
 	method<- "Baltagi, Song and Koh LM-H one-sided joint test"
