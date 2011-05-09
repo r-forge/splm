@@ -20,11 +20,11 @@ additional (other than the spatial lag) endogenous variables.
 }
 
 \usage{
-spgm(formula, data=list(), index=NULL, listw, 
-moments = c("initial", "weights", "fullweights"), lag=FALSE, endog = NULL, 
-instruments= NULL, verbose = FALSE, 
-method = c("w2sls", "b2sls", "g2sls", "ec2sls"), 
-spatial.error=FALSE, effects = c("fixed","random"), control = list())
+spgm(formula, data=list(), index=NULL, listw,
+         model=c("within","random"), lag=FALSE, spatial.error=FALSE,
+         moments = c("initial", "weights", "fullweights"), endog = NULL,
+         instruments= NULL, verbose = FALSE,
+         method = c("w2sls", "b2sls", "g2sls", "ec2sls"), control = list())
 }
 
 \arguments{
@@ -35,15 +35,17 @@ spatial.error=FALSE, effects = c("fixed","random"), control = list())
   \item{index}{if not NULL (default), a character vector to identify the indexes among the columns of the \code{\link{data.frame}}}
   \item{listw}{an object of class \code{listw} created for example by \code{nb2listw}. 
   If a \code{matrix} is given as input the function will transform it using \code{mat2listw}}
+  \item{model}{One of \code{"within"} or \code{"random"}. The assumption
+    made on the individual effects}
+  \item{lag}{if \code{TRUE} a spatial lag of the dependent variable is
+    added to the regression equation}
+  \item{spatial.error}{a logic vector. If \code{TRUE} the spatial autoregressive error term is added to the model and an estimate for \eqn{\rho} is produced}
   \item{moments}{\code{"initial"} (default) defines the set of GM estimator to be used. Alternatives are  
   \code{"weights"} and \code{"fullweights"} (See Details)}
-  \item{lag}{if \code{TRUE} a spatial lag of the dependent variable is added to the regression equation}
   \item{endog}{default \code{NULL}. A string with the name of additional (other than the spatial lag) endogenous variables}
   \item{instruments}{default \code{NULL}. Either a matrix or a string with the name of the specific instruments for the additional endogenous variables}
   \item{verbose}{default \code{FALSE}, If \code{TRUE} reports function values during optimization}  
   \item{method}{One of \code{"w2sls"}, \code{"b2sls"}, \code{"g2sls"}, \code{"ec2sls"}. (See Details)}
-  \item{spatial.error}{a logic vector. If \code{TRUE} the spatial autoregressive error term is added to the model and an estimate for \eqn{\rho} is produced}
-  \item{effects}{One of \code{"fixed"} or \code{"random"}. The assumption made on the individual effects}
   \item{control}{a list of control parameters for the optimization}
 }
 

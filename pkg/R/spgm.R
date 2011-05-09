@@ -1,7 +1,10 @@
 `spgm` <-
-function(formula, data=list(), index=NULL, listw, 
-moments = c("initial", "weights", "fullweights"), lag = FALSE, endog = NULL, instruments= NULL, verbose = FALSE, method = c("w2sls", "b2sls", "g2sls", "ec2sls"), spatial.error=FALSE, effects = c("fixed","random"), control = list()){
+function(formula, data=list(), index=NULL, listw,
+         model=c("within","random"), lag=FALSE, spatial.error=FALSE,
+         moments = c("initial", "weights", "fullweights"), endog = NULL, instruments= NULL, verbose = FALSE, method = c("w2sls", "b2sls", "g2sls", "ec2sls"), control = list()){
 
+## translation for uniformity
+effects <- switch(match.arg(model), within="fixed", random="random")
 
 #source('utilities_GM.R')
 #source('listw2dgCMatrix.R')

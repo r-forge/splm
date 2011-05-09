@@ -1,5 +1,12 @@
+Changes in Version 0.9-01
+  o spml as common wrapper for all ML based estimators
+  o fixed syntax in spgm and sphtest for consistency with spml (essentially: 'model=c("within", "random", "pooling")' argument as in 'plm')
+  o reordered arguments in estimators according to specification logic: formula, data, model type, effects, spatial error and lag
+  o changed names for error and lag components in 'spreml' according to 'spgm' nomenclature: spatial lag is lambda, error is rho. RE variance ratio stays phi.
+
 Changes in Version 0.8-03
   o fixed the joint bsktest, pvalue comes now from pchibar{ibdreg}; added dependency on 'ibdreg' but nothing in NAMESPACE because 'ibdreg' doesn't have one
+
 Changes in Version 0.8-02
   o fixed the bsktest, now only formula methods and correct pvals
 	

@@ -21,7 +21,7 @@ function (X, y, ind, tind, n, k, t, nT, w, w2, coef0 = 0,
 
     ## set names for final parms vectors
     nam.beta <- dimnames(X)[[2]]
-    nam.errcomp <- c("psi")
+    nam.errcomp <- c("lambda")
 
     ## initialize values for optimizer
     myparms0 <- coef0
@@ -108,11 +108,11 @@ function (X, y, ind, tind, n, k, t, nT, w, w2, coef0 = 0,
 
     ## final parms
     betas <- as.vector(beta[[1]])
-    arcoef <- myparms[which(nam.errcomp=="psi")]  # lag-specific line
+    arcoef <- myparms[which(nam.errcomp=="lambda")]  # lag-specific line
     errcomp <- NULL                               # ols.errors-specific
     names(betas) <- nam.beta
-    names(arcoef) <- "psi"                        # lag-specific line
-    #names(errcomp) <- nam.errcomp[which(nam.errcomp!="psi")]
+    names(arcoef) <- "lambda"                        # lag-specific line
+    #names(errcomp) <- nam.errcomp[which(nam.errcomp!="lambda")]
 
     dimnames(covB) <- list(nam.beta, nam.beta)
     dimnames(covAR) <- list(names(arcoef), names(arcoef))

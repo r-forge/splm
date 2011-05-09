@@ -4,12 +4,12 @@ sphtest <- function (x, ...)
     UseMethod("sphtest")
 }
 
-sphtest.formula <- function (x, data, index = NULL, listw, model = c("lag", "error", "sarar"), method = c("ML", "GM"), errors = c("KKP", "BSK"),...)
+sphtest.formula <- function (x, data, index = NULL, listw, spatial.model = c("lag", "error", "sarar"), method = c("ML", "GM"), errors = c("KKP", "BSK"),...)
 {
  ## performs a Hausman test of a FE model with spatial lag or error
  ## against "alternative" with same spatial specification
 
-    model <- switch(match.arg(model),
+    switch(match.arg(spatial.model),
     lag = {
     	lag = TRUE
     	spatial.error = FALSE
@@ -33,17 +33,17 @@ errors <- match.arg(errors)
 
     ML = {
     	
-    femod <- spml(x, data = data, index = index, listw = listw, lag = lag, spatial.error = spatial.error, effects = "fixed", errors = errors)
+    femod <- spml(x, data = data, index = index, listw = listw, lag = lag, spatial.error = spatial.error, model = "within", errors = errors)
 
-    remod <- spml(x, data = data, index = index, listw = listw, lag = lag, spatial.error = spatial.error, effects = "random", errors = errors)
+    remod <- spml(x, data = data, index = index, listw = listw, lag = lag, spatial.error = spatial.error, model = "random", errors = errors)
   	
     	},
     	
     GM = {
     	
-  femod <- spgm(x, data = data, index = index, listw = listw, lag = lag, spatial.error = spatial.error, effects = "fixed", moments = "fullweights")
+  femod <- spgm(x, data = data, index = index, listw = listw, lag = lag, spatial.error = spatial.error, model = "within", moments = "fullweights")
   
-  remod <- spgm(x, data = data, index = index, listw = listw, lag = lag, spatial.error = spatial.error, effects = "random", moments = "fullweights")
+  remod <- spgm(x, data = data, index = index, listw = listw, lag = lag, spatial.error = spatial.error, model = "random", moments = "fullweights")
     	
     	},	
     
