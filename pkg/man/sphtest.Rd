@@ -35,7 +35,6 @@ an object of class \code{htest}
 
 \examples{
 data(Produc, package="Ecdat")
-Produc <- Produc[Produc$year<1975, ]
 data(usaww)
 fm <- log(gsp)~log(pcap)+log(pc)+log(emp)+unemp
 test1<-sphtest(fm,data=Produc, listw = mat2listw(usaww), spatial.model = "error", method="GM")
@@ -43,6 +42,6 @@ test1
 mod1<- spgm(fm, data=Produc, listw = usaww, model = "random", spatial.error = TRUE, moments="fullweights")
 mod2<- spgm(fm, data=Produc, listw = usaww, model = "within", spatial.error = TRUE)
 test2<-sphtest(mod1, mod2)
-summary(test2)
+test2
 }
 \keyword{htest}

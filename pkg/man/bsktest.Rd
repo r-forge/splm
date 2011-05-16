@@ -9,7 +9,8 @@
 }
 \usage{
 bsktest(x,...)
-\method{bsktest}{formula}(x, data, listw, test=c("LMH","LM1","LM2","CLMlambda","CLMmu"), index=NULL, ...)
+\method{bsktest}{formula}(x, data, index=NULL, listw,
+test=c("LMH","LM1","LM2","CLMlambda","CLMmu"), standardize=TRUE, ...)
 }
 \arguments{
 \item{x}{an object of class  \code{formula}}
@@ -17,7 +18,9 @@ bsktest(x,...)
   in the model. When the obect is a \code{\link{data.frame}}, the first two columns may contain the indexes. See \code{index}}
   \item{index}{if not NULL (default), a character vector to identify the indexes among the columns of the \code{\link{data.frame}}}
 \item{listw}{an object of class \code{listw} created for example by \code{nb2listw} }
-\item{test}{one of \code{c("LMH","LM1","LM2","CLMlambda","CLMmu")}, the test to be performed}
+\item{test}{one of \code{c("LMH","LM1","LM2","CLMlambda","CLMmu")}, the
+  test to be performed}
+\item{standardize}{whether to standardize the test statistic or not (applies only to LM1 and LM2)}
 \item{...}{additional arguments to be passed}
 }
 
@@ -32,7 +35,6 @@ Testing panel data regression models with spatial error correlation.
 
 \examples{
 data(Produc, package="Ecdat")
-Produc <- Produc[Produc$year<1975, ]
 data(usaww)
 fm <- log(gsp)~log(pcap)+log(pc)+log(emp)+unemp
 bsktest(fm,data=Produc, listw = mat2listw(usaww),

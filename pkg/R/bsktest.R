@@ -15,16 +15,18 @@ function(x,...){
 #}
 
 `bsktest.formula` <-
-function(x, data, listw, test=c("LMH","LM1","LM2","CLMlambda","CLMmu"), index=NULL, ...){
+function(x, data, index=NULL, listw,
+         test=c("LMH","LM1","LM2","CLMlambda","CLMmu"),
+         standardize=TRUE, ...){
   
 
 switch(match.arg(test), LM1 = {
 
-    bsk = slm1test(x, data, index,  listw, ...)
+    bsk = slm1test(x, data, index,  listw, standardize, ...)
 
   }, LM2 = {
 
-    bsk = slm2test(x, data, index,  listw, ...)
+    bsk = slm2test(x, data, index,  listw, standardize, ...)
 
   }, LMH = {
 
@@ -248,7 +250,7 @@ yybis<-function(q){
 
 
 `slm1test` <-
-function(formula, data, index=NULL,  listw, ...){
+function(formula, data, index=NULL, listw, standardize, ...){
 
   if(!is.null(index)) { ####can be deleted when using the wrapper
     require(plm)
@@ -327,11 +329,10 @@ for (i in 1:k) JIJIX[,i]<-rep(JIJIx[,i],T)
 
 SLM1<-((G+1)- Ed1)/sqrt(Vd1) 
 
-STAT2<- qnorm(0.95,lower.tail=TRUE)
-	statistics<-LM1
-  pval <- 2*pnorm(LM1, lower.tail=FALSE)
+  statistics <- if(standardize) SLM1 else LM1
+  pval <- 2*pnorm(statistics, lower.tail=FALSE)
 	
-  names(statistics)="LM1"
+  names(statistics) <- if(standardize) "SLM1" else "LM1"
 	method<- "Baltagi, Song and Koh SLM1 marginal test"
   dname <- deparse(formula)
   RVAL <- list(statistic = statistics,
@@ -343,7 +344,7 @@ STAT2<- qnorm(0.95,lower.tail=TRUE)
 
 
 `slm2test` <-
-function(formula, data, index=NULL, listw, ...){
+function(formula, data, index=NULL, listw, standardize, ...){
 
   if(!is.null(index)) { 
     require(plm)
@@ -420,12 +421,12 @@ fun2<-function(Q) unlist(tapply(Q,inde,lag))
 	d2<-crossprod(e,We)/ee
 	
 	SLM2<- (d2-Ed2)/sqrt(Vd2) 
-
-STAT2<- qnorm(0.95,lower.tail=TRUE)
-	statistics<-LM2
-  pval <- 2*pnorm(LM2, lower.tail=FALSE)
-
-  names(statistics)="LM2"
+  
+  statistics <- if(standardize) SLM2 else LM2
+  pval <- 2*pnorm(statistics, lower.tail=FALSE)
+	
+  names(statistics) <- if(standardize) "SLM2" else "LM2"
+  
 	method<- "Baltagi, Song and Koh LM2 marginal test"
   dname <- deparse(formula)
   RVAL <- list(statistic = statistics,

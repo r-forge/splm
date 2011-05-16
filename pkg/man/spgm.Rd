@@ -133,7 +133,6 @@ Model with Autoregressive Disturbances,
 \examples{
 data(Produc, package = "Ecdat") 
 data(usaww)
-Produc <- Produc[Produc$year<1975, ] 
 GM<-spgm(log(gsp)~log(pcap)+log(pc)+log(emp)+unemp, data=Produc,listw = usaww, moments="fullweights", spatial.error = TRUE)
 summary(GM)
 }

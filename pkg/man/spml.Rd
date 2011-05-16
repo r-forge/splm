@@ -77,7 +77,6 @@ Testing panel data regression models with spatial and serial error correlation.
 \examples{
 data(Produc, package = "Ecdat")
 data(usaww)
-Produc <- Produc[Produc$year<1974, ]
 fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
 ## the two standard specifications:
 ## random effects panel with spatial errors

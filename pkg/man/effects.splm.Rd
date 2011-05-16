@@ -53,7 +53,6 @@ Spatial panel data models,
 \examples{
 data(Produc, package = "Ecdat")
 data(usaww)
-Produc <- Produc[Produc$year<1975, ]
 fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
 lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "sptpfe", method = "eigen", quiet = TRUE) 
 summary(lag)
