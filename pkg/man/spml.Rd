@@ -72,7 +72,7 @@ Testing panel data regression models with spatial and serial error correlation.
 
 \author{Giovanni Millo}
 
-\seealso{\code{\link{spgm}}, \code{\link{spfeml}}}
+\seealso{\code{\link{spgm}}}
 
 \examples{
 data(Produc, package = "Ecdat")

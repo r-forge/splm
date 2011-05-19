@@ -33,7 +33,7 @@ of equations in the system.
 }
 
 \seealso{
-  \code{\link{spreml}}, \code{\link{spgm}}, \code{\link{spreml}}
+  \code{\link{spml}}, \code{\link{spgm}}
 }
 \author{ Giovanni Millo \email{Giovanni\_Millo@Generali.com}, Gianfranco Piras\email{gpiras@mac.com}}
 

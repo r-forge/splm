@@ -41,19 +41,19 @@ Spatial panel data models,
 \author{ Gianfranco Piras \email{gpiras@mac.com}}
 
 \seealso{
-\code{\link{spfeml}}
+\code{\link{spml}}
 }
 \examples{
 data(Produc, package = "Ecdat")
 data(usaww)
 fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
-lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "sptpfe", method = "eigen", quiet = TRUE)
+lag <- spml(fm, data = Produc, listw = mat2listw(usaww), model="within", effect="twoways", lag=TRUE, method="eigen")
 summary(lag)
 eff <- effects(lag) 
-err <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "error", effects = "tpfe", method = "eigen", quiet = TRUE)
+print(eff)
+err <- spml(fm, data = Produc, listw = mat2listw(usaww), model="within", effect="time", spatial.error="b", method="eigen")
 summary(err)
-eff <- effects(err)
-summary(eff)
+eff <- effects(err) 
 write.effects.splm(eff)
 }
 

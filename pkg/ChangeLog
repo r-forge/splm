@@ -1,3 +1,11 @@
+Changes in Version 0.9-03
+  o reinroduced bsjktest, excluding C.3; syntax harmonized with bsktest
+  o removed spreml, spfeml from namespace and documentation
+  o fixed documentation
+  o fixed parameter names in (hidden) spreml estimators: sr, semsr, srre and semsrre +/- sar (now phi=RE variance ratio, psi=AR, rho=SEM, lambda=SAR)
+  o fixed parameter names in functions calling spreml (pbsjkSDtest)
+
+
 Changes in Version 0.9-02
   o standardized versions of marginal bsktest reintroduced
   o all examples now on full 'Produc' dataset

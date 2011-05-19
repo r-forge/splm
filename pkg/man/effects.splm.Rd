@@ -1,5 +1,6 @@
 \name{effects.splm}
 \alias{effects.splm}
+\alias{print.effects.splm}
 \title{method for extracting fixed effects}
 
 \description{
@@ -48,17 +49,17 @@ Spatial panel data models,
 \author{ Gianfranco Piras \email{gpiras@mac.com}}
 
 \seealso{
-\code{\link{spfeml}} \code{print.effects.splm} \code{summary.effects.splm}
+\code{\link{spml}} \code{summary.effects.splm}
 }
 \examples{
 data(Produc, package = "Ecdat")
 data(usaww)
 fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
-lag <- spfeml(fm, data = Produc, listw = mat2listw(usaww), effects = "sptpfe", method = "eigen", quiet = TRUE) 
+lag <- spml(fm, data = Produc, listw = mat2listw(usaww), model="within", effect="twoways", lag=TRUE, method="eigen")
 summary(lag)
 eff <- effects(lag) 
 print(eff)
-err <- spfeml(fm, data = Produc, listw = mat2listw(usaww), model = "error", effects = "tpfe", method = "eigen", quiet = TRUE)
+err <- spml(fm, data = Produc, listw = mat2listw(usaww), model="within", effect="time", spatial.error="b", method="eigen")
 summary(err)
 eff <- effects(err) 
 print(eff)

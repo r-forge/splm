@@ -38,7 +38,7 @@ An object of class \code{'summary.splm'}
 }
 
 \seealso{
-  \code{\link{spreml}}, \code{\link{spgm}}, \code{\link{effects}}
+  \code{\link{spml}}, \code{\link{spgm}}, \code{\link{effects}}
 }
 \author{ Giovanni Millo \email{Giovanni\_Millo@Generali.com}, Gianfranco Piras\email{gpiras@mac.com}}
 

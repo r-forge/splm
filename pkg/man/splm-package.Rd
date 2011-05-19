@@ -77,7 +77,7 @@ Produc <- Produc[Produc$year<1975, ]
 fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
 GM<-spgm(log(gsp)~log(pcap)+log(pc)+log(emp) + unemp, data = Produc, listw = usaww, moments = "fullweights", spatial.error = TRUE)
 summary(GM)
-respaterr <- spreml(fm, data = Produc, w = usaww, errors="semre")
+respaterr <- spml(fm, data = Produc, listw = mat2listw(usaww), model="random", spatial.error="b")
 summary(respaterr)
 
 }
