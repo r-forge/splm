@@ -2,11 +2,11 @@
 function(x, data, index=NULL, listw, test=c("C.1","C.2","C.3","J"), ...){
 
   ## transform listw if needed
-#  if("listw" %in% class(listw)) {
-#    w <- listw2mat(listw)
-#  } else {
-#    w <- listw
-#  }
+  if("listw" %in% class(listw)) {
+    w <- listw2mat(listw)
+  } else {
+    w <- listw
+  }
 
   ## transform data if needed
   if(!is.null(index)) {
