@@ -83,7 +83,7 @@ fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
 respaterr <- spml(fm, data = Produc, listw = mat2listw(usaww), model="random", spatial.error="b")
 summary(respaterr)
 ## random effects panel with spatial lag
-respatlag <- spml(fm, data = Produc, listw = mat2listw(usaww), model="random", spatial.error="b", lag=TRUE)
+respatlag <- spml(fm, data = Produc, listw = mat2listw(usaww), model="random", spatial.error="none", lag=TRUE)
 summary(respatlag)
 }
 

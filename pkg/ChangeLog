@@ -1,3 +1,6 @@
+Changes in Version 0.9-04
+  o added visible vcov.splm method for interoperability with lmtest, car
+
 Changes in Version 0.9-03
   o reinroduced bsjktest, excluding C.3; syntax harmonized with bsktest
   o removed spreml, spfeml from namespace and documentation

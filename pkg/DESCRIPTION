@@ -1,7 +1,7 @@
 Package: splm
 Title: Econometric Models for Spatial Panel Data
-Version: 0.9-03
-Date: 2011-05-19
+Version: 0.9-04
+Date: 2011-05-26
 Author: Giovanni Millo <giovanni.millo@generali.com>, Gianfranco Piras <gpiras@mac.com>
 Maintainer: Giovanni Millo <giovanni.millo@generali.com>
 Description: ML and GM estimation and diagnostic testing of econometric models for spatial panel data.

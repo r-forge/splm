@@ -1,3 +1,2 @@
-`vcov.splm` <-
-function(x) return(x$vcov)
+`vcov.splm` <- function(object, ...) return(object$vcov)
 
