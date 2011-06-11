@@ -6,6 +6,9 @@ spml <- function(formula, data, index=NULL, listw, listw2=listw,
 
   ## wrapper function for all ML models
 
+  ## record call
+  cl <- match.call()
+
   ## check class(listw)
   checklw <- function(x) {
     if(!("listw" %in% class(x))) {
@@ -34,7 +37,7 @@ spml <- function(formula, data, index=NULL, listw, listw2=listw,
     res <- spfeml(formula=formula, data=data, index=index,
                   listw=listw, listw2=listw2,
                   model=model, effects=effects,
-                  ...)
+                  cl=cl, ...)
   }, random={
     switch(match.arg(effect),
            time={stop("time random effects not implemented")},
@@ -44,13 +47,13 @@ spml <- function(formula, data, index=NULL, listw, listw2=listw,
                               b="semre", kkp="sem2re", none="re")})
     res <- spreml(formula=formula, data=data, index=index,
                   w=listw2mat(listw), w2=listw2mat(listw2),
-                  lag=lag, errors=errors, ...)
+                  lag=lag, errors=errors, cl=cl, ...)
   }, pooling={
            errors <- switch(match.arg(spatial.error),
                               b="sem", kkp="sem", none="ols")
     res <- spreml(formula=formula, data=data, index=index,
                   w=listw2mat(listw), w2=listw2mat(listw2),
-                  lag=lag, errors=errors, ...)
+                  lag=lag, errors=errors, cl=cl, ...)
          })
 
   return(res)

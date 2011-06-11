@@ -4,7 +4,7 @@ function (formula, data, index = NULL, w, w2=w, lag = FALSE,
           "re", "sr", "sem","ols", "sem2re"),
           pvar = FALSE, hess = FALSE, quiet = TRUE,
           initval = c("zeros", "estimate"),
-          x.tol = 1.5e-18, rel.tol = 1e-15, ...)
+          x.tol = 1.5e-18, rel.tol = 1e-15, cl = NULL, ...)
 {
     ## added call to "sem2re" error structure (KKP)
 
@@ -17,7 +17,10 @@ function (formula, data, index = NULL, w, w2=w, lag = FALSE,
     }
     index <- data[, 1]
     tindex <- data[, 2]
-    cl <- match.call()
+
+    ## retrieve call only if not passed on
+    if(is.null(cl)) cl <- match.call()
+
     require(nlme)
     if (!is.matrix(w)) {
         if ("listw" %in% class(w)) {

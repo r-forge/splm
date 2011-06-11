@@ -1,4 +1,4 @@
-spfeml<-function(formula, data=list(), index=NULL,listw,listw2 = NULL, model=c("lag","error", "sarar"),effects=c('pooled','spfe','tpfe','sptpfe'), method="eigen",na.action=na.fail,quiet=TRUE,zero.policy = NULL, interval = NULL, tol.solve = 1e-10, control=list(), legacy = FALSE, llprof = NULL){
+spfeml<-function(formula, data=list(), index=NULL,listw,listw2 = NULL, model=c("lag","error", "sarar"),effects=c('pooled','spfe','tpfe','sptpfe'), method="eigen",na.action=na.fail,quiet=TRUE,zero.policy = NULL, interval = NULL, tol.solve = 1e-10, control=list(), legacy = FALSE, llprof = NULL, cl = NULL, ...){
 	###
 	##model should be one between "lag"  or "error"
 	##effects should be one of:
@@ -45,7 +45,8 @@ con[(namc <- names(control))] <- control
   tindex <- data[,2]
 
 	  ## record call
-cl <- match.call()
+        ## now passed on from spml() but to be sure:
+        if(is.null(cl)) cl <- match.call()
 
 #check the model
 model<-match.arg(model)
@@ -168,7 +169,6 @@ switch(model, lag = if (!quiet) cat("\n Spatial Lag Fixed Effects Model \n"),
   mt<-terms(formula,data=data)
   mf<-lm(formula,data,method="model.frame")#,na.action=na.fail
   na.act<-attr(mf,'na.action')
-  cl<-match.call()
 
 	indic<-seq(1,T)
 	inde<-as.numeric(rep(indic,each=N)) ####takes the first n observations

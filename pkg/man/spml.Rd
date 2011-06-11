@@ -78,10 +78,11 @@ Testing panel data regression models with spatial and serial error correlation.
 data(Produc, package = "Ecdat")
 data(usaww)
 fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
-## the two standard specifications:
-## random effects panel with spatial errors
-respaterr <- spml(fm, data = Produc, listw = mat2listw(usaww), model="random", spatial.error="b")
-summary(respaterr)
+## the two standard specifications (SEM and SAR) one with FE
+## and the other with RE:
+## fixed effects panel with spatial errors
+fespaterr <- spml(fm, data = Produc, listw = mat2listw(usaww), model="within", spatial.error="b")
+summary(fespaterr)
 ## random effects panel with spatial lag
 respatlag <- spml(fm, data = Produc, listw = mat2listw(usaww), model="random", spatial.error="none", lag=TRUE)
 summary(respatlag)
