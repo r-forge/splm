@@ -1,12 +1,5 @@
 spfeml<-function(formula, data=list(), index=NULL,listw,listw2 = NULL, model=c("lag","error", "sarar"),effects=c('pooled','spfe','tpfe','sptpfe'), method="eigen",na.action=na.fail,quiet=TRUE,zero.policy = NULL, interval = NULL, tol.solve = 1e-10, control=list(), legacy = FALSE, llprof = NULL, cl = NULL, ...){
-	###
-	##model should be one between "lag"  or "error"
-	##effects should be one of:
-		#"pooled" (default) no space or time fixed effects
-		#"spfe" : spatial fixed effects
-		#"tpfe" : time period fixed effects
-		#"sptpfe" : for both types of fixed effects
-	##the method argument is taken from lagsarlm
+
 	  
         timings <- list()
         .ptime_start <- proc.time()
@@ -49,7 +42,7 @@ con[(namc <- names(control))] <- control
         if(is.null(cl)) cl <- match.call()
 
 #check the model
-model<-match.arg(model)
+# model<-match.arg(model)
 
 
 #check the effects
@@ -105,7 +98,7 @@ if(is.vector(x)){
 
 ##checks on listw
   if(is.matrix(listw)) {
-    if(dim(listw)[[1]]!=N) stop("Non conformable spatial weights")
+    if(dim(listw)[[1]] !=N ) stop("Non conformable spatial weights")
     require(spdep)
     listw <- mat2listw(listw)
    }

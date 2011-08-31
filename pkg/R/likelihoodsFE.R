@@ -60,8 +60,10 @@ sacsarpanel<-function (coefs, env)
     s2 <- SSE/n
     ldet1 <- do_ldet(coefs[1], env, which = 1)
     ldet2 <- do_ldet(coefs[2], env, which = 2)
-    ret <- (T* ldet1 + T*ldet2 - ((n/2) * log(2 * pi)) - (n/2) * log(s2) - 
+
+            ret <- (T * ldet1 + T * ldet2 - ((n*T/2) * log(2 * pi)) - (n*T/2) * log(s2) - 
         (1/(2 * (s2))) * SSE)
+        
 if (get("verbose", envir = env)) cat("rho:", coefs[1], " lambda:", coefs[2], " function:", 
             ret, " Jacobian1:", ldet1, " Jacobian2:", ldet2, 
             " SSE:", SSE, "\n")
