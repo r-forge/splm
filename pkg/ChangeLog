@@ -2,7 +2,7 @@ Changes in Version 0.9-05
   o the call reported by spml is now, correctly, the user-level one instead of spreml' or spfeml's one
   o example(spml) now produces a fixed effects and a random effects example
   o the 'usaww' contiguity matrix for USA continental states has been fixed (Florida's neighbours were wrong) and documentation in usaww.Rd has been improved
-
+  o fixed the problem in fixed effects sarar model ML 
 Changes in Version 0.9-04
   o added visible vcov.splm method for interoperability with lmtest, car
 
