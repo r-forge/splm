@@ -173,8 +173,8 @@ for (i in 1:nrow(llprof)) ll_prof[i] <- sacsarpanel(llprof[i,], env = env)
         rownames(fdHess) <- colnames(fdHess) <- c("lambda", "lambda",colnames(xt))
         
 
-            rho.se <- sqrt(fdHess[2, 2])
-            lambda.se <- sqrt(fdHess[1, 1])
+            rho.se <- fdHess[2, 2]
+            lambda.se <- fdHess[1, 1]
             rest.se <- vcov(lm.target)
 
 
