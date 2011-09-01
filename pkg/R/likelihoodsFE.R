@@ -193,7 +193,7 @@ f_sacpanel_hess <- function (coefs, env)
     s2 <- SSE/n
     ldet1 <- do_ldet(rho, env, which = 1)
     ldet2 <- do_ldet(lambda, env, which = 2)
-    ret <- (T * ldet1 + T * ldet2 - ((n/2) * log(2 * pi)) - (n/2) * log(s2) - 
+    ret <- (T * ldet1 + T * ldet2 - ((n*T/2) * log(2 * pi)) - (n*T/2) * log(s2) - 
         (1/(2 * s2)) * SSE)
     if (get("verbose", envir = env)) 
         cat("rho:", rho, "lambda:", lambda, " function:", ret, 
