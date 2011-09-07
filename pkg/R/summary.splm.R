@@ -36,6 +36,11 @@ function(object,...){
                 object$lambda <- lambda
             }
 
+            if (object$type == "fixed effects GM" ) {
+                lambda <- object$rho
+                object$lambda <- lambda
+            }
+
             ## make AR coefficient of y's table
             if(!is.null(object$vcov.arcoef)) {
                 std.err1 <- sqrt(diag(object$vcov.arcoef))

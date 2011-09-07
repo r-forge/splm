@@ -6,28 +6,37 @@ function(formula, data=list(), index=NULL, listw,
 ## translation for uniformity
 effects <- switch(match.arg(model), within="fixed", random="random")
 
-#source('utilities_GM.R')
-#source('listw2dgCMatrix.R')
-#source('summary.splm.R')
-#source('print.splm.R')
-#source('print.summary.splm.R')
+# source('tss.R')
+# source('sumres.R')
+# source('utilities_GM.R')
+# source('listw2dgCMatrix.R')
+# source('summary.splm.R')
+# source('print.splm.R')
+# source('print.summary.splm.R')
 #
 #
 #
-#	source("ivsplm.R")
-#	source("ivplm.w2sls.R")
-#	source("ivplm.b2sls.R")	
-#	source("ivplm.g2sls.R")
-#	source("ivplm.ec2sls.R")
+	# source("ivsplm.R")
+	# source("ivplm.w2sls.R")
+	# source("ivplm.b2sls.R")	
+	# source("ivplm.g2sls.R")
+	# source("ivplm.ec2sls.R")
 #	source("sperrorgm2.R")		
 ##	source("spsarargm3.R")		##working with the Mutl and Pfaff. procedure
 #	source("spsarargm4.R")	#works fine with a modified procedure
 #source("spsarargm5.R")	
 
+
+if(model == "within" && attr(terms(formula), "intercept") == 0 ) formula <- as.formula(paste(attr(terms(formula),"variables")[1+attr(terms(formula),"response")], paste(attr(terms(formula),"term.labels"), collapse="+"), sep="~"))
+
+	
+	
+
+
 cl<-match.call()
 if(!spatial.error){
 	
-	results<-ivsplm(formula = formula, data=data, index = index, endog = endog, instruments = instruments, method = method, lag = lag, listw = listw)
+	results<-ivsplm(formula = formula, effects = effects, data=data, index = index, endog = endog, instruments = instruments, method = method, lag = lag, listw = listw)
 	
 	}
 
@@ -325,6 +334,8 @@ betaGLS<-coefficients(result)
 	names(betaGLS)<-colnames(xf)
   errcomp<-rbind(finrho,finsigmaV)
   nam.errcomp <- c("rho","sigma^2_v")
+    rownames(errcomp) <- nam.errcomp
+  colnames(errcomp)<-"Estimate"
    model.data <- data.frame(cbind(y,x[,-1]))
 
   type <- "fixed effects GM"
@@ -830,7 +841,7 @@ model.fit <- spgm.tsls(yf, wyf, xf,  Hwithin)
   errcomp<-rbind(finrho,finsigmaV)
   nam.errcomp <- c("rho","sigma^2_v")
   rownames(errcomp) <- nam.errcomp
-  colnames(errcomp)<-"Estimated error component"
+  colnames(errcomp)<-"Estimate"
 model.data <- data.frame(cbind(y,x))
 
   type <- "fixed effects GM"
@@ -1020,7 +1031,7 @@ names(betaGLS)[1]<-"lambda"
   errcomp<-rbind(finrho,finsigmaV,finsigma1,theta)
   nam.errcomp <- c("rho","sigma^2_v",'sigma^2_1',"theta")
   rownames(errcomp) <- nam.errcomp
-  colnames(errcomp)<-"Estimated error component"
+  colnames(errcomp)<-"Estimate"
 model.data <- data.frame(cbind(y,x))
 
   type <- "random effects GM"

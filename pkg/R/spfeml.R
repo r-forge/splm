@@ -72,7 +72,7 @@ effects<-match.arg(effects)
   #make sure that the model has no intercept if effects !=pooled
   if (effects !="pooled" && colnames(x)[1]=="(Intercept)") {
   	x<-x[,-1]
-  	cat('\n Warning: x may not contain an intercept if fixed effects are specified \n')
+  	#cat('\n Warning: x may not contain an intercept if fixed effects are specified \n')
 	}
 
 if(is.vector(x)){

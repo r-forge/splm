@@ -1,6 +1,8 @@
 
-ivsplm<-function(formula,data=list(), index=NULL, endog = NULL, instruments= NULL, method = c("w2sls", "b2sls", "g2sls", "ec2sls"), lag = FALSE, listw){
-	
+ivsplm<-function(formula,data=list(), index=NULL, endog = NULL, instruments= NULL, method = c("w2sls", "b2sls", "g2sls", "ec2sls"), lag = FALSE, listw, effects = NULL){
+
+if(length(method) !=1 && effects == "fixed") method <- "w2sls" 	
+if(length(method) !=1 && effects == "random") method <- "ec2sls" 	
 		
   if(!is.null(index)) {
     require(plm)
