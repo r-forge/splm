@@ -8,7 +8,7 @@
   interoperability with testing functions in lmtest and car.
 }
 \usage{
-vcov.splm(object, ...)
+vcov(object, ...)
 \method{vcov}{splm}(object, ...)
 }
 \arguments{
