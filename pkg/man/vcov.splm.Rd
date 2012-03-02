@@ -1,5 +1,5 @@
 \name{vcov.splm}
-\alias{vcov.splm}
+\alias{vcov}
 
 \title{Covariance extractor method for \code{splm} objects}
 \description{
