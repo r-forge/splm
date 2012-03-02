@@ -1,5 +1,5 @@
 \name{vcov.splm}
-\alias{vcov}
+\alias{vcov.splm}
 
 \title{Covariance extractor method for \code{splm} objects}
 \description{
@@ -8,7 +8,6 @@
   interoperability with testing functions in lmtest and car.
 }
 \usage{
-vcov(object, ...)
 \method{vcov}{splm}(object, ...)
 }
 \arguments{
