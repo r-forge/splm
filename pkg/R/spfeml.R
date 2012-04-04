@@ -20,7 +20,7 @@ con[(namc <- names(control))] <- control
             warning("unknown names in control: ", paste(noNms, collapse = ", "))
 
     if (is.null(quiet)) 
-	quiet <- !get("verbose", env = spdep:::.spdepOptions)
+	quiet <- !get("verbose", envir = spdep:::.spdepOptions)
     stopifnot(is.logical(quiet))
 
 	if (is.null(zero.policy))
