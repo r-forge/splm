@@ -5,6 +5,6 @@ Date: 2012-03-02
 Author: Giovanni Millo <giovanni.millo@generali.com>, Gianfranco Piras <gpiras@mac.com>
 Maintainer: Giovanni Millo <giovanni.millo@generali.com>
 Description: ML and GM estimation and diagnostic testing of econometric models for spatial panel data.
-Depends: R (>= 2.14.0), MASS, nlme, spdep, plm, Matrix, bdsmatrix, spam, ibdreg, car, lmtest, Ecdat
+Depends: R (>= 2.10.0), MASS, nlme, spdep, plm, Matrix, bdsmatrix, spam, ibdreg, car, lmtest, Ecdat
 License: GPL-2
 LazyLoad: yes

@@ -25,11 +25,6 @@ organized in a coefficient matrix.
 Also a matrix for the error components, 
 or the spatial coefficients will be generated 
 depending on the estimated model. 
-
-When the \code{'splm'} is produced by  
-the function 'spsegm', the summary 
-will be generated looping over the number
-of equations in the system.
 }
 
 \seealso{
@@ -40,7 +35,8 @@ of equations in the system.
 \examples{
 data(Produc, package = "Ecdat") 
 data(usaww)
-GM<-spgm(log(gsp)~log(pcap)+log(pc)+log(emp)+unemp, data=Produc, listw = usaww, moments="fullweights", spatial.error= TRUE)
-summary(GM)
+spremod<-spml(log(gsp)~log(pcap)+log(pc)+log(emp)+unemp, data=Produc,
+listw = mat2listw(usaww), model="random", lag=TRUE, spatial.error="none")
+summary(spremod)
 }
 \keyword{spatial}

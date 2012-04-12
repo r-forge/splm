@@ -64,7 +64,12 @@ Model with Autoregressive Disturbances,
 
   Kelejian, H.H. and Prucha, I.R. (2004) 
 Estimation of Simultaneous systems of spatially interrelated cross sectional equations,
-    \emph{Journal of Econometrics}, \bold{118}, pages 27--50.
+\emph{Journal of Econometrics}, \bold{118}, pages 27--50.
+
+Millo, G., Piras, G. (2012)
+splm: Spatial Panel Data Models in R.
+\emph{Journal of Statistical Software}, \bold{47(1)}, 1--38.
+URL http://www.jstatsoft.org/v47/i01/.
 }
 
 

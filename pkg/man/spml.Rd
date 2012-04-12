@@ -68,6 +68,11 @@ initval: one of \code{c("zeros", "estimate")}, the initial values for
 Baltagi, B.H., Song, S.H., Jung B. and Koh, W. (2007)
 Testing panel data regression models with spatial and serial error correlation.
 \emph{Journal of Econometrics}, \bold{140}, 5-51.
+
+Millo, G., Piras, G. (2012)
+splm: Spatial Panel Data Models in R.
+\emph{Journal of Statistical Software}, \bold{47(1)}, 1--38.
+URL http://www.jstatsoft.org/v47/i01/.
 }
 
 \author{Giovanni Millo}

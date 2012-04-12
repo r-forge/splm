@@ -297,7 +297,7 @@ if(is.null(endog))	 result<-plm(formula = formula1, data = data, effect = "indiv
 else 	result<-ivplm.w2sls(Y = y,X =x, H = instruments, endog = endog, ind = ind, tind = tind, lag = FALSE, listw = listw)
 #print(result$coefficients)
 
-residuals<-as.matrix(residuals(result))
+residuals<-as.matrix(as.numeric(residuals(result)))
 oo<-order(tind,ind)
 res<-residuals[oo,]
 
@@ -401,7 +401,7 @@ if(is.null(endog))	{
 
 result<-lm(y~x-1) 
 
-residuals<-as.matrix(residuals(result))
+residuals<-as.matrix(as.numeric(residuals(result)))
 oo<-order(tind,ind)
 res<-residuals[oo,]
 
@@ -465,10 +465,10 @@ else{
 		result2<-ivplm.b2sls(Y = y,X =x, H = instruments, endog = endog,  ind = ind, tind = tind, lag = FALSE, listw = listw)
 #print(result2$coefficients)
 
-residuals1<-as.matrix(residuals(result1))
+residuals1<-as.matrix(as.numeric(residuals(result1)))
 oo<-order(tind,ind)
 res1<-residuals1[oo]
-res2<-as.matrix(residuals(result2))
+res2<-as.matrix(as.numeric(residuals(result2)))
 
 Gg<-fswithin(listw,res1,N,T)
 
@@ -787,7 +787,7 @@ else 	result<-ivplm.w2sls(Y = y,X =x, H = instruments, endog = endog, ind = ind,
 #print(result$coefficients)
 
 
-residuals<-as.matrix(residuals(result))
+residuals<-as.matrix(as.numeric(residuals(result)))
 oo<-order(tind,ind)
 res<-residuals[oo,]
 
@@ -925,10 +925,10 @@ if(is.null(endog)){
 
 
 
-residuals1<-as.matrix(residuals(result1))
+residuals1<-as.matrix(as.numeric(residuals(result1)))
 oo<-order(tind,ind)
 res1<-residuals1[oo,]
-res2<-as.matrix(residuals(result2))
+res2<-as.matrix(as.numeric(residuals(result2)))
 Gg<-fswithin(listw,res1,N,T)
 
 pars<-c(0.2,0.5)

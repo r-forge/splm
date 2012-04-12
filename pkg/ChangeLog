@@ -1,3 +1,7 @@
+Changes in Version 1.0-00
+  o fixed prblem with spgm due to residuals of plm models now being pseries
+  o added /inst/CITATION, added reference to JSS paper in docs
+
 Changes in Version 0.9-05
   o the call reported by spml is now, correctly, the user-level one instead of spreml' or spfeml's one
   o example(spml) now produces a fixed effects and a random effects example

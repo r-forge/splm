@@ -29,7 +29,12 @@ an object of class \code{htest}
 }
 \references{Baltagi, B.H., Song, S.H. and Koh, W. (2003)
 Testing panel data regression models with spatial error correlation.
-\emph{Journal of Econometrics}, \bold{117}, 123--150.}
+\emph{Journal of Econometrics}, \bold{117}, 123--150.
+
+Millo, G., Piras, G. (2012)
+splm: Spatial Panel Data Models in R.
+\emph{Journal of Statistical Software}, \bold{47(1)}, 1--38.
+URL http://www.jstatsoft.org/v47/i01/.}
 \author{Gianfranco Piras}
 \seealso{\code{\link{sphtest}}}
 

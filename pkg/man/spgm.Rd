@@ -123,8 +123,13 @@ A Generalized Moments Estimator for the Autoregressive Parameter in a Spatial Mo
       Kelejian, H.H. and Prucha, I.R. (1999) 
 A Generalized Spatial Two Stage Least Square Procedure for Estimating a Spatial Autoregressive
 Model with Autoregressive Disturbances,
-    \emph{Journal of Real Estate Finance and Economics}, \bold{17}, pages 99--121.
+    \emph{Journal of Real Estate Finance and Economics}, \bold{17},
+    pages 99--121.
 
+    Millo, G., Piras, G. (2012)
+splm: Spatial Panel Data Models in R.
+\emph{Journal of Statistical Software}, \bold{47(1)}, 1--38.
+URL http://www.jstatsoft.org/v47/i01/.
 }
 
 \author{ Gianfranco Piras \email{gpiras@mac.com}}

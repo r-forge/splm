@@ -29,6 +29,13 @@ sphtest(x, ...)
 \value{
 an object of class \code{htest}
 }
+
+\references{
+  Millo, G., Piras, G. (2012)
+splm: Spatial Panel Data Models in R.
+\emph{Journal of Statistical Software}, \bold{47(1)}, 1--38.
+URL http://www.jstatsoft.org/v47/i01/.}
+
 \author{Gianfranco Piras}
 
 \seealso{\code{\link{spgm}}}
