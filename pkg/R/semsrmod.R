@@ -114,17 +114,19 @@ function (X, y, ind, tind, n, k, t, nT, w, w2, coef0 = rep(0, 3),
 
     ## final parms
     betas <- as.vector(beta[[1]])
+    sigma2 <- as.numeric(beta[["sigma2"]])    
     arcoef <- NULL
-    errcomp <- myparms[which(nam.errcomp!="psi")]
+    errcomp <- myparms[which(nam.errcomp!="lambda")]
     names(betas) <- nam.beta
-    names(errcomp) <- nam.errcomp[which(nam.errcomp!="psi")]
+    names(errcomp) <- nam.errcomp[which(nam.errcomp!="lambda")]
 
     dimnames(covB) <- list(nam.beta, nam.beta)
     dimnames(covPRL) <- list(names(errcomp), names(errcomp))
 
     ## result
     RES <- list(betas = betas, arcoef=arcoef, errcomp = errcomp,
-                covB = covB, covAR=covAR, covPRL = covPRL, ll = myll)
+                covB = covB, covAR=covAR, covPRL = covPRL, ll = myll,
+                sigma2 = sigma2)
 
     return(RES)
 }

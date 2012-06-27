@@ -144,7 +144,12 @@ function (formula, data, index = NULL, w, w2=w, lag = FALSE,
     model.data <- data.frame(cbind(y, X[, -1]))
     dimnames(model.data)[[1]] <- nam.rows
     type <- "random effects ML"
-    sigma2 <- list(one = 3, idios = 2, id = 1)
+    sigma2v <- RES$sigma2
+    sigma2mu <- if(is.null(RES$errcomp["phi"])) {0} else {
+      as.numeric(sigma2v*RES$errcomp["phi"])
+    }
+    sigma2.1 <- sigma2mu + sigma2v
+    sigma2 <- list(one = sigma2.1, idios = sigma2v, id = sigma2mu)
     spmod <- list(coefficients = RES$betas, arcoef = RES$arcoef,
         errcomp = RES$errcomp, vcov = RES$covB, vcov.arcoef = RES$covAR,
         vcov.errcomp = RES$covPRL, residuals = res, fitted.values = y.hat,
