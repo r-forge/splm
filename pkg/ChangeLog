@@ -1,3 +1,5 @@
+Changes in Version 1.0-02
+  o fixed error in bsjktest(..., type="C.2") (calling "rho" parm by wrong name)
 Changes in Version 1.0-01
   o spreml-type models now output object$sigma2, i.e. sigma2e
   o spreml calcumates sigma2mu on the basis of phi, if any, and sigma2.1 as sigma2e+sigma2mu	
