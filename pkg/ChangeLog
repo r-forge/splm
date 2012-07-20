@@ -1,3 +1,5 @@
+Changes in Version 1.0-03
+  o spreml is now visible at user level (for estimating extended specifications with AR errors)
 Changes in Version 1.0-02
   o fixed error in bsjktest(..., type="C.2") (calling "rho" parm by wrong name)
 Changes in Version 1.0-01
