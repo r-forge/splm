@@ -318,7 +318,7 @@ sacsarpanel<-function (coefs, env)
     ldet2 <- do_ldet(coefs[2], env, which = 2)
 
             ret <-(T * (ldet1 + ldet2)) - ((n*T/2) * log(2 * pi)) - (n*T/2) * log(s2) 
-            - (1/(2 * (s2))) * SSE)
+            - (1/(2 * (s2))) * SSE
         
 if (get("verbose", envir = env)) cat("rho:", coefs[1], " lambda:", coefs[2], " function:", 
             ret, " Jacobian1:", ldet1, " Jacobian2:", ldet2, 
@@ -464,11 +464,11 @@ interval2 <- get("interval2", envir = env)
     betas <- coefficients(lm.target)
     names(betas) <- colnames(xt)  
 	coefs <- c(rho, lambda, betas)
-
+	coefsl <- c(s2, rho, lambda, betas)
 
 ###Add the vc matrix exact
         
-        fd <- fdHess(coefs, f_sacpanel_hess, env)
+        fd <- fdHess(coefsl, f_sacpanel_hess, env)
         mat <- fd$Hessian
 		  fdHess<- solve(-(mat), tol.solve = tol.solve)
         rownames(fdHess) <- colnames(fdHess) <- c("lambda", "lambda",colnames(xt))
@@ -484,16 +484,16 @@ f_sacpanel_hess <- function (coefs, env)
 {
 	T<-get("T", envir = env)
 	NT<-get("NT", envir = env)
-    rho <- coefs[1]
-    lambda <- coefs[2]
-    beta <- coefs[-(1:2)]
-    SSE <- sar_sac_hess_sse_panel(rho, lambda, beta, env)
+	s2 <- coefs[1]
+    rho <- coefs[2]
+    lambda <- coefs[3]
+    beta <- coefs[-(1:3)]
+    # SSE <- sar_sac_hess_sse_panel(rho, lambda, beta, env)
     n <- NT/T
-    s2 <- SSE/n
+    SSE<- s2 *n
     ldet1 <- do_ldet(rho, env, which = 1)
     ldet2 <- do_ldet(lambda, env, which = 2)
-    ret <- (T * ldet1 + T * ldet2 - ((n*T/2) * log(2 * pi)) - (n*T/2) * log(s2) - 
-        (1/(2 * s2)) * SSE)
+    ret <- T * ldet1 + T * ldet2 - ((n*T/2) * log(2 * pi)) - (n*T/2) * log(s2) - (1/(2 * s2)) * SSE
     if (get("verbose", envir = env)) 
         cat("rho:", rho, "lambda:", lambda, " function:", ret, 
             " Jacobian1:", ldet1, " Jacobian2:", ldet2, " SSE:", 
