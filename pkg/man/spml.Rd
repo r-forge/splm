@@ -6,7 +6,7 @@
 
 
 \usage{
-spml(formula, data, index = NULL, listw, listw2=listw,
+spml(formula, data, index=NULL, listw, listw2=listw, na.action,
                  model=c("within","random","pooling"),
                  effect=c("individual","time","twoways"),
                  lag=FALSE, spatial.error=c("b","kkp","none"),
@@ -22,6 +22,7 @@ spml(formula, data, index = NULL, listw, listw2=listw,
   \item{listw2}{an object of class \code{listw} or a
   \code{matrix}. Second of set spatial weights for estimation, if
   different from the first (e.g., in a 'sarar' model).}
+  \item{na.action}{see \pkg{spdep} for more details.}
   \item{model}{one of \code{c("within", "random", "pooling").}}
   \item{effect}{one of \code{c("individual","time","twoways")}; the
   effects introduced in the model.}
@@ -87,7 +88,7 @@ fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
 ## the two standard specifications (SEM and SAR) one with FE
 ## and the other with RE:
 ## fixed effects panel with spatial errors
-fespaterr <- spml(fm, data = Produc, listw = mat2listw(usaww), model="within", spatial.error="b")
+fespaterr <- spml(fm, data = Produc, listw = mat2listw(usaww), model="within", spatial.error="b", Hess = TRUE)
 summary(fespaterr)
 ## random effects panel with spatial lag
 respatlag <- spml(fm, data = Produc, listw = mat2listw(usaww), model="random", spatial.error="none", lag=TRUE)

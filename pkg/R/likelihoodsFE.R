@@ -22,7 +22,7 @@ ret <- - (NT/2)*log(Nsig)  + T * ldet
 }
 
 
-splaglm<-function(env, zero.policy = zero.policy, interval = interval){
+splaglm<-function(env, zero.policy = zero.policy, interval = interval, con = con, llprof = llprof, tol.solve= tol.solve, Hess = Hess, method = method){
 
 xt <- get("xt", envir = env)
 yt <- get("yt", envir = env)
@@ -95,7 +95,7 @@ if(!Hess){
         
         rho.se <- fdHess[2, 2]
         sig.se <- fdHess[1, 1]
-        rest.se <- vcov(lm.target)
+        rest.se <- vcov(lm.lag)
             
             
 }
@@ -195,7 +195,7 @@ if (get("verbose", envir = env))
 
 
 
-sperrorlm<-function(env, zero.policy = zero.policy, interval = interval){
+sperrorlm<-function(env, zero.policy = zero.policy, interval = interval, con = con, llprof = llprof, tol.solve= tol.solve, Hess = Hess){
 
 xt <- get("xt", envir = env)
 yt <- get("yt", envir = env)
@@ -342,7 +342,7 @@ sacsarpanel_sse <- function (coefs, env)
 }
 
 
-spsararlm<-function(env, zero.policy = zero.policy, con = con, llprof = llprof, tol.solve= 1e-10){
+spsararlm<-function(env, zero.policy = zero.policy, con = con, llprof = llprof, tol.solve= tol.solve, Hess = Hess, method = method){
 
 xt <- get("xt", envir = env)
 yt <- get("yt", envir = env)
@@ -448,9 +448,10 @@ interval2 <- get("interval2", envir = env)
     names(rho) <- "rho"
     lambda <- optres$par[1]
     names(lambda) <- "lambda"
-    nm <- paste(method, "opt", sep = "_")
-    timings[[nm]] <- proc.time() - .ptime_start
-    .ptime_start <- proc.time()
+
+    # timings[["coefs"]] <- proc.time() - .ptime_start
+    # .ptime_start <- proc.time()
+    # assign("first_time", TRUE, envir = env)
 
     
     lm.target <- lm(I(yt - lambda * wyt - rho * w2yt + rho * lambda * 
@@ -464,17 +465,22 @@ interval2 <- get("interval2", envir = env)
     betas <- coefficients(lm.target)
     names(betas) <- colnames(xt)  
 	coefs <- c(rho, lambda, betas)
-	coefsl <- c(s2, rho, lambda, betas)
+	# coefsl <- c(rho, lambda, betas)
 
 ###Add the vc matrix exact
-        
-        fd <- fdHess(coefsl, f_sacpanel_hess, env)
+if(Hess){        
+        fd <- fdHess(coefs, f_sacpanel_hess, env)
         mat <- fd$Hessian
 		  fdHess<- solve(-(mat), tol.solve = tol.solve)
         rownames(fdHess) <- colnames(fdHess) <- c("lambda", "lambda",colnames(xt))
             rho.se <- fdHess[2, 2]
             lambda.se <- fdHess[1, 1]
             rest.se <- vcov(lm.target)
+            }
+            
+            else{
+            	stop("Asymptotic VC matrix not yet implemented for model SARAR")
+            	}
 
 
 return<-list(coeff=betas,lambda=lambda, rho = rho, s2=s2, asyvar1 = rest.se, lambda.se = lambda.se, rho.se = rho.se)	
@@ -484,13 +490,15 @@ f_sacpanel_hess <- function (coefs, env)
 {
 	T<-get("T", envir = env)
 	NT<-get("NT", envir = env)
-	s2 <- coefs[1]
-    rho <- coefs[2]
-    lambda <- coefs[3]
-    beta <- coefs[-(1:3)]
-    # SSE <- sar_sac_hess_sse_panel(rho, lambda, beta, env)
+	
+    rho <- coefs[1]
+    lambda <- coefs[2]
+     beta <- coefs[-(1:2)]
+     # SSE <- sar_sac_hess_sse_panel(rho, lambda, beta, env)
+    SSE <- sar_sac_hess_sse_panel(rho, lambda, beta, env)
     n <- NT/T
-    SSE<- s2 *n
+    # SSE<- s2 *n
+     s2<- SSE / n
     ldet1 <- do_ldet(rho, env, which = 1)
     ldet2 <- do_ldet(lambda, env, which = 2)
     ret <- T * ldet1 + T * ldet2 - ((n*T/2) * log(2 * pi)) - (n*T/2) * log(s2) - (1/(2 * s2)) * SSE
@@ -501,16 +509,16 @@ f_sacpanel_hess <- function (coefs, env)
     ret
 }
 
-# sar_sac_hess_sse_panel <- function (rho, lambda, beta, env) 
-# {
-    # yl <- get("yt", envir = env) - lambda * get("wyt", envir = env) - 
-        # rho * get("w2yt", envir = env) + rho * lambda * get("w2wyt", 
-        # envir = env)
-    # xl <- get("xt", envir = env) - rho * get("wxt", envir = env)
-    # res <- yl - (xl %*% beta)
-    # SSE <- c(crossprod(res))
-    # SSE
-# }
+sar_sac_hess_sse_panel <- function (rho, lambda, beta, env) 
+{
+    yl <- get("yt", envir = env) - lambda * get("wyt", envir = env) - 
+        rho * get("w2yt", envir = env) + rho * lambda * get("w2wyt", 
+         envir = env)
+     xl <- get("xt", envir = env) - rho * get("wxt", envir = env)
+    res <- yl - (xl %*% beta)
+    SSE <- c(crossprod(res))
+    SSE
+}
 
 
 

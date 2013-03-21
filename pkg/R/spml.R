@@ -1,4 +1,4 @@
-spml <- function(formula, data, index=NULL, listw, listw2=listw,
+spml <- function(formula, data, index=NULL, listw, listw2=listw, na.action,
                  model=c("within","random","pooling"),
                  effect=c("individual","time","twoways"),
                  lag=FALSE, spatial.error=c("b","kkp","none"),
@@ -35,7 +35,7 @@ spml <- function(formula, data, index=NULL, listw, listw2=listw,
     effects <- switch(match.arg(effect), individual="spfe",
                       time="tpfe", twoways="sptpfe")
     res <- spfeml(formula=formula, data=data, index=index,
-                  listw=listw, listw2=listw2,
+                  listw=listw, listw2=listw2, na.action,
                   model=model, effects=effects,
                   cl=cl, ...)
   }, random={
