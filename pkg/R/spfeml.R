@@ -1,8 +1,8 @@
 spfeml<-function(formula, data=list(), index=NULL, listw, listw2 = NULL, na.action, model = c("lag","error", "sarar"),effects = c('pooled','spfe','tpfe','sptpfe'), method="eigen", quiet = TRUE, zero.policy = NULL, interval1 = NULL, interval2 = NULL, trs1 = NULL, trs2 = NULL, tol.solve = 1e-10, control = list(), legacy = FALSE, llprof = NULL, cl = NULL, Hess = TRUE, LeeYu = FALSE, ...){
 
 	  
-        timings <- list()
-       .ptime_start <- proc.time()
+        # timings <- list()
+       # .ptime_start <- proc.time()
 
 model<-match.arg(model)
 
@@ -369,7 +369,7 @@ if(model %in% c("lag", "error") ){
 }
 
 assign("verbose", !quiet, envir = env)
-assign("first_time", TRUE, envir = env)
+# assign("first_time", TRUE, envir = env)
 assign("LAPACK", con$LAPACK, envir = env)
 assign("can.sim", can.sim, envir=env)
 assign("similar", FALSE, envir = env)
@@ -378,8 +378,8 @@ assign("inde",inde, envir=env)
 assign("con", con, envir=env)
 
 
-timings[["set_up"]] <- proc.time() - .ptime_start
-.ptime_start <- proc.time()
+# timings[["set_up"]] <- proc.time() - .ptime_start
+# .ptime_start <- proc.time()
 
     if (!quiet) 
         cat(paste("\nSpatial autoregressive error model\n", "Jacobian calculated using "))
@@ -387,13 +387,14 @@ timings[["set_up"]] <- proc.time() - .ptime_start
 if(model == "lag"){
     interval1 <- spdep:::jacobianSetup(method, env, con, pre_eig = con$pre_eig, trs = trs1, interval = interval1)
     assign("interval1", interval1, envir = env)
-    nm <- paste(method, "set_up", sep = "_")
-    timings[[nm]] <- proc.time() - .ptime_start
-    .ptime_start <- proc.time()	
+    # nm <- paste(method, "set_up", sep = "_")
+    # timings[[nm]] <- proc.time() - .ptime_start
+    # .ptime_start <- proc.time()	
 
 
     RES<- splaglm(env = env, zero.policy = zero.policy, interval = interval1, Hess = Hess)
-    res.eff<-felag(env = env, beta=RES$coeff, sige=RES$s2, effects = effects ,method =method, rho=RES$rho, legacy = legacy, zero.policy = zero.policy)    
+    
+    res.eff<-felag(env = env, beta = RES$coeff, sige = RES$s2, effects = effects, method = method, lambda = RES$lambda, legacy = legacy, zero.policy = zero.policy)    
 
 	}
 
@@ -403,14 +404,14 @@ if(model == "sarar"){
     assign("interval1", interval1, envir = env)
     interval2 <- spdep:::jacobianSetup(method, env, con, pre_eig = con$pre_eig2, trs = trs2, interval = interval2, which = 2)
     assign("interval2", interval2, envir = env)
-    nm <- paste(method, "set_up", sep = "_")
-    timings[[nm]] <- proc.time() - .ptime_start
-    .ptime_start <- proc.time()
+    # nm <- paste(method, "set_up", sep = "_")
+    # timings[[nm]] <- proc.time() - .ptime_start
+    # .ptime_start <- proc.time()
     
       RES<- spsararlm(env = env, zero.policy = zero.policy, con = con, llprof = llprof, tol.solve = tol.solve, Hess = Hess)
   
   
-res.eff<-felag(env = env, beta=RES$coeff, sige=RES$s2, effects = effects ,method = method, rho = RES$lambda, legacy = legacy, zero.policy = zero.policy)    	
+res.eff<-felag(env = env, beta=RES$coeff, sige=RES$s2, effects = effects ,method = method, lambda = RES$lambda, legacy = legacy, zero.policy = zero.policy)    	
 
 
 		}
@@ -420,9 +421,9 @@ if (model=='error'){
 
     interval1 <- spdep:::jacobianSetup(method, env, con, pre_eig = con$pre_eig, trs = trs1, interval = interval1)
     assign("interval1", interval1, envir = env)
-    nm <- paste(method, "set_up", sep = "_")
-    timings[[nm]] <- proc.time() - .ptime_start
-    .ptime_start <- proc.time()	
+    # nm <- paste(method, "set_up", sep = "_")
+    # timings[[nm]] <- proc.time() - .ptime_start
+    # .ptime_start <- proc.time()	
 
   RES<- sperrorlm(env = env, zero.policy = zero.policy, interval = interval1, Hess = Hess)	
     	res.eff<-feerror(env = env, beta=RES$coeff, sige=RES$s2, effects = effects ,method =method, lambda=RES$lambda, legacy = legacy)

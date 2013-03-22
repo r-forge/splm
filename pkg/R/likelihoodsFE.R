@@ -34,7 +34,7 @@ listw<-get("listw", envir = env)
 inde<-get("inde", envir = env)
 interval1 <- get("interval1", envir = env)
 
-      XpX<-crossprod(xt)
+        XpX<-crossprod(xt)
 		b0<-solve(XpX,crossprod(xt,yt)) ####y on X
 		b1<-solve(XpX,crossprod(xt,wyt)) ####Wy on x
 		e0<-yt - xt%*% b0
@@ -53,48 +53,47 @@ opt <- optimize(conclikpan,  interval = interval1, maximum = TRUE, env = env, to
 
 #opt <- nlminb(0.02138744, conclikpan,  lower = interval[1], upper= interval[2],  env = env)
 
-        rho <- opt$maximum
+        lambda <- opt$maximum
 
-    if (isTRUE(all.equal(rho, interval[1])) || isTRUE(all.equal(rho, 
-        interval[2]))) 
-        warning("rho on interval bound - results should not be used")
+    if (isTRUE(all.equal(lambda, interval[1])) || isTRUE(all.equal(lambda,interval[2]))) 
+        warning("lambda on interval bound - results should not be used")
 
-        names(rho) <- "lambda"
+        names(lambda) <- "lambda"
         LL <- opt$objective
         optres <- opt
 
-    nm <- paste(method, "opt", sep = "_")
-    timings[[nm]] <- proc.time() - .ptime_start
-    .ptime_start <- proc.time()
+    # nm <- paste(method, "opt", sep = "_")
+    # timings[[nm]] <- proc.time() - .ptime_start
+    # .ptime_start <- proc.time()
 
-	lm.lag <- lm((yt - rho * wyt) ~ xt - 1)
+	lm.lag <- lm((yt - lambda * wyt) ~ xt - 1)
 	p <- lm.lag$rank
     r <- residuals(lm.lag)
     fit <- yt - r
     names(r) <- names(fit)
 	betas <- coefficients(lm.lag)
 	names(betas) <- colnames(xt)
-	coefs <- c(rho, betas)
+	coefs <- c(lambda, betas)
 
 	SSE <- deviance(lm.lag)
 	s2 <- SSE/NT
-	coefsl <- c(s2, rho, betas)
+	# coefsl <- c(s2, rho, betas)
     
-    timings[["coefs"]] <- proc.time() - .ptime_start
-    .ptime_start <- proc.time()
-    assign("first_time", TRUE, envir = env)
+    # timings[["coefs"]] <- proc.time() - .ptime_start
+    # .ptime_start <- proc.time()
+    # assign("first_time", TRUE, envir = env)
 	
 	
 ### add numerical hessian
-if(!Hess){
+if(Hess){
 	
-        fd <- fdHess(coefsl, f_sarpanel_hess, env)
+        fd <- fdHess(coefs, f_sarpanel_hess, env)
         mat <- fd$Hessian
 		  fdHess<- solve(-(mat), tol.solve = tol.solve)
-        rownames(fdHess) <- colnames(fdHess) <- c("s2", "lambda", colnames(xt))
+        rownames(fdHess) <- colnames(fdHess) <- c("lambda", colnames(xt))
         
-        rho.se <- fdHess[2, 2]
-        sig.se <- fdHess[1, 1]
+        lambda.se <- fdHess[1, 1]
+        sig.se <- NULL
         rest.se <- vcov(lm.lag)
             
             
@@ -104,7 +103,7 @@ else{
 
         tr <- function(A) sum(diag(A))
         W <-listw2dgCMatrix(listw, zero.policy = zero.policy)
-        A <- solve(diag(NT/T) - rho * W)
+        A <- solve(sparseMatrix(i=1:(NT/T), j=1:(NT/T), x=1) - lambda * W)
         WA <- W %*% A
         one  <- T*(tr(WA %*% WA) + tr(t(WA) %*% WA))
 
@@ -128,7 +127,7 @@ else{
         asyv <- solve(asyvar, tol = con$tol.solve)
 		rownames(asyv) <- colnames(asyv) <- c("sigma","lambda", colnames(xt))
         
-        rho.se <- sqrt(asyv[2, 2])        
+        lambda.se <- sqrt(asyv[2, 2])        
         rest.se <- sqrt(diag(asyv))[-c(1:2)]
         sig.se <- sqrt(asyv[1, 1])       
         asyvar1 <- asyv[-1,-1]
@@ -137,7 +136,7 @@ else{
 
 }
  
-    	return<-list(coeff=betas,rho=rho,s2=s2, rest.se=rest.se, rho.se=rho.se, sig.se = sig.se, asyvar1=asyvar1)
+    	return<-list(coeff = betas, lambda = lambda, s2 = s2, rest.se = rest.se, lambda.se = lambda.se, sig.se = sig.se, asyvar1 = asyvar1)
 } 
 
 
@@ -147,22 +146,33 @@ f_sarpanel_hess <- function (coefs, env)
 	
 	T<-get("T", envir = env)
 	NT<-get("NT", envir = env)
-	s2<- coefs[1]
-    lambda <- coefs[2]
-    beta <- coefs[-c(1,2)]
-    SSE <- s2*n
+
+    lambda <- coefs[1]
+    beta <- coefs[-1]
+
     n <- NT/T
+    SSE <- sar_hess_sse_panel(lambda, beta, env)
+    s2 <- SSE /n
+    
     ldet <- do_ldet(lambda, env, which = 1)
     ret <- (T * ldet  - ((n*T/2) * log(2 * pi)) - (n*T/2) * log(s2) - 
         (1/(2 * s2)) * SSE)
     if (get("verbose", envir = env)) 
-        cat("lambda:", lambda, " function:", ret, 
-            " Jacobian:", ldet," SSE:", SSE, "\n")
+        cat("lambda:", lambda, " function:", ret, " Jacobian:", ldet," SSE:", SSE, "\n")
     ret
 }
 
+sar_hess_sse_panel <- function (lambda, beta, env) 
+{
+    yl <- get("yt", envir = env) - lambda * get("wyt", envir = env) 
+    res <- yl - (get("xt", envir = env) %*% beta)
+    SSE <- c(crossprod(res))
+    SSE
+}
+
+
 ####### ERROR MODEL 
-sarpanelerror<-function (lambda, env=env) 
+sarpanelerror<-function (rho, env=env) 
 {
 	yt<- get("yt", envir = env)
 	xt<- get("xt", envir = env)
@@ -176,18 +186,18 @@ sarpanelerror<-function (lambda, env=env)
 	inde<- get("inde", envir = env)
 	T<- get("T", envir = env)
 	
-    yco <- yt - lambda * wyt
-    xco <- xt - lambda * wxt
+    yco <- yt - rho * wyt
+    xco <- xt - rho * wxt
     bb<- solve(crossprod(xco),crossprod(xco, yco) )
 
     ehat<- yco - xco %*% bb
     SSE <- crossprod(ehat)
-  ldet <- do_ldet(lambda, env)
+  ldet <- do_ldet(rho, env)
 
     ret <- T*ldet - (NT/2) * log(SSE) 
 
 if (get("verbose", envir = env)) 
-        cat("rho:", lambda, " function:", ret, " Jacobian:", ldet, " SSE:", SSE, "\n")
+        cat("rho:", rho, " function:", ret, " Jacobian:", ldet, " SSE:", SSE, "\n")
  ret
 }
 
@@ -472,7 +482,8 @@ if(Hess){
         fd <- fdHess(coefs, f_sacpanel_hess, env)
         mat <- fd$Hessian
 		  fdHess<- solve(-(mat), tol.solve = tol.solve)
-        rownames(fdHess) <- colnames(fdHess) <- c("lambda", "lambda",colnames(xt))
+        rownames(fdHess) <- colnames(fdHess) <- c("lambda", "rho",colnames(xt))
+            
             rho.se <- fdHess[2, 2]
             lambda.se <- fdHess[1, 1]
             rest.se <- vcov(lm.target)
