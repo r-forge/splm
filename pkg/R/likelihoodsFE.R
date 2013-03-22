@@ -94,7 +94,7 @@ if(Hess){
         
         lambda.se <- fdHess[1, 1]
         sig.se <- NULL
-        rest.se <- vcov(lm.lag)
+        asyvar1 <- vcov(lm.lag)
             
             
 }
@@ -127,10 +127,10 @@ else{
         asyv <- solve(asyvar, tol = con$tol.solve)
 		rownames(asyv) <- colnames(asyv) <- c("sigma","lambda", colnames(xt))
         
-        lambda.se <- sqrt(asyv[2, 2])        
+        lambda.se <- asyv[2, 2]        
         rest.se <- sqrt(diag(asyv))[-c(1:2)]
         sig.se <- sqrt(asyv[1, 1])       
-        asyvar1 <- asyv[-1,-1]
+        asyvar1 <- asyv[-c(1,2),-c(1,2)]
         
         rownames(asyvar1) <- colnames(asyvar1) <- c("lambda", colnames(xt))
 
@@ -244,7 +244,7 @@ opt <- optimize(sarpanelerror, interval = interval, maximum = TRUE, env = env, t
      coefs <- c(rho, betas) 
 
 
-if(!Hess){
+if(Hess){
 	
 	        fd <- fdHess(coefs, sarpanelerror_hess, env)
         mat <- fd$Hessian
@@ -253,7 +253,7 @@ if(!Hess){
 
             rho.se <- fdHess[1, 1]
             s2.se <- NULL
-            rest.se <- vcov(lm.target)
+            asyvar1 <- vcov(lm.target)
 }
 else{
     
@@ -269,9 +269,9 @@ else{
         asyv <- solve(asyvar, tol = con$tol.solve)
         rownames(asyv) <- colnames(asyv) <- c("sigma","rho", colnames(xt))
         s2.se <- sqrt(asyv[1, 1])
-        rho.se <- sqrt(asyv[2, 2])
-        asyvar1 <- asyv[-1,-1]
-        rownames(asyvar1) <- colnames(asyvar1) <- c("rho", colnames(xt))
+        rho.se <- asyv[2, 2]
+        asyvar1 <- asyv[-c(1,2),-c(1,2)]
+        # rownames(asyvar1) <- colnames(asyvar1) <- c(colnames(xt))
 
 }
 
@@ -340,12 +340,12 @@ if (get("verbose", envir = env)) cat("rho:", coefs[1], " lambda:", coefs[2], " f
 
 sacsarpanel_sse <- function (coefs, env) 
 {
-    rho <- coefs[1]
-    lambda <- coefs[2]
-    yl <- get("yt", envir = env) - rho * get("wyt", envir = env) - 
-        lambda * get("w2yt", envir = env) + rho * lambda * get("w2wyt", 
+    lambda <- coefs[1]
+    rho <- coefs[2]
+    yl <- get("yt", envir = env) - lambda * get("wyt", envir = env) - 
+        rho * get("w2yt", envir = env) + rho * lambda * get("w2wyt", 
         envir = env)
-    xl <- get("xt", envir = env) - lambda * get("wxt", envir = env)
+    xl <- get("xt", envir = env) - rho * get("wxt", envir = env)
     xl.q <- qr.Q(qr(xl, LAPACK = get("LAPACK", envir = env)))
     xl.q.yl <- crossprod(xl.q, yl)
     SSE <- crossprod(yl) - crossprod(xl.q.yl)
@@ -475,7 +475,7 @@ interval2 <- get("interval2", envir = env)
     s2 <- SSE/NT
     betas <- coefficients(lm.target)
     names(betas) <- colnames(xt)  
-	coefs <- c(rho, lambda, betas)
+	coefs <- c(lambda, rho, betas)
 	# coefsl <- c(rho, lambda, betas)
 
 ###Add the vc matrix exact
@@ -485,9 +485,9 @@ if(Hess){
 		  fdHess<- solve(-(mat), tol.solve = tol.solve)
         rownames(fdHess) <- colnames(fdHess) <- c("lambda", "rho",colnames(xt))
             
-            rho.se <- fdHess[2, 2]
-            lambda.se <- fdHess[1, 1]
-            rest.se <- vcov(lm.target)
+            rho.se <- fdHess[1, 1]
+            lambda.se <- fdHess[2, 2]
+            asyvar1 <- vcov(lm.target)
             }
             
             else{
@@ -495,7 +495,7 @@ if(Hess){
             	}
 
 
-return<-list(coeff=betas,lambda=lambda, rho = rho, s2=s2, asyvar1 = rest.se, lambda.se = lambda.se, rho.se = rho.se)	
+return<-list(coeff=betas,lambda=lambda, rho = rho, s2=s2, asyvar1 = asyvar1, lambda.se = lambda.se, rho.se = rho.se)	
 	}
 
 f_sacpanel_hess <- function (coefs, env) 
@@ -503,11 +503,11 @@ f_sacpanel_hess <- function (coefs, env)
 	T<-get("T", envir = env)
 	NT<-get("NT", envir = env)
 	
-    rho <- coefs[1]
-    lambda <- coefs[2]
+    rho <- coefs[2]
+    lambda <- coefs[1]
      beta <- coefs[-(1:2)]
      # SSE <- sar_sac_hess_sse_panel(rho, lambda, beta, env)
-    SSE <- sar_sac_hess_sse_panel(rho, lambda, beta, env)
+    SSE <- sar_sac_hess_sse_panel(lambda, rho, beta, env)
     n <- NT/T
     # SSE<- s2 *n
      s2<- SSE / n
@@ -521,7 +521,7 @@ f_sacpanel_hess <- function (coefs, env)
     ret
 }
 
-sar_sac_hess_sse_panel <- function (rho, lambda, beta, env) 
+sar_sac_hess_sse_panel <- function (lambda, rho, beta, env) 
 {
     yl <- get("yt", envir = env) - lambda * get("wyt", envir = env) - 
         rho * get("w2yt", envir = env) + rho * lambda * get("w2wyt", 

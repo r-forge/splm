@@ -459,20 +459,34 @@ if (model=='error'){
 
 
 
-if (model == "lag")   spat.coef<-RES$rho
-if (model == "error") spat.coef<-RES$lambda
+if (model == "lag")   spat.coef<-RES$lambda
+if (model == "error") spat.coef<-RES$rho
 if (model == "sarar") spat.coef <- c(RES$rho, RES$lambda)
 
-if (is.null(RES$lambda.se) && model=="error") Coeff<-RES$coeff
-else  Coeff<-c(spat.coef,RES$coeff)
+ # if (is.null(RES$lambda.se) && model=="error") Coeff<-RES$coeff
+Coeff<-c(spat.coef, RES$coeff)
 
 type <- paste("fixed effects", model)
 
+
 var<-RES$asyvar1
+
+if(model == "lag"){
+	var<-matrix(0,(ncol(RES$asyvar1)+1),(ncol(RES$asyvar1)+1))
+   var[1,1]<-	RES$lambda.se
+   var[(2:ncol(var)),(2:ncol(var))]<-RES$asyvar1
+	}
+
+if(model == "error"){
+	var<-matrix(0,(ncol(RES$asyvar1)+1),(ncol(RES$asyvar1)+1))
+   var[1,1]<-	RES$rho.se
+   var[(2:ncol(var)),(2:ncol(var))]<-RES$asyvar1
+	}
+	
 if(model == "sarar"){
 	var<-matrix(0,(ncol(RES$asyvar1)+2),(ncol(RES$asyvar1)+2))
-   var[1,1]<-	RES$lambda.se
-   var[2,2]<-	RES$rho.se
+   var[1,1]<-	RES$rho.se
+   var[2,2]<-	RES$lambda.se
    var[((2+1):ncol(var)),((2+1):ncol(var))]<-RES$asyvar1
 	}
 
