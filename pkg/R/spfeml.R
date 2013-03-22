@@ -426,7 +426,7 @@ if (model=='error'){
     # .ptime_start <- proc.time()	
 
   RES<- sperrorlm(env = env, zero.policy = zero.policy, interval = interval1, Hess = Hess)	
-    	res.eff<-feerror(env = env, beta=RES$coeff, sige=RES$s2, effects = effects ,method =method, lambda=RES$lambda, legacy = legacy)
+    	res.eff<-feerror(env = env, beta=RES$coeff, sige=RES$s2, effects = effects ,method =method, rho=RES$rho, legacy = legacy)
     	
     }
     

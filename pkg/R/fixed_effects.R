@@ -1,4 +1,4 @@
-feerror<-function(env, beta,sige, effects, method,lambda, legacy){
+feerror<-function(env, beta,sige, effects, method,rho, legacy){
 
 	y<-get("y", envir = env)
 	x<-get("x", envir = env)
