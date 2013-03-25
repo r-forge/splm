@@ -51,7 +51,7 @@ lag <- spml(fm, data = Produc, listw = mat2listw(usaww), model="within", effect=
 summary(lag)
 eff <- effects(lag) 
 print(eff)
-err <- spml(fm, data = Produc, listw = mat2listw(usaww), model="within", effect="time", spatial.error="b", method="eigen")
+err <- spml(fm, data = Produc, listw = mat2listw(usaww), model="within", effect="time", spatial.error="b", method="eigen", Hess= FALSE)
 summary(err)
 eff <- effects(err) 
 write.effects.splm(eff)

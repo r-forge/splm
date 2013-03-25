@@ -461,7 +461,7 @@ if (model=='error'){
 
 if (model == "lag")   spat.coef<-RES$lambda
 if (model == "error") spat.coef<-RES$rho
-if (model == "sarar") spat.coef <- c(RES$rho, RES$lambda)
+if (model == "sarar") spat.coef <- c(RES$lambda, RES$rho)
 
  # if (is.null(RES$lambda.se) && model=="error") Coeff<-RES$coeff
 Coeff<-c(spat.coef, RES$coeff)
@@ -485,8 +485,8 @@ if(model == "error"){
 	
 if(model == "sarar"){
 	var<-matrix(0,(ncol(RES$asyvar1)+2),(ncol(RES$asyvar1)+2))
-   var[1,1]<-	RES$rho.se
-   var[2,2]<-	RES$lambda.se
+   var[1,1]<-	RES$lambda.se
+   var[2,2]<-	RES$rho.se
    var[((2+1):ncol(var)),((2+1):ncol(var))]<-RES$asyvar1
 	}
 

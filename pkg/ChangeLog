@@ -1,3 +1,7 @@
+Changes in Version 1.0-05
+ o fixed some bugs in spfeml and update the relative function to changes in spdep (a few differences arises with the paper on JSS such as: the residuals of the sarar model and the s.e. of the spatial coefficients) 
+
+
 Changes in Version 1.0-03
   o spreml is now visible at user level (for estimating extended specifications with AR errors)
 Changes in Version 1.0-02
