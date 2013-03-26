@@ -30,7 +30,10 @@ spml <- function(formula, data, index=NULL, listw, listw2=listw, na.action,
       model <- switch(match.arg(spatial.error), b="sarar",
                       kkp="sarar", none="lag")
     } else {
-      model <- "error"
+    	model <- switch(match.arg(spatial.error), b="error",
+                      kkp="error", none="plm")
+                      
+      if(model == "plm") stop("No spatial component, use plm instead") 
     }
     effects <- switch(match.arg(effect), individual="spfe",
                       time="tpfe", twoways="sptpfe")

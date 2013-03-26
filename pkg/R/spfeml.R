@@ -1,4 +1,4 @@
-spfeml<-function(formula, data=list(), index=NULL, listw, listw2 = NULL, na.action, model = c("lag","error", "sarar"),effects = c('pooled','spfe','tpfe','sptpfe'), method="eigen", quiet = TRUE, zero.policy = NULL, interval1 = NULL, interval2 = NULL, trs1 = NULL, trs2 = NULL, tol.solve = 1e-10, control = list(), legacy = FALSE, llprof = NULL, cl = NULL, Hess = TRUE, LeeYu = FALSE, ...){
+spfeml<-function(formula, data=list(), index=NULL, listw, listw2 = NULL, na.action, model = c("lag","error", "sarar"),effects = c('spfe','tpfe','sptpfe'), method="eigen", quiet = TRUE, zero.policy = NULL, interval1 = NULL, interval2 = NULL, trs1 = NULL, trs2 = NULL, tol.solve = 1e-10, control = list(), legacy = FALSE, llprof = NULL, cl = NULL, Hess = TRUE, LeeYu = FALSE, ...){
 
 	  
         # timings <- list()
@@ -69,7 +69,7 @@ effects<-match.arg(effects)
   clnames<-colnames(x)
   rwnames<-rownames(x)
   #make sure that the model has no intercept if effects !=pooled
-  if (effects !="pooled" && colnames(x)[1]=="(Intercept)") {
+  if (colnames(x)[1]=="(Intercept)") {
   	x<-x[,-1]
   	#cat('\n Warning: x may not contain an intercept if fixed effects are specified \n')
 	}
@@ -149,30 +149,6 @@ if(model == "sarar"){
     }
 
 	}
-
-
-###specific checks for the LAG (to be added)
-# if(model == "lag"){
-	
-        
-  # stopifnot(is.logical(con$small_asy))
-    # if (method != "eigen") {
-        # if (con$small >= n && con$small_asy) 
-            # do_asy <- TRUE
-        # else do_asy <- FALSE
-    # }
-    # else do_asy <- TRUE
-    # if (is.null(con$fdHess)) {
-        # con$fdHess <- method != "eigen" && !do_asy
-        # fdHess <- NULL
-    # }
-    # stopifnot(is.logical(con$fdHess))
-
-    # }
-	
-# }
-
-###specific checks for the error 
 
 
 switch(model, lag = if (!quiet) cat("\n Spatial Lag Fixed Effects Model \n"),
@@ -286,10 +262,10 @@ assign("xsms",xsms, envir=env)
 	}
 	
 	
-if (effects=='pooled'){
-	yt<-y  	###keep the variables with no transformation
-	xt<-x
-	}
+# if (effects=='pooled'){
+	# yt<-y  	###keep the variables with no transformation
+	# xt<-x
+	# }
 
 
 if (effects=="tpfe"){ ####generate the demeaned variables for tpfe
@@ -382,7 +358,7 @@ assign("con", con, envir=env)
 # .ptime_start <- proc.time()
 
     if (!quiet) 
-        cat(paste("\nSpatial autoregressive error model\n", "Jacobian calculated using "))
+        cat(paste("\nSpatial fixed effects model\n", "Jacobian calculated using "))
 
 if(model == "lag"){
     interval1 <- spdep:::jacobianSetup(method, env, con, pre_eig = con$pre_eig, trs = trs1, interval = interval1)
@@ -463,7 +439,7 @@ if (model == "lag")   spat.coef<-RES$lambda
 if (model == "error") spat.coef<-RES$rho
 if (model == "sarar") spat.coef <- c(RES$lambda, RES$rho)
 
- # if (is.null(RES$lambda.se) && model=="error") Coeff<-RES$coeff
+
 Coeff<-c(spat.coef, RES$coeff)
 
 type <- paste("fixed effects", model)

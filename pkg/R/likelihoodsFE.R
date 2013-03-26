@@ -54,7 +54,7 @@ opt <- optimize(conclikpan,  interval = interval1, maximum = TRUE, env = env, to
 #opt <- nlminb(0.02138744, conclikpan,  lower = interval[1], upper= interval[2],  env = env)
 
         lambda <- opt$maximum
-		print(lambda)
+		
     if (isTRUE(all.equal(lambda, interval[1])) || isTRUE(all.equal(lambda,interval[2]))) 
         warning("lambda on interval bound - results should not be used")
 
@@ -232,6 +232,8 @@ opt <- optimize(sarpanelerror, interval = interval, maximum = TRUE, env = env, t
         names(rho) <- "rho"
         LL <- opt$objective
 
+    if (isTRUE(all.equal(rho, interval[1])) || isTRUE(all.equal(rho,interval[2]))) 
+        warning("rho on interval bound - results should not be used")
 
     lm.target <- lm(I(yt - rho * wyt) ~ I(xt - rho * wxt) - 
         1)
@@ -302,7 +304,7 @@ sarpanelerror_hess<-function (coef, env=env)
 	 
      yco <- yt - rho * wyt
      xco <- xt - rho * wxt
-     bb<- solve(crossprod(xco),crossprod(xco, yco) )
+     # bb<- solve(crossprod(xco),crossprod(xco, yco) )
 
      ehat<- yco - xco %*% bb
     SSE <- crossprod(ehat)
