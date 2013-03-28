@@ -321,25 +321,29 @@ if (get("verbose", envir = env))
 
 ###SARAR MODEL
 
-sacsarpanel<-function (coefs, env) 
-{
+sacsarpanel<-function (coefs, env, LeeYu = LeeYu){
+
 	lambda <- coefs[1]
     rho <- coefs[2]
-
   	 T<-get("T", envir = env)
-    SSE <- sacsarpanel_sse(coefs, env)
     n <- get("n", envir = env)
+        if(LeeYu){
+    	T <- T-1
+    	NT <- n*T
+    	}	
+
+    SSE <- sacsarpanel_sse(coefs, env)
     s2 <- SSE/n
     ldet1 <- do_ldet(lambda, env, which = 1)
     ldet2 <- do_ldet(rho, env, which = 2)
 
-            ret <-(T * ldet1 + T * ldet2 - ((n*T/2) * log(2 * pi)) - (n*T/2) * log(s2) 
-            - (1/(2 * (s2))) * SSE)
-        
-if (get("verbose", envir = env)) cat("lambda:", lambda, " rho:", rho, " function:", 
-            ret, " Jacobian1:", ldet1, " Jacobian2:", ldet2, 
-            " SSE:", SSE, "\n")
-    -ret
+ret <- (T * ldet1 + T * ldet2 - (((n*T)/2) * (log(2 * pi)+1)) - (n*T/2) * log(s2))
+                        # - (1/(2 * (s2))) * SSE)
+
+ # if(get("verbose", envir = env)) cat("lambda:", lambda, " rho:", rho, " function:", 
+             # ret, " Jacobian1:", ldet1, " Jacobian2:", ldet2, 
+             # " SSE:", SSE, "\n")
+-ret
 }
 
 
@@ -358,7 +362,7 @@ sacsarpanel_sse <- function (coefs, env)
 }
 
 
-spsararlm<-function(env, zero.policy = zero.policy, con = con, llprof = llprof, tol.solve= tol.solve, Hess = Hess, method = method){
+spsararlm<-function(env, zero.policy = zero.policy, con = con, llprof = llprof, tol.solve= tol.solve, Hess = Hess, method = method, LeeYu = LeeYu){
 
 xt <- get("xt", envir = env)
 yt <- get("yt", envir = env)
@@ -372,7 +376,15 @@ wx<-get("wx", envir = env)
 	
 NT<-get("NT", envir = env)
 T<-get("T", envir = env)
+n<-get("n", envir = env)
+
+if(LeeYu){
+	T <- T-1
+	NT <- n*T
+	}
+
 listw<-get("listw", envir = env)
+listw2<-get("listw2", envir = env)
 inde<-get("inde", envir = env)
 interval1 <- get("interval1", envir = env)
 interval2 <- get("interval2", envir = env)
@@ -392,9 +404,9 @@ interval2 <- get("interval2", envir = env)
         ll_prof <- numeric(nrow(llprof))
         for (i in 1:nrow(llprof)) ll_prof[i] <- sacsarpanel(llprof[i, 
             ], env = env)
-        nm <- paste(method, "profile", sep = "_")
-        timings[[nm]] <- proc.time() - .ptime_start
-        .ptime_start <- proc.time()
+        # nm <- paste(method, "profile", sep = "_")
+        # timings[[nm]] <- proc.time() - .ptime_start
+        # .ptime_start <- proc.time()
     }
     if (is.null(pars)) {
         if (con$npars == 4L) {
@@ -417,42 +429,42 @@ interval2 <- get("interval2", envir = env)
         if (is.null(pars)) {
             mxs <- apply(mpars, 1, function(pp) -nlminb(pp, sacsarpanel, 
                 env = env, control = con$opt_control, lower = lower, 
-                upper = upper)$objective)
+                upper = upper, LeeYu = LeeYu)$objective)
             pars <- mpars[which.max(mxs), ]
             optres <- nlminb(pars, sacsarpanel, env = env, control = con$opt_control, 
-                lower = lower, upper = upper)
+                lower = lower, upper = upper, LeeYu = LeeYu)
         }
         else {
             optres <- nlminb(pars, sacsarpanel, env = env, control = con$opt_control, 
-                lower = lower, upper = upper)
+                lower = lower, upper = upper, LeeYu = LeeYu)
         }
     }
     else if (con$opt_method == "L-BFGS-B") {
         if (is.null(pars)) {
             mxs <- apply(mpars, 1, function(pp) -optim(pars, 
                 sacsarpanel, env = env, method = "L-BFGS-B", control = con$opt_control, 
-                lower = lower, upper = upper)$objective)
+                lower = lower, upper = upper, LeeYu = LeeYu)$objective)
             pars <- mpars[which.max(mxs), ]
             optres <- optim(pars, sacsarpanel, env = env, method = "L-BFGS-B", 
-                control = con$opt_control, lower = lower, upper = upper)
+                control = con$opt_control, lower = lower, upper = upper, LeeYu = LeeYu)
         }
         else {
             optres <- optim(pars, sacsarpanel, env = env, method = "L-BFGS-B", 
-                control = con$opt_control, lower = lower, upper = upper)
+                control = con$opt_control, lower = lower, upper = upper, LeeYu = LeeYu)
         }
     }
     else {
         if (is.null(pars)) {
             mxs <- apply(mpars, 1, function(pp) -optim(pars, 
                 sacsarpanel, env = env, method = con$opt_method, 
-                control = con$opt_control)$objective)
+                control = con$opt_control, LeeYu = LeeYu)$objective)
             pars <- mpars[which.max(mxs), ]
             optres <- optim(pars, sacsarpanel, env = env, method = con$opt_method, 
-                control = con$opt_control)
+                control = con$opt_control, LeeYu = LeeYu)
         }
         else {
             optres <- optim(pars, sacsarpanel, env = env, method = con$opt_method, 
-                control = con$opt_control)
+                control = con$opt_control, LeeYu = LeeYu)
         }
     }
     
@@ -485,7 +497,7 @@ interval2 <- get("interval2", envir = env)
 
 ###Add the vc matrix exact
 if(Hess){        
-        fd <- fdHess(coefs, f_sacpanel_hess, env)
+        fd <- fdHess(coefs, f_sacpanel_hess, env, LeeYu = LeeYu)
         mat <- fd$Hessian
 		  fdHess<- solve(-(mat), tol.solve = tol.solve)
         rownames(fdHess) <- colnames(fdHess) <- c("lambda", "rho",colnames(xt))
@@ -496,6 +508,20 @@ if(Hess){
             }
             
             else{
+        tr <- function(A) sum(diag(A))
+        W1 <- listw2dgCMatrix(listw, zero.policy = zero.policy)
+        W2 <- listw2dgCMatrix(listw2, zero.policy = zero.policy)
+        Sl <- solve(sparseMatrix(i=1:(NT/T), j=1:(NT/T), x=1)  - lambda * W1)
+        Rr <- solve(sparseMatrix(i=1:(NT/T), j=1:(NT/T), x=1)  - rho * W2)
+        Slinv <- solve(Sl)
+        Rrinv <- solve(Rr)
+        Gmat <- W1 %*% Slinv
+        Hmat <- W2 %*% Rrinv
+        Rrxt <- Rr %*% xt
+        Gmat2 <- Gmat %*% Gmat
+        s2s2 <- 1/s2 * crossprod(t(Rrxt), Rrxt)
+        two <- T* tr(Gmat2) 
+        # one <- 1/s2 *()
             	stop("Asymptotic VC matrix not yet implemented for model SARAR")
             	}
 
@@ -503,11 +529,17 @@ if(Hess){
 return<-list(coeff=betas,lambda=lambda, rho = rho, s2=s2, asyvar1 = asyvar1, lambda.se = lambda.se, rho.se = rho.se)	
 	}
 
-f_sacpanel_hess <- function (coefs, env) 
+f_sacpanel_hess <- function (coefs, env, LeeYu = LeeYu) 
 {
 	T<-get("T", envir = env)
 	NT<-get("NT", envir = env)
-	
+	n<-get("n", envir = env)
+
+if(LeeYu){
+	T <- T-1
+	NT <- n*T
+	}
+
     lambda <- coefs[1] 
     rho <- coefs[2]
     beta <- coefs[-(1:2)]
@@ -519,7 +551,10 @@ f_sacpanel_hess <- function (coefs, env)
     ldet1 <- do_ldet(lambda, env, which = 1)
     ldet2 <- do_ldet(rho, env, which = 2)
    
-    ret <- T * ldet1 + T * ldet2 - ((n*T/2) * log(2 * pi)) - (n*T/2) * log(s2) - (1/(2 * s2)) * SSE
+ret <- (T * ldet1 + T * ldet2 - (((n*T)/2) * (log(2 * pi)+1)) - (n*T/2) * log(s2))
+                        # - (1/(2 * (s2))) * SSE)
+
+
     if (get("verbose", envir = env)) cat("rho:", rho, "lambda:", lambda, " function:", ret, 
             " Jacobian1:", ldet1, " Jacobian2:", ldet2, " SSE:", 
             SSE, "\n")

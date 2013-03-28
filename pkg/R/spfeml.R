@@ -181,45 +181,6 @@ assign("n",n, envir=env)
 
 wy<-unlist(tapply(y,inde, function(u) lag.listw(listw,u, zero.policy = zero.policy), simplify=TRUE))
 	
-#Lee and Yu transformation
-
-if(LeeYu){
-
-stop("Lee and Yu correction not yet implemented")
-# if (effects=="spfe" | effects=="sptpfe"){
-# IT <- Diagonal(T)
-# IN <- Diagonal(n)
-# JT <- matrix(1,T,T)
-# Jbar <- 1/T * JT	
-# Qmat <-IT - Jbar
-# vec <- eigen(Qmat)
-# Fmat <- vec$vectors[,vec$values==1L] 
-# Ftm <- kronecker(t(Fmat), IN)
-# }
-
-
-# if (effects=="tpfe" | effects=="sptpfe"){
-# IT <- Diagonal(T)
-# IN <- Diagonal(n)
-# JT <- matrix(1,T,T)
-# Jbar <- 1/T * JT	
-# Qmat <-IT - Jbar
-# vec <- eigen(Qmat)
-# Fmat <- matrix(vec$vectors[,vec$values==1L], T, T-1) 
-# Ftm <- kronecker(t(Fmat), IN)
-# iotan <- matrix(1,n,1)
-# Jnbar <-1/n * iotan %*% t(iotan)
-# Qmat1 <-  IN - Jnbar
-# vec1 <- eigen(Qmat1)
-# Fmat1 <- matrix(vec1$vectors[,vec1$values==1L], n, n-1) 
-# FFmat<- kronecker(t(Fmat), t(Fmat1)) 
-# }
-
-
-	
-}
-
-
 
 #demeaning of the y and x variables depending both on model and effects
 
@@ -357,6 +318,51 @@ assign("con", con, envir=env)
 # timings[["set_up"]] <- proc.time() - .ptime_start
 # .ptime_start <- proc.time()
 
+
+#Lee and Yu transformation
+
+# if(LeeYu){
+# T <- T-1	
+# assign("T",T, envir=env)	
+# NT <- n*T
+# assign("NT",T, envir=env)	
+# # stop("Lee and Yu correction not yet implemented")
+# # if (effects=="spfe" | effects=="sptpfe"){
+# # IT <- Diagonal(T)
+# # IN <- Diagonal(n)
+# # JT <- matrix(1,T,T)
+# # Jbar <- 1/T * JT	
+# # Qmat <-IT - Jbar
+# # vec <- eigen(Qmat)
+# # Fmat <- vec$vectors[,vec$values==1L] 
+# # Ftm <- kronecker(t(Fmat), IN)
+# # }
+
+
+# # if (effects=="tpfe" | effects=="sptpfe"){
+# # IT <- Diagonal(T)
+# # IN <- Diagonal(n)
+# # JT <- matrix(1,T,T)
+# # Jbar <- 1/T * JT	
+# # Qmat <-IT - Jbar
+# # vec <- eigen(Qmat)
+# # Fmat <- matrix(vec$vectors[,vec$values==1L], T, T-1) 
+# # Ftm <- kronecker(t(Fmat), IN)
+# # iotan <- matrix(1,n,1)
+# # Jnbar <-1/n * iotan %*% t(iotan)
+# # Qmat1 <-  IN - Jnbar
+# # vec1 <- eigen(Qmat1)
+# # Fmat1 <- matrix(vec1$vectors[,vec1$values==1L], n, n-1) 
+# # FFmat<- kronecker(t(Fmat), t(Fmat1)) 
+# # }
+
+
+	
+# }
+
+
+
+
     if (!quiet) 
         cat(paste("\nSpatial fixed effects model\n", "Jacobian calculated using "))
 
@@ -384,7 +390,7 @@ if(model == "sarar"){
     # timings[[nm]] <- proc.time() - .ptime_start
     # .ptime_start <- proc.time()
     
-      RES<- spsararlm(env = env, zero.policy = zero.policy, con = con, llprof = llprof, tol.solve = tol.solve, Hess = Hess)
+      RES<- spsararlm(env = env, zero.policy = zero.policy, con = con, llprof = llprof, tol.solve = tol.solve, Hess = Hess, LeeYu = LeeYu)
   
   
 res.eff<-felag(env = env, beta=RES$coeff, sige=RES$s2, effects = effects ,method = method, lambda = RES$lambda, legacy = legacy, zero.policy = zero.policy)    	
