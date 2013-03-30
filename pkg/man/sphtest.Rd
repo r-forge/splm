@@ -21,8 +21,8 @@ sphtest(x, ...)
 \item{index}{if not NULL (default), a character vector to identify the indexes among the columns of the \code{\link{data.frame}}}
 \item{listw}{an object of class \code{listw} created for example by \code{nb2listw} }
 \item{spatial.model}{one of \code{c("lag","error","sarar")}, the model to be estimated (only lag, only error, both lag and error dependence)}
-\item{method}{one of \code{c("ML","GM"}}
-\item{errors}{one of \code{c("BSK","KPP"}. When \code{method} is \code{"ML"} defines the specification of the innovations}
+\item{method}{one of \code{c("ML","GM")}}
+\item{errors}{one of \code{c("BSK","KPP")}. When \code{method} is \code{"ML"} defines the specification of the innovations}
 \item{...}{additional arguments to be passed}
 }
 

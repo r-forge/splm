@@ -1,6 +1,5 @@
 \name{spml}
 \alias{spml}
-\alias{spreml}
 \title{Spatial Panel Model by Maximum Likelihood}
 \description{Maximum likelihood (ML) estimation of spatial panel models, possibly with fixed or random effects.}
 

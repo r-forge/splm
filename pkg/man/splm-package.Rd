@@ -22,7 +22,7 @@ LazyLoad: \tab yes\cr
 \author{
 Giovanni Millo and Gianfranco Piras
 
-Maintainer: Giovanni Millo <giovanni.millo@generali.com>
+Maintainer: Giovanni Millo <giovanni\_millo@generali.com>
 }
 
 \references{

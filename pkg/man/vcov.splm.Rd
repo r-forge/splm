@@ -19,6 +19,9 @@
 a covariance matrix of beta coefficients
 }
 
+
+\author{Giovanni Millo}
+
 \references{Zeileis, A. (2006) Object-Oriented Computation of Sandwich
   Estimators. \emph{Journal of Statistical Software}, \bold{16(9)}, 1-16.}
 
