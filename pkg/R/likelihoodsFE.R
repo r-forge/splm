@@ -508,6 +508,7 @@ if(Hess){
             }
             
             else{
+            	
         tr <- function(A) sum(diag(A))
         W1 <- listw2dgCMatrix(listw, zero.policy = zero.policy)
         W2 <- listw2dgCMatrix(listw2, zero.policy = zero.policy)
@@ -519,10 +520,55 @@ if(Hess){
         Hmat <- W2 %*% Rrinv
         Rrxt <- Rr %*% xt
         Gmat2 <- Gmat %*% Gmat
-        s2s2 <- 1/s2 * crossprod(t(Rrxt), Rrxt)
-        two <- T* tr(Gmat2) 
-        # one <- 1/s2 *()
-            	stop("Asymptotic VC matrix not yet implemented for model SARAR")
+        Hmat2 <- Hmat %*% Hmat
+        bebe <- (1/s2) * crossprod(Rrxt)
+        RrWyt <- Rr %*% W1 %*% yt
+        bela <- (1/s2) * crossprod(RrWyt, Rrxt)
+        Vxsi <- Rr %*% (Sl %*% yt - xt %*% beta)
+        HVxsi <- Hmat %*% Vxsi
+        bero1 <- (1/s2) * crossprod(HVxsi, Rrxt) 
+        Mxt <- W2 %*% xt
+        bero2 <- (1/s2) * crossprod(Vxsi, Mxt)         
+        bero <- bero1 + bero2
+        besi<- (1/s2) * (1/s2) * crossprod(Vxsi, Rrxt)
+        lala1 <- (1/s2) *crossprod(RrWyt)
+        lala2 <- T* tr(Gmat2) 
+        lala <- ll1 + ll2
+        laro1 <- (1/s2) *crossprod(RrWyt, HVxsi)
+        MWyt <- W2 %*% W1 %*% yt
+        laro2 <- (1/s2) *crossprod(MWyt, Vxsi)
+        laro <- laro1 + laro2
+        lasi <- (1/s2) * (1/s2) * crossprod(RrWyt, Vxsi)  
+        roro1 <- (1/s2) * crossprod(HVxsi) 
+        roro2 <- T * tr(Hmat2) 
+        roro <- roro1 + roro2
+        rosi <- (1/s2) * (1/s2) * crossprod(HVxsi, Vxsi)  
+        sisi1 <-  - (n*T)/(2*s2*s2)
+        sisi2 <- (1/s2) * (1/s2) * (1/s2) * crossprod(Vxsi)
+        sisi <- sisi1 + sisi2
+        
+        asyvar <- matrix(0, nrow = 3 + p, ncol = 3 + p)
+        asyvar[1:p, 1:p] <- bebe 
+        asyvar[p+1, 1] <- asyvar[1, p+1] <- bela
+        asyvar[p+2, 1] <- asyvar[1, p+2] <- bero
+        asyvar[p+3, 1] <- asyvar[1, p+3] <- besi
+        asyvar[p+2, p+1] <- asyvar[p+1, p+2] <- laro
+        asyvar[p+3, p+1] <- asyvar[p+1, p+3] <- lasi
+        asyvar[p+3, p+2] <- asyvar[p+2, p+3] <- rosi        
+        asyvar[1+p, 1+p] <- lala
+        asyvar[2+p, 2+p] <- roro
+        asyvar[3+p, 3+p] <- sisi
+
+        asyv <- solve(asyvar, tol = con$tol.solve)
+        rownames(asyv) <- colnames(asyv) <- c(colnames(xt), "lambda", "rho", "sigma")
+        s2.se <- sqrt(asyv[3+p, 3+p])
+        rho.se <- asyv[2+p, 2+p]
+        lambda.se <- asyv[2+p, 2+p]
+        asyvar1 <- asyv[-((p+1):(p+3)),-((p+1):(p+3))]
+
+
+
+            	# stop("Asymptotic VC matrix not yet implemented for model SARAR")
             	}
 
 
