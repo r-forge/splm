@@ -22,7 +22,7 @@ function (X, y, ind, tind, n, k, t., nT, w, w2, coef0 = rep(0, 4),
 
     ## set names for final parms vectors
     nam.beta <- dimnames(X)[[2]]
-    nam.errcomp <- c("phi", "rho", "lambda")
+    nam.errcomp <- c("phi", "psi", "rho")
 
     ## initialize values for optimizer
     myparms0 <- coef0
@@ -194,9 +194,9 @@ function (X, y, ind, tind, n, k, t., nT, w, w2, coef0 = rep(0, 4),
     betas <- as.vector(beta[[1]])
     sigma2 <- as.numeric(beta[["sigma2"]])
     arcoef <- NULL
-    errcomp <- myparms[which(nam.errcomp!="psi")]
+    errcomp <- myparms
     names(betas) <- nam.beta
-    names(errcomp) <- nam.errcomp[which(nam.errcomp!="psi")]
+    names(errcomp) <- nam.errcomp
 
     dimnames(covB) <- list(nam.beta, nam.beta)
     dimnames(covPRL) <- list(names(errcomp), names(errcomp))
