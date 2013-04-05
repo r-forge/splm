@@ -1,7 +1,7 @@
 sarem2srREmod <-
 function (X, y, ind, tind, n, k, t., nT, w, w2, coef0 = rep(0, 4),
     hess = FALSE, trace = trace, x.tol = 1.5e-18, rel.tol = 1e-15,
-    method="BFGS",
+    method="nlminb",
           ...)
 {
 
