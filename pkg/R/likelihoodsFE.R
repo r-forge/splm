@@ -352,10 +352,10 @@ sacsarpanel_sse <- function (coefs, env)
 {
     lambda <- coefs[1]
     rho <- coefs[2]
-    yl <- get("yt", envir = env) - rho * get("wyt", envir = env) - 
-        lambda * get("w2yt", envir = env) + rho * lambda * get("w2wyt", 
+    yl <- get("yt", envir = env) - lambda * get("wyt", envir = env) - 
+        rho * get("w2yt", envir = env) + rho * lambda * get("w2wyt", 
         envir = env)
-    xl <- get("xt", envir = env) - lambda * get("wxt", envir = env)
+    xl <- get("xt", envir = env) - rho * get("wxt", envir = env)
     xl.q <- qr.Q(qr(xl, LAPACK = get("LAPACK", envir = env)))
     xl.q.yl <- crossprod(xl.q, yl)
     SSE <- crossprod(yl) - crossprod(xl.q.yl)
@@ -398,9 +398,9 @@ interval2 <- get("interval2", envir = env)
         llrho <- NULL
         lllambda <- NULL
         if (length(llprof) == 1L) {
-            llrho <- seq(lower[1], upper[1], length.out = llprof)
-            lllambda <- seq(lower[2], upper[2], length.out = llprof)
-            llprof <- as.matrix(expand.grid(llrho, lllambda))
+            llrho <- seq(lower[2], upper[2], length.out = llprof)
+            lllambda <- seq(lower[1], upper[1], length.out = llprof)
+            llprof <- as.matrix(expand.grid(lllambda, llrho))
         }
         ll_prof <- numeric(nrow(llprof))
         for (i in 1:nrow(llprof)) ll_prof[i] <- sacsarpanel(llprof[i, 
@@ -473,6 +473,7 @@ interval2 <- get("interval2", envir = env)
     if (optres$convergence != 0) 
         warning(paste("convergence failure:", optres$message))
 	
+	# print(optres)
     rho <- optres$par[2]
     names(rho) <- "rho"
     lambda <- optres$par[1]
@@ -483,8 +484,8 @@ interval2 <- get("interval2", envir = env)
     # assign("first_time", TRUE, envir = env)
 
     
-    lm.target <- lm(I(yt - rho * wyt - lambda * w2yt + rho * lambda * 
-        w2wyt) ~ I(xt - lambda * wxt) - 1)
+    lm.target <- lm(I(yt - lambda * wyt - rho * w2yt + rho * lambda * 
+        w2wyt) ~ I(xt - rho * wxt) - 1)
 
     r <- as.vector(residuals(lm.target))
     fit <- as.vector(yt - r)
@@ -510,19 +511,22 @@ if(Hess){
             }
             
             else{
-            	
-        # tr <- function(A) sum(diag(A))
-        # W1 <- listw2dgCMatrix(listw, zero.policy = zero.policy)
-        # W2 <- listw2dgCMatrix(listw2, zero.policy = zero.policy)
-        # Sl <- solve(sparseMatrix(i=1:(NT/T), j=1:(NT/T), x=1)  - lambda * W1)
-        # Rr <- solve(sparseMatrix(i=1:(NT/T), j=1:(NT/T), x=1)  - rho * W2)
-        # Slinv <- solve(Sl)
-        # Rrinv <- solve(Rr)
-        # Gmat <- W1 %*% Slinv
-        # Hmat <- W2 %*% Rrinv        
+
+        tr <- function(A) sum(diag(A))
+        W1 <- listw2dgCMatrix(listw, zero.policy = zero.policy)
+        W2 <- listw2dgCMatrix(listw2, zero.policy = zero.policy)
+        Sl <- sparseMatrix(i=1:(NT/T), j=1:(NT/T), x=1)  - lambda * W1
+        Rr <- sparseMatrix(i=1:(NT/T), j=1:(NT/T), x=1)  - rho * W2
+        Slinv <- solve(Sl)
+        Rrinv <- solve(Rr)
+        Gmat <- W1 %*% Slinv
+        Hmat <- W2 %*% Rrinv        
         # Gmat2 <- Gmat %*% Gmat
         # Hmat2 <- Hmat %*% Hmat
-        # It <- sparseMatrix(i=1:(T+1), j=1:(T+1), x=1) 
+        
+if(LeeYu)	dim <- T+1
+else        dim <- T 
+        It <- sparseMatrix(i=1:dim, j=1:dim, x=1) 
         
         
         # Slinv <- kronecker(It,Slinv)
@@ -534,17 +538,29 @@ if(Hess){
         # Rr<- kronecker(It,Rr)
         # Sl<- kronecker(It,Sl)
 
-# Equation 43 Lee and Yu         
-        # Wdot <- Rr %*% W1  %*% Rrinv
-        # Gdot <- Rr %*% Gmat  %*% Rrinv
-        # Rrbig <- kronecker(It,Rr)
-        # GdotB<-  kronecker(It,Gdot)
-        # WdotB<-  kronecker(It,Wdot)
+# Equation 39 Lee and Yu         
+        Wdot <- Rr %*% W1  %*% Rrinv
+        Gdot <- Rr %*% Gmat  %*% Rrinv
+        GS <- t(Gdot) + Gdot
+        HS <- t(Hmat) + Hmat
+        Rrbig <- kronecker(It,Rr)
+        RriB  <- kronecker(It,Rrinv) 
+        GdotB<-  kronecker(It,Gdot)
+        WdotB<-  kronecker(It,Wdot)
+        Xdot <-  Rrbig %*% xt  
+        GdXdb <- GdotB %*% Xdot %*% betas
         
-        
-        # Xdot <- Rrbig %*% xt  
-        
-        
+
+
+        fp   <- (1/s2) *crossprod(GdXdb)
+        lala <- fp + (T * tr(GS %*% Gdot))
+        laro <- T * tr(HS %*% Gdot) 
+        lasi <- (1/s2) * T * tr(Gdot) 
+        roro <- T * tr(HS %*% Hmat)
+        rosi <- (1/s2) * T * tr(Hmat)
+        sisi <- NT/(2*s2*s2)
+        bebe <- (1/s2) * crossprod(Xdot)       
+        bela <- (1/s2) * crossprod(GdXdb, Xdot)
         
         # Rrxt <- Rr %*% xt
         # bebe <- (1/s2) * crossprod(Rrxt)
@@ -573,32 +589,34 @@ if(Hess){
         # sisi2 <- (1/(s2)^3) * crossprod(Vxsi)
         # sisi <-  sisi1  + sisi2
 
-        # asyvar <- matrix(0, nrow = 3 + p, ncol = 3 + p)
-        # # print(dim(bela))
-        # # print(p)
-        # asyvar[1:p, 1:p] <- as.matrix(bebe) 
-        # asyvar[p+1, 1:p] <- asyvar[1:p, p+1] <- as.numeric(bela)
-        # asyvar[p+2, 1:p] <- asyvar[1:p, p+2] <- as.numeric(bero)
-        # asyvar[p+3, 1:p] <- asyvar[1:p, p+3] <- as.numeric(besi)
-        # asyvar[p+2, p+1] <- asyvar[p+1, p+2] <- as.numeric(laro)
-        # asyvar[p+3, p+1] <- asyvar[p+1, p+3] <- as.numeric(lasi)
-        # asyvar[p+3, p+2] <- asyvar[p+2, p+3] <- as.numeric(rosi)        
-        # asyvar[1+p, 1+p] <- as.matrix(lala)
-        # asyvar[2+p, 2+p] <- as.matrix(roro)
-        # asyvar[3+p, 3+p] <- as.matrix(sisi)
+        asyvar <- matrix(0, nrow = 3 + p, ncol = 3 + p)
+        # print(dim(bela))
+        # print(p)
+        asyvar[1:p, 1:p] <- as.matrix(bebe) 
+        asyvar[p+1, 1:p] <- asyvar[1:p, p+1] <- as.numeric(bela)
+        asyvar[p+2, 1:p] <- asyvar[1:p, p+2] <- 0
+        asyvar[p+3, 1:p] <- asyvar[1:p, p+3] <- 0
+        asyvar[p+2, p+1] <- asyvar[p+1, p+2] <- as.numeric(laro)
+        asyvar[p+3, p+1] <- asyvar[p+1, p+3] <- as.numeric(lasi)
+        asyvar[p+3, p+2] <- asyvar[p+2, p+3] <- as.numeric(rosi)        
+        asyvar[1+p, 1+p] <- as.matrix(lala)
+        asyvar[2+p, 2+p] <- as.matrix(roro)
+        asyvar[3+p, 3+p] <- as.matrix(sisi)
 # print(asyvar)
-        # asyv <- solve(asyvar, tol = con$tol.solve)
-# # print(asyv)        
-        # rownames(asyv) <- colnames(asyv) <- c(colnames(xt), "lambda", "rho", "sigma")
-        # s2.se <- asyv[3+p, 3+p]
-        # rho.se <- asyv[2+p, 2+p]
-        # lambda.se <- asyv[1+p, 1+p]
-        # # print(rho.se)
-        # # print(lambda.se)
-        # rest.se <- sqrt(diag(asyv))[-((p+1):(p+3))]
-        # asyvar1 <- asyv[-((p+1):(p+3)),-((p+1):(p+3))]
+ 
+         # asyvar <- NT * asyvar
+        asyv <- solve(asyvar, tol = con$tol.solve)
+ # print(sqrt(diag(asyv)))        
+        rownames(asyv) <- colnames(asyv) <- c(colnames(xt), "lambda", "rho", "sigma")
+        s2.se <- asyv[3+p, 3+p]
+        rho.se <- asyv[2+p, 2+p]
+        lambda.se <- asyv[1+p, 1+p]
+        # print(rho.se)
+        # print(lambda.se)
+        rest.se <- sqrt(diag(asyv))[-((p+1):(p+3))]
+        asyvar1 <- asyv[-((p+1):(p+3)),-((p+1):(p+3))]
 
-stop("Asymptotic VC matrix not yet implemented for model SARAR")
+# stop("Asymptotic VC matrix not yet implemented for model SARAR")
             	}
 
 
@@ -639,11 +657,11 @@ ret <- (T * ldet1 + T * ldet2 - (((n*T)/2) * (log(2 * pi)+1)) - (n*T/2) * log(s2
 
 sar_sac_hess_sse_panel <- function (lambda, rho, beta, env) 
 {
-    yl <- get("yt", envir = env) - rho * get("wyt", envir = env) - 
-        lambda * get("w2yt", envir = env) + rho * lambda * get("w2wyt", 
+    yl <- get("yt", envir = env) - lambda * get("wyt", envir = env) - 
+        rho * get("w2yt", envir = env) + rho * lambda * get("w2wyt", 
          envir = env)
          
-    xl <- get("xt", envir = env) - lambda * get("wxt", envir = env)
+    xl <- get("xt", envir = env) - rho * get("wxt", envir = env)
     res <- yl - (xl %*% beta)
     SSE <- c(crossprod(res))
     SSE

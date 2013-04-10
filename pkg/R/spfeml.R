@@ -469,7 +469,7 @@ if(model == "sarar"){
 	var<-matrix(0,(ncol(RES$asyvar1)+2),(ncol(RES$asyvar1)+2))
    var[1,1]<-	RES$lambda.se
    var[2,2]<-	RES$rho.se
-   var[((2+1):ncol(var)),((2+1):ncol(var))]<-RES$asyvar1
+   var[(3:ncol(var)),(3:ncol(var))]<-RES$asyvar1
 	}
 
 
