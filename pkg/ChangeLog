@@ -1,5 +1,5 @@
 Changes in Version 1.1.00
- o revised all random effects estimators as per paper submitted to CSDA. Sparse matrix methods, flexible optimizers, SAREM2SRRE and SEM2SRRE models have been added.
+ o revised all random effects estimators as per paper submitted to CSDA. Sparse matrix methods, flexible optimizers, SAREM2SRRE and SEM2SRRE models have been added. Datasets and weights for Rice Farming and Italian Insurance examples have been added.
 
 Changes in Version 1.0-05
  o fixed some bugs in spfeml and update the relative function to changes in spdep (a few differences arises with the paper on JSS such as: the residuals of the sarar model and the s.e. of the spatial coefficients) 
