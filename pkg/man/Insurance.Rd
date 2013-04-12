@@ -1,11 +1,11 @@
 \name{Insurance}
 \docType{data}
 \alias{Insurance}
-\title{Insurance consumption across Italian provinces, 1995-2004}
+\title{Insurance consumption across Italian provinces, 1998-2002}
 \description{
   a panel of 103 observations
 
- \emph{number of observations} :  1030
+ \emph{number of observations} :  515
 
  \emph{observation} :  provinces
 
