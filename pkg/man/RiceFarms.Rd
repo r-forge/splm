@@ -42,6 +42,4 @@
 
 }
 \author{Yves Croissant}
-\references{
-}
 \keyword{datasets}
