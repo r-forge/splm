@@ -23,7 +23,7 @@
     \item{den}{population density per square Km}
     \item{rirs}{real interest rate on lending to families and small enterprises}
     \item{agen}{density of insurance agencies per 1000 inhabitants}
-    \item{school}{share of people with second-grade schooling or more}
+    \item{school}{share of people with second grade schooling or more}
     \item{vaagr}{share of value added, agriculture}
     \item{fam}{average number of family members}
     \item{inef}{judicial inefficiency index: average years to settle first degree of civil case}
