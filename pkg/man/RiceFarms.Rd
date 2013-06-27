@@ -3,7 +3,7 @@
 \alias{RiceFarms}
 \title{Production of Rice in Indonesia}
 \description{
-  a panel of 171 observations
+  A panel of 171 observations
 
  \emph{number of observations} :  1026
 

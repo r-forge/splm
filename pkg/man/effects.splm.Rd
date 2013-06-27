@@ -55,11 +55,7 @@ Spatial panel data models,
 data(Produc, package = "Ecdat")
 data(usaww)
 fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
-#lag <- spml(fm, data = Produc, listw = mat2listw(usaww), model="within", effect="twoways", lag=TRUE, method="eigen", Hess = TRUE)
-#summary(lag)
-#eff <- effects(lag) 
-#print(eff)
-err <- spml(fm, data = Produc, listw = mat2listw(usaww), model="within", effect="time", spatial.error="b", method="eigen", Hess = FALSE)
+err <- spml(fm, data = Produc, listw = mat2listw(usaww), model="within")
 summary(err)
 eff <- effects(err) 
 print(eff)

@@ -9,7 +9,7 @@ Spatial weights matrix of the 171 farms in the Indonesian Rice Farming example. 
 }
 
 \usage{
-usaww
+data(riceww)
 }
 
 \format{

@@ -3,7 +3,7 @@
 \alias{Insurance}
 \title{Insurance consumption across Italian provinces, 1998-2002}
 \description{
-  a panel of 103 observations
+  A panel of 103 observations
 
  \emph{number of observations} :  515
 

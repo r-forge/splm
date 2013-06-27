@@ -21,10 +21,10 @@ additional (other than the spatial lag) endogenous variables.
 
 \usage{
 spgm(formula, data=list(), index=NULL, listw,
-         model=c("within","random"), lag=FALSE, spatial.error=FALSE,
-         moments = c("initial", "weights", "fullweights"), endog = NULL,
-         instruments= NULL, verbose = FALSE,
-         method = c("w2sls", "b2sls", "g2sls", "ec2sls"), control = list())
+      model=c("within","random"), lag=FALSE, spatial.error=FALSE,
+      moments = c("initial", "weights", "fullweights"), endog = NULL,
+      instruments= NULL, verbose = FALSE,
+      method = c("w2sls", "b2sls", "g2sls", "ec2sls"), control = list())
 }
 
 \arguments{
@@ -138,7 +138,8 @@ URL http://www.jstatsoft.org/v47/i01/.
 \examples{
 data(Produc, package = "Ecdat") 
 data(usaww)
-GM<-spgm(log(gsp)~log(pcap)+log(pc)+log(emp)+unemp, data=Produc,listw = usaww, moments="fullweights", spatial.error = TRUE)
+GM <- spgm(log(gsp)~log(pcap)+log(pc)+log(emp)+unemp, data=Produc,
+           listw = usaww, moments="fullweights", spatial.error = TRUE)
 summary(GM)
 }
 

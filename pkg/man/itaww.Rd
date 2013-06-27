@@ -9,7 +9,7 @@ Spatial weights matrix of the 103 Italian provinces as in 1992-2005.
 }
 
 \usage{
-usaww
+data(itaww)
 }
 
 \format{

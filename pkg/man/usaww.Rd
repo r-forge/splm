@@ -9,7 +9,7 @@ Spatial weights matrix of the 48 continental US States based on the queen contig
 }
 
 \usage{
-usaww
+data(usaww)
 }
 
 \format{

@@ -9,7 +9,9 @@ Hausman specification test for spatial panel data models
 }
 \usage{
 sphtest(x, ...)
-\method{sphtest}{formula}(x, data, index = NULL, listw, spatial.model = c("lag", "error", "sarar"), method = c("ML", "GM"), errors = c("KKP", "BSK"),...)
+\method{sphtest}{formula}(x, data, index = NULL, listw,
+      spatial.model = c("lag", "error", "sarar"),
+      method = c("ML", "GM"), errors = c("KKP", "BSK"),...)
 \method{sphtest}{splm}(x, x2, ...)
 }
 
@@ -44,10 +46,13 @@ URL http://www.jstatsoft.org/v47/i01/.}
 data(Produc, package="Ecdat")
 data(usaww)
 fm <- log(gsp)~log(pcap)+log(pc)+log(emp)+unemp
-test1<-sphtest(fm,data=Produc, listw = mat2listw(usaww), spatial.model = "error", method="GM")
+test1<-sphtest(fm,data=Produc, listw = mat2listw(usaww),
+                spatial.model = "error", method="GM")
 test1
-mod1<- spgm(fm, data=Produc, listw = usaww, model = "random", spatial.error = TRUE, moments="fullweights")
-mod2<- spgm(fm, data=Produc, listw = usaww, model = "within", spatial.error = TRUE)
+mod1<- spgm(fm, data=Produc, listw = usaww, model = "random",
+             spatial.error = TRUE, moments="fullweights")
+mod2<- spgm(fm, data=Produc, listw = usaww, model = "within",
+             spatial.error = TRUE)
 test2<-sphtest(mod1, mod2)
 test2
 }

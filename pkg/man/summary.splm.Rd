@@ -45,7 +45,8 @@ An object of class \code{'summary.splm'}
 \examples{
 data(Produc, package = "Ecdat") 
 data(usaww)
-GM<-spgm(log(gsp)~log(pcap)+log(pc)+log(emp)+unemp, data=Produc, listw = usaww, moments = "fullweights", spatial.error = TRUE)
+GM <- spgm(log(gsp)~log(pcap)+log(pc)+log(emp)+unemp, data=Produc,
+            listw=usaww, moments = "fullweights", spatial.error = TRUE)
 summary(GM)
 }
 

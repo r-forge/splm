@@ -21,7 +21,7 @@ spreml(formula, data, index = NULL, w, w2=w, lag = FALSE,
   \item{index}{if not NULL (default), a character vector to identify the indexes among the columns of the \code{\link{data.frame}}}
   \item{w}{an object of class \code{listw} or a \code{matrix}. It represents the spatial weights to be used in estimation.}
   \item{w2}{an object of class \code{listw} or a
-  \code{matrix}. Second of set spatial weights for estimation, if
+  \code{matrix}. Second set of spatial weights for estimation, if
   different from the first (e.g., in a 'sarar' model).}
   \item{lag}{default=\code{FALSE}. If \code{TRUE}, a spatial lag of the dependent variable is added.}
   \item{errors}{Specifies the error covariance structure. See details.}
@@ -48,7 +48,7 @@ spreml(formula, data, index = NULL, w, w2=w, lag = FALSE,
   Abbreviations in \code{errors} correspond to: \code{"sem"}
   Anselin-Baltagi type spatial autoregressive error: if
   present, random effects are not spatially correlated;  \code{"sem2"}
-  Kapoor, Kelejin and Prucha-type spatial autoregressive error model
+  Kapoor, Kelejian and Prucha-type spatial autoregressive error model
   with spatially correlated random effects; \code{"sr"} serially
   correlated remainder errors; \code{"re"} random effects; \code{"ols"}
   spherical errors (usually combined with \code{lag=T}).
@@ -80,8 +80,8 @@ spreml(formula, data, index = NULL, w, w2=w, lag = FALSE,
 \references{
   Millo, G. (2013)
   Maximum likelihood estimation of spatially and serially correlated
-  panels with random effects. Submitted to \emph{Computational
-  Statistics and Data Analysis}.
+  panels with random effects. \emph{Computational Statistics and Data
+  Analysis}, \bold{forthcoming}.
 }
 
 \author{Giovanni Millo}
@@ -94,7 +94,8 @@ data(usaww)
 fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
 ## random effects panel with spatial lag and serial error correlation
 ## optimization method set to "BFGS"
-sarsrmod <- spreml(fm, data = Produc, w = usaww, errors="sr", lag=TRUE, method="BFGS")
+sarsrmod <- spreml(fm, data = Produc, w = usaww, errors="sr", lag=TRUE,
+                    method="BFGS")
 summary(sarsrmod)
 }
 

@@ -87,10 +87,12 @@ fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
 ## the two standard specifications (SEM and SAR) one with FE
 ## and the other with RE:
 ## fixed effects panel with spatial errors
-fespaterr <- spml(fm, data = Produc, listw = mat2listw(usaww), model="within", spatial.error="b", Hess = FALSE)
+fespaterr <- spml(fm, data = Produc, listw = mat2listw(usaww),
+                   model="within", spatial.error="b", Hess = FALSE)
 summary(fespaterr)
 ## random effects panel with spatial lag
-respatlag <- spml(fm, data = Produc, listw = mat2listw(usaww), model="random", spatial.error="none", lag=TRUE)
+respatlag <- spml(fm, data = Produc, listw = mat2listw(usaww),
+                   model="random", spatial.error="none", lag=TRUE)
 summary(respatlag)
 }
 

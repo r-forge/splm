@@ -30,7 +30,7 @@ depending on the estimated model.
 \seealso{
   \code{\link{spml}}, \code{\link{spgm}}
 }
-\author{ Giovanni Millo \email{Giovanni\_Millo@Generali.com}, Gianfranco Piras\email{gpiras@mac.com}}
+\author{Giovanni Millo, Gianfranco Piras}
 
 \examples{
 data(Produc, package = "Ecdat") 
