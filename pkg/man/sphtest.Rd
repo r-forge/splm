@@ -18,9 +18,9 @@ sphtest(x, ...)
 \arguments{
 \item{x}{an object of class  \code{formula} or \code{splm} }
 \item{x2}{an object of class  \code{splm} }
-  \item{data}{an object of class \code{\link{data.frame}} or \code{pdata.frame}. An optional data frame containing the variables
-  in the model. When the obect is a \code{\link{data.frame}}, the first two columns may contain the indexes. See \code{index}}
-\item{index}{if not NULL (default), a character vector to identify the indexes among the columns of the \code{\link{data.frame}}}
+  \item{data}{an object of class \code{data.frame} or \code{pdata.frame}. An optional data frame containing the variables
+  in the model. When the obect is a \code{data.frame}, the first two columns may contain the indexes. See \code{index}}
+\item{index}{if not NULL (default), a character vector to identify the indexes among the columns of the \code{data.frame}}
 \item{listw}{an object of class \code{listw} created for example by \code{nb2listw} }
 \item{spatial.model}{one of \code{c("lag","error","sarar")}, the model to be estimated (only lag, only error, both lag and error dependence)}
 \item{method}{one of \code{c("ML","GM")}}
@@ -40,7 +40,7 @@ URL http://www.jstatsoft.org/v47/i01/.}
 
 \author{Gianfranco Piras}
 
-\seealso{\code{\link{spgm}}}
+\seealso{\code{spgm}}
 
 \examples{
 data(Produc, package="Ecdat")

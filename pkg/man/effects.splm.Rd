@@ -46,10 +46,10 @@ Spatial panel data models,
 
 }
 
-\author{ Gianfranco Piras \email{gpiras@mac.com}}
+\author{Gianfranco Piras}
 
 \seealso{
-\code{\link{spml}} \code{summary.effects.splm}
+\code{spml} \code{summary.effects.splm}
 }
 \examples{
 data(Produc, package = "Ecdat")

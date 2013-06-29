@@ -14,9 +14,9 @@ spml(formula, data, index=NULL, listw, listw2=listw, na.action,
 
 \arguments{
   \item{formula}{a symbolic description of the model to be estimated}
-  \item{data}{an object of class \code{\link{data.frame}} or \code{pdata.frame}. A data frame containing the variables
-  in the model. When the object is a \code{\link{data.frame}}, the first two columns shall contain the indexes, unless otherwise specified. See \code{index}}
-  \item{index}{if not NULL (default), a character vector to identify the indexes among the columns of the \code{\link{data.frame}}}
+  \item{data}{an object of class \code{data.frame} or \code{pdata.frame}. A data frame containing the variables
+  in the model. When the object is a \code{data.frame}, the first two columns shall contain the indexes, unless otherwise specified. See \code{index}}
+  \item{index}{if not NULL (default), a character vector to identify the indexes among the columns of the \code{data.frame}}
   \item{listw}{an object of class \code{listw} or a \code{matrix}. It represents the spatial weights to be used in estimation.}
   \item{listw2}{an object of class \code{listw} or a
   \code{matrix}. Second of set spatial weights for estimation, if
@@ -43,8 +43,8 @@ initval: one of \code{c("zeros", "estimate")}, the initial values for
   \code{"estimate"} the initial values are retreived from the estimation
   of the nested specifications. Alternatively, a numeric vector can be
   specified.
-  x.tol: Tolerance. See \code{\link{nlminb}} for details.
-  rel.tol: Relative tolerance. See \code{\link{nlminb}} for details.
+  x.tol: Tolerance. See \code{nlminb} for details.
+  rel.tol: Relative tolerance. See \code{nlminb} for details.
 }
 \value{
   An object of class \code{"splm"}.
@@ -78,7 +78,7 @@ URL http://www.jstatsoft.org/v47/i01/.
 
 \author{Giovanni Millo}
 
-\seealso{\code{\link{spgm}}}
+\seealso{\code{spgm}}
 
 \examples{
 data(Produc, package = "Ecdat")

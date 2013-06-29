@@ -29,8 +29,8 @@ a covariance matrix of beta coefficients
 data(Produc, package="Ecdat")
 data(usaww)
 fm <- log(gsp)~log(pcap)+log(pc)+log(emp)+unemp
-sarremod <- spml(fm, data=Produc, listw = mat2listw(usaww), model="random",
-lag=TRUE, spatial.error="none")
+sarremod <- spml(fm, data=Produc, listw = mat2listw(usaww),
+ model="random", lag=TRUE, spatial.error="none")
 ## compact representation of betas
 library(lmtest)
 coeftest(sarremod)

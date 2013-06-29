@@ -14,7 +14,7 @@ data(usaww)
 
 \format{
 A matrix with elements different from zero if state i and j are
-neighbors. Weights are row-standardized. According to the queen
+neighbors. Weights are row standardized. According to the queen
 contiguity criterium, Arizona and Colorado are considered neighbours.}
 
 \author{Giovanni Millo}

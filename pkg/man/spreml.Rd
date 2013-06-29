@@ -16,9 +16,9 @@ spreml(formula, data, index = NULL, w, w2=w, lag = FALSE,
 
 \arguments{
   \item{formula}{a symbolic description of the model to be estimated}
-  \item{data}{an object of class \code{\link{data.frame}} or \code{pdata.frame}. A data frame containing the variables
-  in the model. When the object is a \code{\link{data.frame}}, the first two columns shall contain the indexes, unless otherwise specified. See \code{index}}
-  \item{index}{if not NULL (default), a character vector to identify the indexes among the columns of the \code{\link{data.frame}}}
+  \item{data}{an object of class \code{data.frame} or \code{pdata.frame}. A data frame containing the variables
+  in the model. When the object is a \code{data.frame}, the first two columns shall contain the indexes, unless otherwise specified. See \code{index}}
+  \item{index}{if not NULL (default), a character vector to identify the indexes among the columns of the \code{data.frame}}
   \item{w}{an object of class \code{listw} or a \code{matrix}. It represents the spatial weights to be used in estimation.}
   \item{w2}{an object of class \code{listw} or a
   \code{matrix}. Second set of spatial weights for estimation, if
@@ -36,8 +36,8 @@ spreml(formula, data, index = NULL, w, w2=w, lag = FALSE,
   \code{"estimate"} the initial values are retreived from the estimation
   of the nested specifications. Alternatively, a numeric vector can be
   specified.}
-  \item{x.tol}{control parameter for tolerance. See \code{\link{nlminb}} for details.}
-  \item{rel.tol}{control parameter for relative tolerance. See \code{\link{nlminb}} for details.}
+  \item{x.tol}{control parameter for tolerance. See \code{nlminb} for details.}
+  \item{rel.tol}{control parameter for relative tolerance. See \code{nlminb} for details.}
   \item{...}{additional arguments to pass over to other functions, e.g. \code{method}.}
 }
 \details{Second-level wrapper for estimation of random effects models
@@ -86,7 +86,7 @@ spreml(formula, data, index = NULL, w, w2=w, lag = FALSE,
 
 \author{Giovanni Millo}
 
-\seealso{\code{\link{spml}}}
+\seealso{\code{spml}}
 
 \examples{
 data(Produc, package = "Ecdat")

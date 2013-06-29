@@ -34,7 +34,7 @@
     \item{goutput}{gross output of rice in kg}
     \item{noutput}{net output, gross output minus harvesting cost (paid in terms of rice)}
     \item{price}{price of rough rice in Rupiah per kg}
-    \item{region}{one of \code{'wargabinangun'}, \code{'langan'}, \code{'gunungwangi'}, \code{'malausma'}, \code{'sukaambit'}, \code{'ciwangi'}}
+    \item{region}{one of six regions}
   }
 }
 \source{
