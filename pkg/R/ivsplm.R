@@ -87,7 +87,7 @@ if(length(listw$neighbours)!=N	)stop("Non conformable spatial weights")
 if (!inherits(listw, c("listw", "matrix"))) 
         stop("listw should be either a matrix of an object of class listw")
 
-if(is.null(endog) && lag == FALSE) stop("No engogenous variables specified")
+if(is.null(endog) && lag == FALSE) stop("No endogenous variables specified")
 
 if(is.character(endog)){
 	xend<- match(endog,colnames(data))  
@@ -136,6 +136,7 @@ stop("...\nUnknown method\n"))
     result$legacy <- FALSE
     result$listw_style <- FALSE
     result$call <- match.call()
+
 
 class(result) <- "stsls"
 result

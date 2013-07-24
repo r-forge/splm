@@ -54,6 +54,7 @@ else results <- spsarargm(formula = formula, data = data, index = index, listw =
 results$call <- cl
 results$ef.sph<- effects
 results$legacy <- c(lag, spatial.error)
+results$endog <- endog
 results
 
 }

@@ -494,12 +494,13 @@ interval2 <- get("interval2", envir = env)
     s2 <- SSE/NT
     betas <- coefficients(lm.target)
     names(betas) <- colnames(xt)  
-	# coefs <- c(lambda, rho, betas)
-	coefs <- c(lambda, rho, betas)
+	 # coefs <- c(rho, lambda, betas)
+	 coefs <- c(lambda, rho, betas)
 
 ###Add the vc matrix exact
 if(Hess){        
         fd <- fdHess(coefs, f_sacpanel_hess, env, LeeYu = LeeYu)
+        #
         mat <- fd$Hessian
 		  fdHess<- solve(-(mat), tol.solve = tol.solve)
         rownames(fdHess) <- colnames(fdHess) <- c("lambda", "rho",colnames(xt))
@@ -645,8 +646,10 @@ if(LeeYu){
     ldet1 <- do_ldet(lambda, env, which = 1)
     ldet2 <- do_ldet(rho, env, which = 2)
    
-ret <- (T * ldet1 + T * ldet2 - (((n*T)/2) * (log(2 * pi)+1)) - (n*T/2) * log(s2))
+#ret <- (T * ldet1 + T * ldet2 - (((n*T)/2) * (log(2 * pi))) - (n*T/2) * log(s2))
                         # - (1/(2 * (s2))) * SSE)
+ret <- (T * ldet1 + T * ldet2 - ((n*T/2) * log(2 * pi)) - (n*T/2) * log(s2) - 
+        (1/(2 * s2)) * SSE)
 
 
     if (get("verbose", envir = env)) cat("rho:", rho, "lambda:", lambda, " function:", ret, 
@@ -655,7 +658,7 @@ ret <- (T * ldet1 + T * ldet2 - (((n*T)/2) * (log(2 * pi)+1)) - (n*T/2) * log(s2
     ret
 }
 
-sar_sac_hess_sse_panel <- function (lambda, rho, beta, env) 
+sar_sac_hess_sse_panel <- function (lambda, rho,  beta, env) 
 {
     yl <- get("yt", envir = env) - lambda * get("wyt", envir = env) - 
         rho * get("w2yt", envir = env) + rho * lambda * get("w2wyt", 
