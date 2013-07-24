@@ -134,7 +134,7 @@ stop("...\nUnknown method\n"))
     result$zero.policy <- FALSE
     result$robust <- FALSE
     result$legacy <- FALSE
-    result$listw_style <- FALSE
+    result$listw_style <- NULL
     result$call <- match.call()
 
 

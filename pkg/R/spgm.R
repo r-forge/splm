@@ -38,6 +38,7 @@ if(!spatial.error){
 	
 	results<-ivsplm(formula = formula, effects = effects, data=data, index = index, endog = endog, instruments = instruments, method = method, lag = lag, listw = listw)
 	
+	results$type <- "lag GM"
 	}
 
 
