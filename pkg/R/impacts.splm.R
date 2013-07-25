@@ -1,10 +1,12 @@
 impacts.splm<-function(obj, listw = NULL, time = NULL, ..., tr=NULL, R=200, type="mult", empirical=FALSE, Q=NULL){
+if(is.null(listw) && is.null(tr)) stop("either listw or tr should be provided")
+
 	
-if(!is.null(listw)){	
+if(!is.null(listw) ){	
 	if(listw$style != "W") stop("Only row-standardised weights supported")
 	if(is.null(time) && is.null(tr)) stop("time periods should be provided")
 }
-else stop("listw object should be provided")
+
 
 if(is.null(tr)){
 	
