@@ -21,4 +21,4 @@ S3method(bsktest, formula)
 S3method(bsjktest, formula)
 S3method(sphtest, formula)
 S3method(sphtest, splm)
-
+S3method(impacts, splm)
