@@ -1,3 +1,9 @@
+Changes in Version 1.2.00
+ o All changes documented in: Piras, G. “Impact estimates for static panel data models in R”. url: http://rri.wvu.edu/wp-content/uploads/2012/11/Piras_ImpactEstimatesForStaticSpatial2013-05.pdf
+
+ o Rewrote a new framework to deal with GM estimation using exclusively sparse Matrices. This new framework has multiple improvements in terms both of timing and improvements with respect to the previous version. Most of the changes are reported in a file SPGM - structure.doc available from G. Piras. I am also planning to write a paper showing most of the new functionality. Basically, most of the options available from sphet have been included also in spgm. 
+
+
 Changes in Version 1.1.00
  o revised all random effects estimators as per paper submitted to CSDA. Sparse matrix methods, flexible optimizers, SAREM2SRRE and SEM2SRRE models have been added. Datasets and weights for Rice Farming and Italian Insurance examples have been added.
 
