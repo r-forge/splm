@@ -260,7 +260,7 @@ if(is.null(pars)) {
     wres <- as.matrix(Ws %*% res)
     r.init <- solve(crossprod(res),crossprod(res,wres))
 if(is.null(endog))	v.init <- crossprod(res)/NT	
-else    	        v.init <- result1$sigmav
+else    	        v.init <- result$sigmav
 	pars <- c(r.init, v.init)	
 }
 
