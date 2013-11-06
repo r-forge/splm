@@ -9,6 +9,7 @@ Xwithin <- panel.transformations(X, indic, type= "within")
 colnames(Xwithin)<-colnames(X)
 del <- which(diag(var(Xwithin)) == 0)
 Xwithin <- Xwithin[,-del]
+# print(Xwithin[1:5,])	
 
 
 if(!lag){
