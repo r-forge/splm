@@ -127,7 +127,7 @@ spgm.tsls <- function(y, yend, X, Zinst, Hinst= NULL, instr = FALSE){
 if (instr) H <- Hinst	
 else    H <- cbind(X, Zinst)
    Z <- cbind(yend, X)
-  Znames<- colnames(Z) 
+   Znames<- colnames(Z) 
 	 yendp<-matrix(,nrow(yend), ncol(yend))
 for(i in 1:ncol(yend))	yendp[,i] <- fitted.values(lm(yend[,i] ~ H-1  ))
     Zp <- cbind(yendp,X)
@@ -135,7 +135,7 @@ for(i in 1:ncol(yend))	yendp[,i] <- fitted.values(lm(yend[,i] ~ H-1  ))
     biv <- coefficients(model.fit)
 readout<- which(is.na(biv))
 
-if(any(is.na(biv)))  yp <- Z[,-which(is.na(biv))] %*% biv[-which(is.na(biv))]
+if(any(is.na(biv)))  yp <- as.matrix(Z[,-which(is.na(biv))]) %*% biv[-which(is.na(biv))]
 else yp <- Z %*% biv
 
 
@@ -145,7 +145,7 @@ else yp <- Z %*% biv
         df <- model.fit$df.residual
         s2 <- sse/df
         
-if(any(is.na(biv)))   Zp<-Zp[,-which(is.na(biv))]  
+if(any(is.na(biv)))   Zp<-as.matrix(Zp)[,-which(is.na(biv))]  
 
 
 ZpZi<-solve(crossprod(Zp))   
@@ -681,6 +681,7 @@ indes<-index
 
     y <- model.extract(mf, "response")
     x <- model.matrix(mt, mf)
+    namesx <- colnames(x)
     
   N<-length(unique(ind))
   k<-dim(x)[[2]]
@@ -715,7 +716,7 @@ Xwithin<-transx[[1]]
 Xbetween <- as.matrix(Xbetween)
 Xwithin <- as.matrix(Xwithin)
 del<-which(diag(var(as.matrix(Xwithin)))==0)
-if (colnames(x)[1] == "(Intercept)") Xbetween <- Xbetween[,-1]
+if (namesx[1] == "(Intercept)") Xbetween <- Xbetween[,-1]
 delb<-which(diag(var(as.matrix(Xbetween)))==0)
 if(length(delb)==0) Xbetween<-Xbetween
 else Xbetween<-Xbetween[,-delb]
@@ -757,7 +758,7 @@ else estim1 <- optim(pars, arg, v = Gg, verbose = verbose, control = control, me
 
 finrho<-estim1$par[1]
 finsigmaV<-estim1$par[2]
-#print(c(finrho,finsigmaV))
+# print(c(finrho,finsigmaV))
 
    wy <- as.matrix(Ws2 %*% y)
    yt <- y-finrho*wy
@@ -773,7 +774,7 @@ finsigmaV<-estim1$par[2]
    wyf<-panel.transformations(wyt,indic, type= "within")
 	xf<-xf[,-del]
 	xf<-as.matrix(xf)
-	colnames(xf)<-colnames(x)[-del]
+	colnames(xf)<- namesx[-del]
 	# wxf <- as.matrix(Ws %*% xf)
 
 	

@@ -121,7 +121,7 @@ endogwithin <- panel.transformations(endog, indic, type= "within")
 
 endogwithin <-cbind(endogwithin, wywithin)
 colnames(endogwithin)<-c(colnames(endog), "lambda")
-colnames(Xwithin)<-colnames(X)[-del]
+# colnames(Xwithin)<-colnames(X)[-del]
 
 res<-spgm.tsls(ywithin, endogwithin, Xwithin, Hwithin)
 
