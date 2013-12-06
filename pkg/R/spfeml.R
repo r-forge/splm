@@ -378,6 +378,7 @@ if (model=='error'){
 	N.vars<-res.eff$N.vars
 
 
+
 	nam.rows <- dimnames(x)[[1]]
 	
 	

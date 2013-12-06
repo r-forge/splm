@@ -73,6 +73,7 @@ if(LeeYu && effects == "spfe") s2 <- (T/(T-1)) * as.numeric(s2)
 if(LeeYu && effects == "tpfe") s2 <- (n/(n-1)) * as.numeric(s2)	
 
 	betas <- coefficients(lm.lag)
+	 # betas <- b0 - lambda*b1
 	names(betas) <- colnames(xt)
 	coefs <- c(lambda, betas)
 
@@ -188,7 +189,7 @@ if(LeeYu && effects == "tpfe"){
 
 }
  
-    	return<-list(coeff = betas, lambda = lambda, s2 = s2, rest.se = rest.se, lambda.se = lambda.se, sig.se = sig.se, asyvar1 = asyvar1)
+    	return<-list(coeff = betas, lambda = lambda, s2 = s2, rest.se = rest.se, lambda.se = lambda.se, sig.se = sig.se, asyvar1 = asyvar1,  residuals = r)
 } 
 
 
@@ -412,7 +413,7 @@ if(LeeYu && effects == "tpfe"){
 
 }
 
-	return<-list(coeff=betas, rho = rho, s2 = s2, rest.se = rest.se, rho.se = rho.se, s2.se = s2.se, asyvar1=asyvar1)
+	return<-list(coeff=betas, rho = rho, s2 = s2, rest.se = rest.se, rho.se = rho.se, s2.se = s2.se, asyvar1=asyvar1, residuals = r)
 }
 
 
@@ -804,7 +805,7 @@ if(LeeYu && effects == "sptpfe"){
             	}
 
 
-return<-list(coeff = betas, lambda = lambda, rho = rho, s2 = s2, asyvar1 = asyvar1, lambda.se = lambda.se, rho.se = rho.se, s2.se = s2.se)	
+return<-list(coeff = betas, lambda = lambda, rho = rho, s2 = s2, asyvar1 = asyvar1, lambda.se = lambda.se, rho.se = rho.se, s2.se = s2.se, residuals = r)	
 	}
 
 f_sacpanel_hess <- function (coefs, env, LeeYu = LeeYu, effects = effects) 
