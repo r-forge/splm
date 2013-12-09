@@ -38,7 +38,7 @@ function (formula, data, index = NULL, w, w2=w, lag = FALSE,
     ind <- index[which(names(index) %in% row.names(X))]
     tind <- tindex[which(names(index) %in% row.names(X))]
     oo <- order(tind, ind)
-    X <- X[oo, ]
+    X <- X[oo, , drop=FALSE]
     y <- y[oo]
     ind <- ind[oo]
     tind <- tind[oo]
