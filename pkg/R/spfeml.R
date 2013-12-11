@@ -55,6 +55,9 @@ effects<-match.arg(effects)
 
   ## reduce X,y to model matrix values (no NAs)
   x<-model.matrix(formula,data=data)
+  clnames <- colnames(x)
+  rwnames <- rownames(x)
+
   y<-model.response(model.frame(formula,data=data))
   ## reduce index accordingly
   names(index)<-row.names(data)
@@ -68,32 +71,25 @@ effects<-match.arg(effects)
   ind<-ind[oo]
   tind<-tind[oo]
 
-  clnames<-colnames(x)
-  rwnames<-rownames(x)
+
   #make sure that the model has no intercept if effects !=pooled
-  if (colnames(x)[1]=="(Intercept)") {
-  	x<-x[,-1]
-  	#cat('\n Warning: x may not contain an intercept if fixed effects are specified \n')
-	}
-
-if(is.vector(x)){
-  k<-1 
-  x<-matrix(x)
-  colnames(x)<-clnames[-1]
-  dimnames(x)[[1]]<-rwnames
-  dimnames(x)[[2]]<-clnames[-1]
+  if (attr(attributes(model.frame(formula,data=data))$terms, "intercept") == 1) {
+  	x <- as.matrix(x[,-1])
+    colnames(x)<-clnames[-1]
+    dimnames(x)[[1]]<-rwnames
+    clnames <- clnames[-1]
   }
-  else   k<-dim(x)[[2]]
-
-  
-
+	x <- as.matrix(x)
+    k <- dim(x)[2]
+      
+    
 
   ## det. number of groups and df
   N<-length(unique(ind))
   n<-N
-  #x<-matrix(x,length(ind),k)
   ## det. max. group numerosity
-  T<-max(tapply(x[,1],ind,length))
+  T<-max(tapply(tind,ind,length))
+
   ## det. total number of obs. (robust vs. unbalanced panels)
   NT<-length(ind)
 
@@ -263,21 +259,21 @@ if(model=="sarar")	{
 if 	(model == "error"){
 	dm<-function(A) trash<-unlist(tapply(A,inde,function(TT) lag.listw(listw,TT), simplify=TRUE))
    wxt<-apply(xt,2,dm)
-   colnames(wxt)<-paste('Lag.',colnames(x), sep="")
+   # colnames(wxt)<-paste('Lag.',colnames(x), sep="")
    wx<-apply(x,2,dm)
-   colnames(wx)<-paste('lag.',colnames(x), sep="")
+   # colnames(wx)<-paste('lag.',colnames(x), sep="")
 	}
 
 if 	(model == "sarar"){
 	dm<-function(A) trash<-unlist(tapply(A,inde,function(TT) lag.listw(listw2,TT), simplify=TRUE))
    wxt<-apply(xt,2,dm)
-   colnames(wxt)<-paste('Lag.',colnames(x), sep="")
+   # colnames(wxt)<-paste('Lag.',colnames(x), sep="")
    wx<-apply(x,2,dm)
-   colnames(wx)<-paste('lag.',colnames(x), sep="")
+   # colnames(wx)<-paste('lag.',colnames(x), sep="")
 	}
 
-
-colnames(xt)<-dimnames(x)[[2]]
+# print(clnames)
+colnames(xt)<- clnames
 
 	
 
@@ -307,6 +303,8 @@ if(model %in% c("lag", "error") ){
 
 }
 
+
+
 assign("verbose", !quiet, envir = env)
 # assign("first_time", TRUE, envir = env)
 assign("LAPACK", con$LAPACK, envir = env)
@@ -315,6 +313,7 @@ assign("similar", FALSE, envir = env)
 assign("family", "SAR", envir = env)
 assign("inde",inde, envir=env)
 assign("con", con, envir=env)
+
 
 
     if (!quiet) 
@@ -358,7 +357,7 @@ if (model=='error'){
     # timings[[nm]] <- proc.time() - .ptime_start
     # .ptime_start <- proc.time()	
 
-  RES<- sperrorlm(env = env, zero.policy = zero.policy, interval = interval1, Hess = Hess, LeeYu = LeeYu, effects = effects)	
+  RES <- sperrorlm(env = env, zero.policy = zero.policy, interval = interval1, Hess = Hess, LeeYu = LeeYu, effects = effects)	
     	res.eff<-feerror(env = env, beta=RES$coeff, sige=RES$s2, effects = effects ,method =method, rho=RES$rho, legacy = legacy)
     	
     }
@@ -403,15 +402,17 @@ Coeff<-c(spat.coef, RES$coeff)
 type <- paste("fixed effects", model)
 
 
-var<-RES$asyvar1
+if (!Hess) var <- RES$asyv
 
-if(model == "lag"){
+else{
+
+if(model == "lag" ){
 	var<-matrix(0,(ncol(RES$asyvar1)+1),(ncol(RES$asyvar1)+1))
    var[1,1]<-	RES$lambda.se
    var[(2:ncol(var)),(2:ncol(var))]<-RES$asyvar1
 	}
 
-if(model == "error"){
+if(model == "error" ){
 	var<-matrix(0,(ncol(RES$asyvar1)+1),(ncol(RES$asyvar1)+1))
    var[1,1]<-	RES$rho.se
    var[(2:ncol(var)),(2:ncol(var))]<-RES$asyvar1
@@ -424,6 +425,7 @@ if(model == "sarar"){
    var[(3:ncol(var)),(3:ncol(var))]<-RES$asyvar1
 	}
 
+}
 
 spmod <- list(coefficients=Coeff, errcomp=NULL,
                 vcov = var ,spat.coef=spat.coef,

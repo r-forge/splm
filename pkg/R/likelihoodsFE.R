@@ -44,6 +44,7 @@ interval1 <- get("interval1", envir = env)
 		e1e1<-crossprod(e1)
 		e0e1<-t(e1)%*%e0
 
+
 assign("e0e0", e0e0, envir = env)		
 assign("e1e1", e1e1, envir = env)		
 assign("e0e1", e0e1, envir = env)		
@@ -123,7 +124,7 @@ if(LeeYu && effects == "sptpfe"){
 
 	
 }	
-	
+
 ### add numerical hessian
 if(Hess){
 	
@@ -183,13 +184,19 @@ if(LeeYu && effects == "tpfe"){
         lambda.se <- asyv[2, 2]        
         rest.se <- sqrt(diag(asyv))[-c(1:2)]
         sig.se <- sqrt(asyv[1, 1])       
-        asyvar1 <- asyv[-c(1,2),-c(1,2)]
-        
-        rownames(asyvar1) <- colnames(asyvar1) <- c(colnames(xt))
+        asyvar1 <- as.matrix(asyv[-c(1,2),-c(1,2)])
+
+        rownames(asyvar1) <- colnames(asyvar1) <- colnames(xt)
+
 
 }
+
+if(Hess) asyv <- NULL        
+else asyv <- asyv
+
+
  
-    	return<-list(coeff = betas, lambda = lambda, s2 = s2, rest.se = rest.se, lambda.se = lambda.se, sig.se = sig.se, asyvar1 = asyvar1,  residuals = r)
+    	return<-list(coeff = betas, lambda = lambda, s2 = s2, rest.se = rest.se, lambda.se = lambda.se, sig.se = sig.se, asyvar1 = asyvar1,  residuals = r, asyv = asyv)
 } 
 
 
@@ -411,9 +418,15 @@ if(LeeYu && effects == "tpfe"){
         asyvar1 <- asyv[-c(1,2),-c(1,2)]
         # rownames(asyvar1) <- colnames(asyvar1) <- c(colnames(xt))
 
+        
+
 }
 
-	return<-list(coeff=betas, rho = rho, s2 = s2, rest.se = rest.se, rho.se = rho.se, s2.se = s2.se, asyvar1=asyvar1, residuals = r)
+if(Hess) asyv <- NULL        
+else asyv <- asyv
+
+
+	return<-list(coeff=betas, rho = rho, s2 = s2, rest.se = rest.se, rho.se = rho.se, s2.se = s2.se, asyvar1=asyvar1, residuals = r, asyv = asyv)
 }
 
 
@@ -802,10 +815,14 @@ if(LeeYu && effects == "sptpfe"){
         rest.se <- sqrt(diag(asyv))[-((p+1):(p+3))]
         asyvar1 <- asyv[-((p+1):(p+3)),-((p+1):(p+3))]
 
+
             	}
 
+if(Hess) asyv <- NULL        
+else asyv <- asyv
+        
 
-return<-list(coeff = betas, lambda = lambda, rho = rho, s2 = s2, asyvar1 = asyvar1, lambda.se = lambda.se, rho.se = rho.se, s2.se = s2.se, residuals = r)	
+return<-list(coeff = betas, lambda = lambda, rho = rho, s2 = s2, asyvar1 = asyvar1, lambda.se = lambda.se, rho.se = rho.se, s2.se = s2.se, residuals = r, asyv = asyv)	
 	}
 
 f_sacpanel_hess <- function (coefs, env, LeeYu = LeeYu, effects = effects) 
