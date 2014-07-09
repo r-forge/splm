@@ -1,4 +1,5 @@
 impacts.splm<-function(obj, listw = NULL, time = NULL, ..., tr=NULL, R=200, type="mult", empirical=FALSE, Q=NULL){
+
 if(is.null(listw) && is.null(tr)) stop("either listw or tr should be provided")
 
 	

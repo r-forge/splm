@@ -178,14 +178,14 @@ if(LeeYu && effects == "tpfe"){
         col2 <- rbind(T*tr(WA)/s2, V, three )
         col3 <- rbind(zero, t(three), 1/as.numeric(s2)* xtxt)
         asyvar <- cbind(col1, col2, col3)
-        asyv <- solve(asyvar, tol = con$tol.solve)
-		rownames(asyv) <- colnames(asyv) <- c("sigma","lambda", colnames(xt))
+        asyva <- solve(asyvar, tol = con$tol.solve)
+        rownames(asyva) <- colnames(asyva) <- c("sigma","lambda", colnames(xt))
         
-        lambda.se <- asyv[2, 2]        
-        rest.se <- sqrt(diag(asyv))[-c(1:2)]
-        sig.se <- sqrt(asyv[1, 1])       
-        asyvar1 <- as.matrix(asyv[-c(1,2),-c(1,2)])
-
+        lambda.se <- asyva[2, 2]        
+        rest.se <- sqrt(diag(asyva))[-c(1:2)]
+        sig.se <- sqrt(asyva[1, 1]) 
+        asyv <- asyva[-1,-1]      
+        asyvar1 <- as.matrix(asyva[-c(1,2),-c(1,2)])
         rownames(asyvar1) <- colnames(asyvar1) <- colnames(xt)
 
 
@@ -341,10 +341,10 @@ if(LeeYu && effects == "sptpfe"){
         asyvar[3:(p + 2), 3:(p + 2)] <- 1/as.numeric(s2) * (t(xt - rho *wxt) %*% (xt - rho * wxt)) 
         asyv <- solve(asyvar, tol = con$tol.solve)
         rownames(asyv) <- colnames(asyv) <- c("sigma","rho", colnames(xt))
+
         s2.se <- sqrt(asyv[1, 1])
         rho.se <- asyv[2, 2]
         asyvar1 <- asyv[-c(1,2),-c(1,2)]
-
 		init <- c((T/(T+1)), rep(1,p+1))	
 
 		a3 <- rep(0,p)
@@ -411,12 +411,13 @@ if(LeeYu && effects == "tpfe"){
         asyvar[2, 1] <- asyvar[1, 2] <- T*tr(WA)/s2
         asyvar[2, 2] <- T*(tr(WA %*% WA) + tr(t(WA) %*% WA))
         asyvar[3:(p + 2), 3:(p + 2)] <- 1/as.numeric(s2) * (t(xt - rho *wxt) %*% (xt - rho * wxt)) 
-        asyv <- solve(asyvar, tol = con$tol.solve)
-        rownames(asyv) <- colnames(asyv) <- c("sigma","rho", colnames(xt))
-        s2.se <- sqrt(asyv[1, 1])
-        rho.se <- asyv[2, 2]
-        asyvar1 <- asyv[-c(1,2),-c(1,2)]
-        # rownames(asyvar1) <- colnames(asyvar1) <- c(colnames(xt))
+        asyva <- solve(asyvar, tol = con$tol.solve)
+        rownames(asyva) <- colnames(asyva) <- c("sigma","rho", colnames(xt))
+        s2.se <- sqrt(asyva[1, 1])
+        rho.se <- asyva[2, 2]
+        asyvar1 <- asyva[-c(1,2),-c(1,2)]
+        asyv <- asyva[-1,-1]
+        rownames(asyvar1) <- colnames(asyvar1) <- colnames(xt)
 
         
 
@@ -807,13 +808,15 @@ if(LeeYu && effects == "sptpfe"){
         asyvar[1+p, 1+p] <- as.matrix(lala)
         asyvar[2+p, 2+p] <- as.matrix(roro)
         asyvar[3+p, 3+p] <- as.matrix(sisi)
-        asyv <- solve(asyvar, tol = con$tol.solve)
-        rownames(asyv) <- colnames(asyv) <- c(colnames(xt), "lambda", "rho", "sigma")
-        s2.se <- asyv[3+p, 3+p]
-        rho.se <- asyv[2+p, 2+p]
-        lambda.se <- asyv[1+p, 1+p]
-        rest.se <- sqrt(diag(asyv))[-((p+1):(p+3))]
-        asyvar1 <- asyv[-((p+1):(p+3)),-((p+1):(p+3))]
+        asyva <- solve(asyvar, tol = con$tol.solve)
+        rownames(asyva) <- colnames(asyva) <- c(colnames(xt), "lambda", "rho", "sigma")
+
+        s2.se <- asyva[3+p, 3+p]
+        rho.se <- asyva[2+p, 2+p]
+        lambda.se <- asyva[1+p, 1+p]
+        rest.se <- sqrt(diag(asyva))[-((p+1):(p+3))]
+        asyvar1 <- asyva[-((p+1):(p+3)),-((p+1):(p+3))]
+        asyv <- asyva[-(p+3),-(p+3)]
 
 
             	}

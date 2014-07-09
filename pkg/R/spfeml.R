@@ -1,4 +1,4 @@
-spfeml<-function(formula, data=list(), index=NULL, listw, listw2 = NULL, na.action, model = c("lag","error", "sarar"), effects = c('spfe','tpfe','sptpfe'), method="eigen", quiet = TRUE, zero.policy = NULL, interval1 = NULL, interval2 = NULL, trs1 = NULL, trs2 = NULL, tol.solve = 1e-10, control = list(), legacy = FALSE, llprof = NULL, cl = NULL, Hess = TRUE, LeeYu = FALSE, ...){
+spfeml<-function(formula, data=list(), index=NULL, listw, listw2 = NULL, na.action, model = c("lag","error", "sarar"), effects = c('spfe','tpfe','sptpfe'), method="eigen", quiet = TRUE, zero.policy = NULL, interval1 = NULL, interval2 = NULL, trs1 = NULL, trs2 = NULL, tol.solve = 1e-10, control = list(), legacy = FALSE, llprof = NULL, cl = NULL, Hess = FALSE, LeeYu = FALSE, ...){
 
 	  
         # timings <- list()
@@ -399,15 +399,36 @@ if (model == "sarar") spat.coef <- c(RES$lambda, RES$rho)
 
 Coeff<-c(spat.coef, RES$coeff)
 
+
 type <- paste("fixed effects", model)
 
+if (Hess){
 
-if (!Hess) var <- RES$asyv
+	if(model == "lag" ){
+   		var<-matrix(0,(ncol(RES$asyvar1)+1),(ncol(RES$asyvar1)+1))
+		var[1,1]<-	RES$lambda.se
+		var[(2:ncol(var)),(2:ncol(var))]<-RES$asyvar1
+	}
+	
+	if(model == "error" ){
+	 	var<-matrix(0,(ncol(RES$asyvar1)+1),(ncol(RES$asyvar1)+1))
+    	var[1,1]<-	RES$rho.se
+    	var[(2:ncol(var)),(2:ncol(var))]<-RES$asyvar1
+	}
+	
+	if(model == "sarar"){
+		var <- matrix(0,(ncol(RES$asyvar1)+2),(ncol(RES$asyvar1)+2))
+	    var[1,1] <-	RES$lambda.se
+	    var[2,2] <-	RES$rho.se
+	    var[(3:ncol(var)),(3:ncol(var))] <- RES$asyvar1
+	}
+	
+} 
 
 else{
 
 if(model == "lag" ){
-	var<-matrix(0,(ncol(RES$asyvar1)+1),(ncol(RES$asyvar1)+1))
+   var<-matrix(0,(ncol(RES$asyvar1)+1),(ncol(RES$asyvar1)+1))
    var[1,1]<-	RES$lambda.se
    var[(2:ncol(var)),(2:ncol(var))]<-RES$asyvar1
 	}
@@ -419,20 +440,22 @@ if(model == "error" ){
 	}
 	
 if(model == "sarar"){
-	var<-matrix(0,(ncol(RES$asyvar1)+2),(ncol(RES$asyvar1)+2))
+   var<-matrix(0,(ncol(RES$asyvar1)+2),(ncol(RES$asyvar1)+2))
    var[1,1]<-	RES$lambda.se
    var[2,2]<-	RES$rho.se
    var[(3:ncol(var)),(3:ncol(var))]<-RES$asyvar1
+
 	}
 
 }
+
 
 spmod <- list(coefficients=Coeff, errcomp=NULL,
                 vcov = var ,spat.coef=spat.coef,
                 vcov.errcomp=NULL,
                 residuals=res, fitted.values=y.hat,
-                sigma2=RES$s2, type=type, model=model.data,
-                call=cl, logLik=RES$ll, method=method, effects=effects, 
+                sigma2=RES$s2, type=type, model = model.data,
+                call=cl, logLik=RES$ll, method = method, effects=effects, 
                 res.eff=res.eff)
                 
 if (!is.null(na.act)) 

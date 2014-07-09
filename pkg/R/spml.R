@@ -52,6 +52,7 @@ spml <- function(formula, data, index=NULL, listw, listw2=listw, na.action,
     }
     effects <- switch(match.arg(effect), individual="spfe",
                       time="tpfe", twoways="sptpfe")
+
     res <- spfeml(formula=formula, data=data, index=index,
                   listw=listw, listw2=listw2, na.action,
                   model=model, effects=effects,
