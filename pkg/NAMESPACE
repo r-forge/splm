@@ -1,9 +1,14 @@
 importFrom(stats, model.matrix, model.response, aggregate, effects)
-import(nlme)
+importFrom(stats, optim, nlminb)
+importFrom(plm, plm.data)
+importFrom(nlme, fdHess, lme)
 import(spdep)
+importFrom(ibdreg, pchibar)
 import(Matrix)
-importFrom(bdsmatrix,bdsmatrix)
-importFrom(MASS,ginv)
+importFrom(spam, as.spam, diag.spam, solve.spam, t.spam, determinant.spam)
+importFrom(maxLik, maxLik)
+importFrom(bdsmatrix, bdsmatrix)
+importFrom(MASS, ginv)
 
 
 export(bsktest, sphtest, bsjktest, vcov.splm,

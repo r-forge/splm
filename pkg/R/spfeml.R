@@ -31,7 +31,7 @@ con[(namc <- names(control))] <- control
 	  
 	  ## reorder data if needed
   if(!is.null(index)) {
-    require(plm)
+    #require(plm)
     data <- plm.data(data, index)
     }
 
@@ -103,7 +103,7 @@ effects<-match.arg(effects)
 ##checks on listw
   if(is.matrix(listw)) {
     if(dim(listw)[[1]] !=N ) stop("Non conformable spatial weights")
-    require(spdep)
+    #require(spdep)
     listw <- mat2listw(listw)
    }
   if (!inherits(listw, "listw"))

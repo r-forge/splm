@@ -8,19 +8,19 @@ function (formula, data, index = NULL, w, w2=w, lag = FALSE,
 {
     ## mod from spreml5.R to include experimental versions of functions in /optim
 
-    require(maxLik)
+    #require(maxLik)
 
     trace <- as.numeric(!quiet)
     if (pvar)
         print("<implement pvar>")
     if (!is.null(index)) {
-        require(plm)
+        #require(plm)
         data <- plm.data(data, index)
     }
     index <- data[, 1]
     tindex <- data[, 2]
     cl <- match.call()
-    require(nlme)
+    #require(nlme)
     if (!is.matrix(w)) {
         if ("listw" %in% class(w)) {
  #           require(spdep)

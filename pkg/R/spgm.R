@@ -176,7 +176,7 @@ moments<-match.arg(moments)
 indes<-index
 
  if(!is.null(index)) {
-    require(plm)
+    #require(plm)
     data <- plm.data(data, index)
     }
   
@@ -657,7 +657,7 @@ moments<-match.arg(moments)
 indes<-index
 
  if(!is.null(index)) {
-    require(plm)
+    #require(plm)
     data <- plm.data(data, index)
     }
   

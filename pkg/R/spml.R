@@ -24,7 +24,7 @@ spml <- function(formula, data, index=NULL, listw, listw2=listw, na.action,
     
     if(!("listw" %in% class(x))) {
       if("matrix" %in% class(x)) {
-        require(spdep)
+        #require(spdep)
         x <- listw2mat(x)
       } 
       else {

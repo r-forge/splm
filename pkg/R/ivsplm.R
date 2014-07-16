@@ -5,7 +5,7 @@ if(length(method) !=1 && effects == "fixed") method <- "w2sls"
 if(length(method) !=1 && effects == "random") method <- "ec2sls" 	
 		
  if(!is.null(index)) {
-    require(plm)
+    #require(plm)
     data <- plm.data(data, index)
     }
   

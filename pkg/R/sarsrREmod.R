@@ -18,7 +18,7 @@ function (X, y, ind, tind, n, k, t, nT, w, w2, coef0 = rep(0, 3),
     ## - make list of results
 
     ## change this to 'bdsmatrix'
-    require(bdsmatrix)
+    #require(bdsmatrix)
 
     ## set names for final parms vectors
     nam.beta <- dimnames(X)[[2]]

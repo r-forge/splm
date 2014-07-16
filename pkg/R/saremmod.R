@@ -136,7 +136,7 @@ function (X, y, ind, tind, n, k, t., nT, w, w2, coef0 = rep(0, 2),
 
     } else {
 
-        require(maxLik)
+        #require(maxLik)
 
         ## initial values are not allowed to be zero
         maxout<-function(x,a) ifelse(x>a, x, a)

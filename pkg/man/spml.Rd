@@ -81,7 +81,7 @@ URL http://www.jstatsoft.org/v47/i01/.
 \seealso{\code{spgm}}
 
 \examples{
-data(Produc, package = "Ecdat")
+data(Produc, package = "plm")
 data(usaww)
 fm <- log(gsp) ~ log(pcap) + log(pc) + log(emp) + unemp
 ## the two standard specifications (SEM and SAR) one with FE
