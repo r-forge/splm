@@ -12,7 +12,7 @@ importFrom(MASS, ginv)
 
 
 export(bsktest, sphtest, bsjktest, vcov.splm,
-effects.splm, print.effects.splm, write.effects.splm, 
+effects.splm, print.effects.splm, 
 print.splm, spml, spgm, summary.splm, sphtest, listw2dgCMatrix, spreml)
 
 
