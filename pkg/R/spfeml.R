@@ -20,9 +20,9 @@ con[(namc <- names(control))] <- control
     if (length(noNms <- namc[!namc %in% nmsC])) 
             warning("unknown names in control: ", paste(noNms, collapse = ", "))
 
-    if (is.null(quiet)) 
-	quiet <- !get("verbose", envir = spdep:::.spdepOptions)
-    stopifnot(is.logical(quiet))
+##    if (is.null(quiet)) # now this has a default in spml(), hence it never is
+##	quiet <- !get("verbose", envir = spdep:::.spdepOptions)
+##    stopifnot(is.logical(quiet))
 
 	if (is.null(zero.policy))
             zero.policy <- get.ZeroPolicyOption()
@@ -111,7 +111,7 @@ effects<-match.arg(effects)
      
  		can.sim <- FALSE
     if (listw$style %in% c("W", "S")) 
-        can.sim <- spdep:::can.be.simmed(listw)
+        can.sim <- can.be.simmed(listw)
     if (!is.null(na.act)) {
         subset <- !(1:length(listw$neighbours) %in% na.act)
         listw <- subset(listw, subset, zero.policy = zero.policy)
@@ -140,7 +140,7 @@ if(model == "sarar"){
 
     can.sim2 <- FALSE
     if (listw2$style %in% c("W", "S")) 
-        can.sim2 <- spdep:::can.be.simmed(listw2)
+        can.sim2 <- can.be.simmed(listw2)
     if (!is.null(na.act)) {
         subset <- !(1:length(listw2$neighbours) %in% na.act)
         listw2 <- subset(listw2, subset, zero.policy = zero.policy)
@@ -320,7 +320,7 @@ assign("con", con, envir=env)
         cat(paste("\nSpatial fixed effects model\n", "Jacobian calculated using "))
 
 if(model == "lag"){
-    interval1 <- spdep:::jacobianSetup(method, env, con, pre_eig = con$pre_eig, trs = trs1, interval = interval1)
+    interval1 <- jacobianSetup(method, env, con, pre_eig = con$pre_eig, trs = trs1, interval = interval1)
     assign("interval1", interval1, envir = env)
 
 
@@ -332,9 +332,9 @@ if(model == "lag"){
 
 if(model == "sarar"){
 	
-    interval1 <- spdep:::jacobianSetup(method, env, con, pre_eig = con$pre_eig1, trs = trs1, interval = interval1, which = 1)
+    interval1 <- jacobianSetup(method, env, con, pre_eig = con$pre_eig1, trs = trs1, interval = interval1, which = 1)
     assign("interval1", interval1, envir = env)
-    interval2 <- spdep:::jacobianSetup(method, env, con, pre_eig = con$pre_eig2, trs = trs2, interval = interval2, which = 2)
+    interval2 <- jacobianSetup(method, env, con, pre_eig = con$pre_eig2, trs = trs2, interval = interval2, which = 2)
     assign("interval2", interval2, envir = env)
     # nm <- paste(method, "set_up", sep = "_")
     # timings[[nm]] <- proc.time() - .ptime_start
@@ -351,7 +351,7 @@ res.eff<-felag(env = env, beta=RES$coeff, sige=RES$s2, effects = effects ,method
 
 if (model=='error'){
 
-    interval1 <- spdep:::jacobianSetup(method, env, con, pre_eig = con$pre_eig, trs = trs1, interval = interval1)
+    interval1 <- jacobianSetup(method, env, con, pre_eig = con$pre_eig, trs = trs1, interval = interval1)
     assign("interval1", interval1, envir = env)
     # nm <- paste(method, "set_up", sep = "_")
     # timings[[nm]] <- proc.time() - .ptime_start
