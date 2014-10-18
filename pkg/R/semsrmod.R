@@ -17,8 +17,8 @@ function (X, y, ind, tind, n, k, t., nT, w, w2, coef0 = rep(0, 3),
     ## - calc final covariances
     ## - make list of results
 
-    # mark
-    #print("uso versione 0")
+    ## if w2!=w has been specified, then let w=w2
+    w <- w2
 
     ## set names for final parms vectors
     nam.beta <- dimnames(X)[[2]]
