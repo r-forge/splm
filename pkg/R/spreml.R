@@ -32,8 +32,11 @@ function (formula, data, index = NULL, w, w2=w, lag = FALSE,
     }
     if (dim(data)[[1]] != length(index))
         stop("Non conformable arguments")
-    X <- model.matrix(formula, data = data)
-    y <- model.response(model.frame(formula, data = data))
+#    X <- model.matrix(formula, data = data)
+#    y <- model.response(model.frame(formula, data = data))
+    pmod <- plm(formula, data, model="pooling")
+    X <- model.matrix(pmod)
+    y <- pmodel.response(pmod)
     names(index) <- row.names(data)
     ind <- index[which(names(index) %in% row.names(X))]
     tind <- tindex[which(names(index) %in% row.names(X))]
