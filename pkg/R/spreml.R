@@ -11,8 +11,6 @@ function (formula, data, index = NULL, w, w2=w, lag = FALSE,
     #require(maxLik)
 
     trace <- as.numeric(!quiet)
-    if (pvar)
-        print("<implement pvar>")
     if (!is.null(index)) {
         #require(plm)
         data <- plm.data(data, index)
@@ -24,7 +22,7 @@ function (formula, data, index = NULL, w, w2=w, lag = FALSE,
     if (!is.matrix(w)) {
         if ("listw" %in% class(w)) {
  #           require(spdep)
- #           w <- listw2mat(w)
+            w <- listw2mat(w)
         }
         else {
             stop("w has to be either a 'matrix' or a 'listw' object")
@@ -51,7 +49,7 @@ function (formula, data, index = NULL, w, w2=w, lag = FALSE,
     nT <- length(ind)
 #    if (dim(w)[[1]] != n)
 #        stop("Non conformable spatial weights") # temporary: adapt to listw or mat
-    balanced <- n * t == nT
+    balanced <- pdim(pmod)$balanced
     if (!balanced)
         stop("Estimation method unavailable for unbalanced panels")
     sv.length <- switch(match.arg(errors), semsrre = 3, semsr = 2,
