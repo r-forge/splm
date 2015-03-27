@@ -6,38 +6,40 @@ function (formula, data, index = NULL, w, w2=w, lag = FALSE,
           initval = c("zeros", "estimate"),
           x.tol = 1.5e-18, rel.tol = 1e-15, ...)
 {
-    ## mod from spreml5.R to include experimental versions of functions in /optim
-
-    #require(maxLik)
 
     trace <- as.numeric(!quiet)
     if (!is.null(index)) {
         #require(plm)
         data <- plm.data(data, index)
     }
-    index <- data[, 1]
-    tindex <- data[, 2]
+    #index <- data[, 1]
+    #tindex <- data[, 2]
     cl <- match.call()
-    #require(nlme)
+ 
     if (!is.matrix(w)) {
         if ("listw" %in% class(w)) {
- #           require(spdep)
-            w <- listw2mat(w)
+             w <- listw2mat(w)
         }
         else {
             stop("w has to be either a 'matrix' or a 'listw' object")
         }
     }
-    if (dim(data)[[1]] != length(index))
-        stop("Non conformable arguments")
+    #if (dim(data)[[1]] != length(index))
+    #    stop("Non conformable arguments")
 #    X <- model.matrix(formula, data = data)
 #    y <- model.response(model.frame(formula, data = data))
+
+    ## data management through plm functions
     pmod <- plm(formula, data, model="pooling")
     X <- model.matrix(pmod)
     y <- pmodel.response(pmod)
-    names(index) <- row.names(data)
-    ind <- index[which(names(index) %in% row.names(X))]
-    tind <- tindex[which(names(index) %in% row.names(X))]
+    
+    #names(index) <- row.names(data)
+    #ind <- index[which(names(index) %in% row.names(X))]
+    #tind <- tindex[which(names(index) %in% row.names(X))]
+
+    ind <- attr(pmod$model, "index")[, 1]
+    tind <- attr(pmod$model, "index")[, 2]
     oo <- order(tind, ind)
     X <- X[oo, , drop=FALSE]
     y <- y[oo]
@@ -47,11 +49,16 @@ function (formula, data, index = NULL, w, w2=w, lag = FALSE,
     k <- dim(X)[[2]]
     t <- max(tapply(X[, 1], ind, length))
     nT <- length(ind)
-#    if (dim(w)[[1]] != n)
-#        stop("Non conformable spatial weights") # temporary: adapt to listw or mat
+
+    ## check compatibility of weights matrix
+    if (dim(w)[[1]] != n) stop("Non conformable spatial weights")
+
+    ## check if balanced
     balanced <- pdim(pmod)$balanced
     if (!balanced)
         stop("Estimation method unavailable for unbalanced panels")
+
+    ## manage initial values
     sv.length <- switch(match.arg(errors), semsrre = 3, semsr = 2,
           srre = 2, semre = 2, re = 1, sr = 1, sem = 1, ols = 0,
           sem2srre = 3, sem2re = 2)
@@ -90,6 +97,8 @@ function (formula, data, index = NULL, w, w2=w, lag = FALSE,
             }
         })
     }
+
+    ## switch actual estimator function
     if (lag) {
         est.fun <- switch(match.arg(errors), semsrre = {
            saremsrREmod
@@ -132,12 +141,13 @@ function (formula, data, index = NULL, w, w2=w, lag = FALSE,
             semmod
         }, ols = {
             olsmod
-            #stop("No lag and no covariance parameters selected: use lm()")
         }, sem2re = {
             sem2REmod
         })
         arcoef <- NULL
     }
+
+    ## estimate and get results
     RES <- est.fun(X, y, ind, tind, n, k, t, nT, w = w, w2 = w2,
                    coef0 = coef0, hess = hess, trace = trace,
                    x.tol = x.tol, rel.tol = rel.tol, ...)
@@ -146,7 +156,8 @@ function (formula, data, index = NULL, w, w2=w, lag = FALSE,
     nam.rows <- dimnames(X)[[1]]
     names(y.hat) <- nam.rows
     names(res) <- nam.rows
-    model.data <- data.frame(cbind(y, X[, -1]))
+    model.data <- data.frame(cbind(y, X[, -1])) # fix case with no intercept
+                                                # using has.intercept
     dimnames(model.data)[[1]] <- nam.rows
     type <- "random effects ML"
     sigma2v <- RES$sigma2

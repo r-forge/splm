@@ -1,3 +1,6 @@
+Changes in Version 1.3-8
+ o Completed implementation of 'plm' infrastructure in spreml; now works with data.frames plus (possibly implicit) indices or pdata.frames indifferently.
+
 Changes in Version 1.3-7
  o Added slag() method for spatially lagging a vector or a pseries
 
