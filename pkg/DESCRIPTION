@@ -1,7 +1,7 @@
 Package: splm
 Title: Econometric Models for Spatial Panel Data
-Version: 1.3-8
-Date: 2015-03-27
+Version: 1.3-9
+Date: 2015-04-01
 Authors@R: c(person(given = "Giovanni", family = "Millo", role = c("aut", "cre"), email = "giovanni.millo@generali.com"),
              person(given = "Gianfranco", family = "Piras", role = c("aut"), email = "gpiras@mac.com"))
 Description: ML and GM estimation and diagnostic testing of econometric models for spatial panel data.
