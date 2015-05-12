@@ -4,6 +4,9 @@ Version: 1.3-9
 Date: 2015-04-01
 Authors@R: c(person(given = "Giovanni", family = "Millo", role = c("aut", "cre"), email = "giovanni.millo@generali.com"),
              person(given = "Gianfranco", family = "Piras", role = c("aut"), email = "gpiras@mac.com"))
+Author: Giovanni Millo [aut],
+	Gianfranco Piras [aut]
+Maintainer: Giovanni Millo <giovanni.millo@generali.com>
 Description: ML and GM estimation and diagnostic testing of econometric models for spatial panel data.
 Depends: R (>= 2.12.0), spdep
 Imports: plm, maxLik, MASS, bdsmatrix, ibdreg, nlme, Matrix, spam
