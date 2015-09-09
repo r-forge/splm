@@ -74,7 +74,7 @@ effects<-match.arg(effects)
 
   #make sure that the model has no intercept if effects !=pooled
   if (attr(attributes(model.frame(formula,data=data))$terms, "intercept") == 1) {
-  	x <- as.matrix(x[,-1])
+  	x <- as.matrix(x[,-1, drop=FALSE])
     colnames(x)<-clnames[-1]
     dimnames(x)[[1]]<-rwnames
     clnames <- clnames[-1]

@@ -1,3 +1,6 @@
+Changes in Version 1.3-10
+ o Fixed a couple of degenerating matrices when K=1 in likelihoodsFE.R by adding ',drop=FALSE' to subsetting '['
+
 Changes in Version 1.3-8
  o Completed implementation of 'plm' infrastructure in spreml; now works with data.frames plus (possibly implicit) indices or pdata.frames indifferently.
 

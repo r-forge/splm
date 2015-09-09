@@ -415,7 +415,7 @@ if(LeeYu && effects == "tpfe"){
         rownames(asyva) <- colnames(asyva) <- c("sigma","rho", colnames(xt))
         s2.se <- sqrt(asyva[1, 1])
         rho.se <- asyva[2, 2]
-        asyvar1 <- asyva[-c(1,2),-c(1,2)]
+        asyvar1 <- asyva[-c(1,2),-c(1,2), drop=FALSE]
         asyv <- asyva[-1,-1]
         rownames(asyvar1) <- colnames(asyvar1) <- colnames(xt)
 
@@ -815,7 +815,7 @@ if(LeeYu && effects == "sptpfe"){
         rho.se <- asyva[2+p, 2+p]
         lambda.se <- asyva[1+p, 1+p]
         rest.se <- sqrt(diag(asyva))[-((p+1):(p+3))]
-        asyvar1 <- asyva[-((p+1):(p+3)),-((p+1):(p+3))]
+        asyvar1 <- asyva[-((p+1):(p+3)),-((p+1):(p+3)), drop=FALSE]
         asyv <- asyva[-(p+3),-(p+3)]
 
 
