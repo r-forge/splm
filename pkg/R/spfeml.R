@@ -1,6 +1,5 @@
-spfeml<-function(formula, data=list(), index=NULL, listw, listw2 = NULL, na.action, model = c("lag","error", "sarar"), effects = c('spfe','tpfe','sptpfe'), method="eigen", quiet = TRUE, zero.policy = NULL, interval1 = NULL, interval2 = NULL, trs1 = NULL, trs2 = NULL, tol.solve = 1e-10, control = list(), legacy = FALSE, llprof = NULL, cl = NULL, Hess = FALSE, LeeYu = FALSE, ...){
+spfeml<-function(formula, data=list(), index=NULL, listw, listw2 = NULL, na.action, model = c("lag","error", "sarar"), effects = c('spfe','tpfe','sptpfe','pooling'), method= "eigen", quiet = TRUE, zero.policy = NULL, interval1 = NULL, interval2 = NULL, trs1 = NULL, trs2 = NULL, tol.solve = 1e-10, control = list(), legacy = FALSE, llprof = NULL, cl = NULL, Hess = FALSE, LeeYu = FALSE, ...){
 
-	  
         # timings <- list()
        # .ptime_start <- proc.time()
 
@@ -47,7 +46,7 @@ con[(namc <- names(control))] <- control
 
 
 #check the effects
-effects<-match.arg(effects)
+# effects<-match.arg(effects)
 
 
   ## check
@@ -245,7 +244,10 @@ if (effects=="sptpfe"){ ####generate the demeaned variables for both types of FE
 	for (i in 1:(k)) xmm[,i]<-rep(mean(x[,i]),NT)
 	xt<-x - xsm - xtm + xmm
 								}
-								
+if(effects == 'pooling')	{
+	yt <- y
+	xt <- x
+}							
 
 	wyt<-unlist(tapply(yt,inde, function(u) lag.listw(listw,u), simplify=TRUE))
 

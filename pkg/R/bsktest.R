@@ -17,9 +17,8 @@ function(x,...){
 `bsktest.formula` <-
 function(x, data, index=NULL, listw,
          test=c("LMH","LM1","LM2","CLMlambda","CLMmu"),
-         standardize=TRUE, ...){
+         standardize=TRUE, method = NULL, ...){
   
-
 switch(match.arg(test), LM1 = {
 
     bsk = slm1test(x, data, index,  listw, standardize, ...)
@@ -38,7 +37,7 @@ switch(match.arg(test), LM1 = {
 
   }, CLMmu = {
 
-    bsk = clmmtest(x, data, index,  listw, ...)
+    bsk = clmmtest(x, data, index,  listw, method = method,...)
 
   })
 
@@ -532,15 +531,11 @@ if (LM1<=0){
 
 
 `clmmtest` <-
-function(formula, data, index=NULL, listw, ...){
+function(formula, data, index=NULL, listw, method, ...){
 
-## print("uso questa")
-
-ml <- spfeml(formula=formula, data=data, index=index, listw=listw, model="error", effects="pooled")
-    ## spml(formula, data=data, index=index, listw, errors = "BSK", effects = "fixed", lag = FALSE, spatial.error = TRUE)
+ml <- spfeml(formula=formula, data=data, index=index, listw=listw, model="error", effects="pooling", method = method)
 
 	 if(!is.null(index)) {
-    #require(plm)
     data <- plm.data(data, index)
     }
 
@@ -588,9 +583,6 @@ vc<-function(R) {
 
 	eme<-unlist(tapply(eML,inde,vc))
 
-#	eme<-tapply(eML,inde1,mean)
-#	emme<-eML - rep(eme,T)
-#
 	sigmav2<-crossprod(eML,eme)/(N*T)
 	sigmav4<-sigmav2^2
 

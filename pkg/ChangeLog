@@ -1,3 +1,7 @@
+
+Changes in Version 1.3-11
+ o Fixed bsktest when test is “CLMmu”. November 25, 2015 See email from Luc Anselin
+
 Changes in Version 1.3-10
  o Fixed a couple of degenerating matrices when K=1 in likelihoodsFE.R by adding ',drop=FALSE' to subsetting '['
 

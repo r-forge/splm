@@ -1,7 +1,7 @@
 Package: splm
 Title: Econometric Models for Spatial Panel Data
-Version: 1.3-10
-Date: 2015-09-09
+Version: 1.3-11
+Date: 2015-11-25
 Authors@R: c(person(given = "Giovanni", family = "Millo", role = c("aut", "cre"), email = "giovanni.millo@generali.com"),
              person(given = "Gianfranco", family = "Piras", role = c("aut"), email = "gpiras@mac.com"))
 Author: Giovanni Millo [aut, cre],

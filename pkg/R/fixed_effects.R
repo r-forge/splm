@@ -76,7 +76,7 @@ if (effects== "sptpfe"){
 FE.out<-list(res.tfe=res.tfe, res.se.tfe=res.se.tfe, res.sfe=res.sfe, res.se.sfe=res.se.sfe, intercept=intercept, res.se.con=res.se.con,xhat=xhat,N.vars=N.vars,res.e=res.e)
 		}
 		
-if (effects=="pooled") {
+if (effects=="pooling") {
 	xhat <-   x %*% as.matrix(beta)
 	res.e <- y - xhat
 	FE.out<-list(xhat=xhat,N.vars=k,res.e=res.e)
@@ -171,7 +171,7 @@ if (effects== "sptpfe"){
 	res.e <- y - xhat - lambda * wy
 FE.out<-list(res.tfe=res.tfe, res.se.tfe=res.se.tfe, res.sfe=res.sfe, res.se.sfe=res.se.sfe, intercept=intercept, res.se.con=res.se.con,xhat=xhat,N.vars=N.vars,res.e=res.e)
 		}
-if (effects=="pooled") {
+if (effects=="pooling") {
 	xhat <-   x %*% as.matrix(beta)
 	res.e <- y - xhat - lambda* wy
 	FE.out<-list(xhat=xhat,N.vars=k,res.e=res.e)

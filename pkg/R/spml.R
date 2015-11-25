@@ -11,16 +11,6 @@ spml <- function(formula, data, index=NULL, listw, listw2=listw, na.action,
 
   ## check class(listw)
   checklw <- function(x) {
-# if(model == "within"){
-	
-	# if("matrix" %in% class(x)) x <- Matrix(x)
-		# if("listw" %in% class(x)) x <- listw2dgCMatrix(x)
-			# if("Matrix" %in% class(x)) x <- x
-	
-			  # else stop("'listw' has to be 'listw', 'matrix', or 'Matrix' when model is within")
-	
-			# }  	
-# else{
     
     if(!("listw" %in% class(x))) {
       if("matrix" %in% class(x)) {
@@ -39,14 +29,29 @@ spml <- function(formula, data, index=NULL, listw, listw2=listw, na.action,
 
   ## dimensions check is moved downstream
 
+##added by gpiras on November 25, 2015 for consistency with the test bsk
+
+
+if(model == 'pooling' && spatial.error == 'b' && lag ==FALSE){
+
+	res <- spfeml(formula=formula, data=data, index=index,
+                  listw=listw, listw2=listw2, na.action,
+                  model = 'error', effects = "pooling",
+                  cl=cl, ...)
+}
+else{
   switch(match.arg(model), within={
   
     if(lag) {
       model <- switch(match.arg(spatial.error), b="sarar",
                       kkp="sarar", none="lag")
     } else {
+    	
+
     	model <- switch(match.arg(spatial.error), b="error",
                       kkp="error", none="plm")
+                      
+                      
                       
       if(model == "plm") stop("No spatial component, use plm instead") 
     }
@@ -75,6 +80,7 @@ spml <- function(formula, data, index=NULL, listw, listw2=listw, na.action,
                   lag=lag, errors=errors, cl=cl, ...)
          })
 
+}
   return(res)
 }
 
