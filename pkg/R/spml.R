@@ -13,9 +13,10 @@ spml <- function(formula, data, index=NULL, listw, listw2=listw, na.action,
   checklw <- function(x) {
     
     if(!("listw" %in% class(x))) {
+        x <- x
       if("matrix" %in% class(x)) {
         #require(spdep)
-        x <- listw2mat(x)
+        x <- mat2listw(x)
       } 
       else {
         stop("'listw' has to be either a 'listw' or a 'matrix' object")
@@ -24,8 +25,8 @@ spml <- function(formula, data, index=NULL, listw, listw2=listw, na.action,
     return(x)
   }
 
-  checklw(listw)
-  checklw(listw2)
+  listw <- checklw(listw)
+  listw2 <- checklw(listw2)
 
   ## dimensions check is moved downstream
 
@@ -53,7 +54,9 @@ else{
                       
                       
                       
-      if(model == "plm") stop("No spatial component, use plm instead") 
+      if(model == "plm") stop("No spatial component, use plm instead")
+        ## put call to plm() here, fetch results
+        ## and suitably transform them for compliance
     }
     effects <- switch(match.arg(effect), individual="spfe",
                       time="tpfe", twoways="sptpfe")

@@ -159,7 +159,25 @@ function (formula, data, index = NULL, w, w2=w, lag = FALSE,
     model.data <- data.frame(cbind(y, X[, -1])) # fix case with no intercept
                                                 # using has.intercept
     dimnames(model.data)[[1]] <- nam.rows
-    type <- "random effects ML"
+    ## name model 'type'
+    type <- "random effects ML" # this for consistency
+    ## make more elaborate description for printing
+    type.des <- "ML panel with "
+    type.sar <- if(lag) "spatial lag" else ""
+    type.re <- if(grepl("re", errors.)) {
+        if(grepl("2", errors.)) {
+            ", spatial RE (KKP)"
+            } else {
+                ", random effects"
+                }} else ""
+    type.sr <- if(grepl("sr", errors.)) ", AR(1) serial correlation" else ""
+    type.sem <- if(grepl("sem", errors.)) ", spatial error correlation" else ""
+    if(grepl("ols", errors.)) {
+        cong <- if(type.sar=="") "" else " and " 
+        type.des <- paste(type.des, type.sar, cong, "iid errors", sep="")
+    } else {
+        type.des <- paste(type.des, type.sar, paste(type.re, type.sr, type.sem, sep=""), sep="")
+    }
     sigma2v <- RES$sigma2
     sigma2mu <- if(is.null(RES$errcomp["phi"])) {0} else {
       as.numeric(sigma2v*RES$errcomp["phi"])
@@ -169,8 +187,8 @@ function (formula, data, index = NULL, w, w2=w, lag = FALSE,
     spmod <- list(coefficients = RES$betas, arcoef = RES$arcoef,
         errcomp = RES$errcomp, vcov = RES$covB, vcov.arcoef = RES$covAR,
         vcov.errcomp = RES$covPRL, residuals = res, fitted.values = y.hat,
-        sigma2 = sigma2, model = model.data, type = type, call = cl,
-        errors = errors, logLik = RES$ll)
+        sigma2 = sigma2, model = model.data, type = type, type.des=type.des,
+        call = cl, errors = errors, logLik = RES$ll)
     class(spmod) <- "splm"
     return(spmod)
 }

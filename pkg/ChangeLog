@@ -1,3 +1,6 @@
+Changes in Version 1.4-0
+ o Harmonized print.summary for fixed and random models (now fixed print spatial parms separately). Improved header of printout for random type models, now prints a correct description of model type. Fixed cllistw() internal function for checking whether listw is a listw or a matrix and convert if needed. 
+
 Changes in Version 1.3-11
  o Fixed 'itaww.rda' weights matrix for Italian provinces. An '1' was missing between 98 (Lodi) and 19 (Cremona).
 
