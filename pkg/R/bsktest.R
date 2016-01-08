@@ -17,7 +17,7 @@ function(x,...){
 `bsktest.formula` <-
 function(x, data, index=NULL, listw,
          test=c("LMH","LM1","LM2","CLMlambda","CLMmu"),
-         standardize=TRUE, method = NULL, ...){
+         standardize=TRUE, method = "eigen", ...){
   
 switch(match.arg(test), LM1 = {
 

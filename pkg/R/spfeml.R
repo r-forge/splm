@@ -6,7 +6,6 @@ spfeml<-function(formula, data=list(), index=NULL, listw, listw2 = NULL, na.acti
 model<-match.arg(model)
 effects <- match.arg(effects)
 
-
 if (model == "sarar") con <- list(LAPACK = FALSE,  Imult = 2L, cheb_q = 5L, MC_p = 16L, MC_m=30L, super=FALSE, opt_method = "nlminb", opt_control = list(), pars = NULL, npars = 4L, pre_eig1 = NULL, pre_eig2 = NULL)
 
 else     con <- list(tol.opt = .Machine$double.eps^0.5,  Imult = 2, cheb_q = 5, MC_p = 16, MC_m = 30, super = NULL, spamPivot = "MMD", in_coef = 0.1, type = "MC", correct = TRUE, trunc = TRUE, SE_method = "LU", nrho = 200, interpn = 2000, SElndet = NULL, LU_order = FALSE, pre_eig = NULL)
@@ -53,6 +52,22 @@ con[(namc <- names(control))] <- control
   if(dim(data)[[1]]!=length(index)) stop("Non conformable arguments")
 
   ## reduce X,y to model matrix values (no NAs)
+
+  ## the old module based on standard model.matrix etc.
+  ## can be substituted by the module taken from spreml() in
+  ## order to use the functions from 'plm', so that any
+  ## panel transformation of the data can in principle
+  ## be employed (e.g., slag() for spatial Durbins).
+  ## Ready to employ under here:
+  #
+  ## data management through plm functions
+  # pmod <- plm(formula, data, index=index, model="pooling")
+  #  X <- model.matrix(pmod)
+  #  y <- pmodel.response(pmod)
+  #  ind <- attr(pmod$model, "index")[, 1]
+  #  tind <- attr(pmod$model, "index")[, 2]
+  ## Gio 8/1/16
+
   x<-model.matrix(formula,data=data)
   clnames <- colnames(x)
   rwnames <- rownames(x)

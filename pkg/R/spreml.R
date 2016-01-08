@@ -30,7 +30,7 @@ function (formula, data, index = NULL, w, w2=w, lag = FALSE,
 #    y <- model.response(model.frame(formula, data = data))
 
     ## data management through plm functions
-    pmod <- plm(formula, data, model="pooling")
+    pmod <- plm(formula, data, index=index, model="pooling")
     X <- model.matrix(pmod)
     y <- pmodel.response(pmod)
     
