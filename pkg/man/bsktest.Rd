@@ -11,7 +11,7 @@
 bsktest(x,...)
 \method{bsktest}{formula}(x, data, index=NULL, listw,
 test=c("LMH","LM1","LM2","CLMlambda","CLMmu"), 
-standardize=TRUE, method = "eigen", ...)
+standardize=FALSE, method = "eigen", ...)
 }
 \arguments{
 \item{x}{a \code{formula}}
@@ -45,7 +45,7 @@ data(Produc, package="plm")
 data(usaww)
 fm <- log(gsp)~log(pcap)+log(pc)+log(emp)+unemp
 bsktest(fm,data=Produc, listw = mat2listw(usaww),
-  test="LM1", standardize=TRUE)
+  test="LM1")
 }
 
 \keyword{htest}

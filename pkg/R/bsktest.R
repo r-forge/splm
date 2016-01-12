@@ -17,7 +17,7 @@ function(x,...){
 `bsktest.formula` <-
 function(x, data, index=NULL, listw,
          test=c("LMH","LM1","LM2","CLMlambda","CLMmu"),
-         standardize=TRUE, method = "eigen", ...){
+         standardize=FALSE, method = "eigen", ...){
   
 switch(match.arg(test), LM1 = {
 
@@ -250,7 +250,9 @@ yybis<-function(q){
 
 `slm1test` <-
 function(formula, data, index=NULL, listw, standardize, ...){
-
+    ## temporary switch because of bad results in SLM1
+    if(standardize) stop("Standardized SLM1 test temporarily unavailable: \n use 'standardize=FALSE' for LM1 test instead")
+    
   if(!is.null(index)) { ####can be deleted when using the wrapper
     #require(plm)
     data <- plm.data(data, index)
@@ -344,7 +346,8 @@ SLM1<-((G+1)- Ed1)/sqrt(Vd1)
 
 `slm2test` <-
 function(formula, data, index=NULL, listw, standardize, ...){
-
+    if(standardize) stop("Standardized SLM2 test temporarily unavailable: \n use 'standardize=FALSE' for LM2 test instead")
+                                              
   if(!is.null(index)) { 
     #require(plm)
     data <- plm.data(data, index)
@@ -533,8 +536,13 @@ if (LM1<=0){
 `clmmtest` <-
 function(formula, data, index=NULL, listw, method, ...){
 
-ml <- spfeml(formula=formula, data=data, index=index, listw=listw, model="error", effects="pooling", method = method)
+##ml <- spfeml(formula=formula, data=data, index=index, listw=listw, model="error", effects="pooling", method = method)
 
+    ## modified for obtaining correct residuals
+    ## (spfeml omitted the intercept)
+    ml <- spreml(formula=formula, data=data, index=index, w=listw,
+                 errors="sem", lag=F)
+                                                        
 	 if(!is.null(index)) {
     data <- plm.data(data, index)
     }
@@ -562,8 +570,9 @@ ml <- spfeml(formula=formula, data=data, index=index, listw=listw, model="error"
 	ind1<-seq(1,N)
 	inde1<-as.numeric(rep(ind1,T))
 
-	lambda<-ml$spat.coef
-	eML<-residuals(ml)
+	lambda <- ml$errcomp["rho"] # was: ml$spat.coef,
+                                    # modified for use with spreml
+        eML<-residuals(ml)
 
  	Ws<-listw2dgCMatrix(listw)
 	Wst<-t(Ws)
