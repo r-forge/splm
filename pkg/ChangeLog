@@ -1,4 +1,7 @@
 Changes in Version 1.4-2
+ o Introduced Baltagi et al. C.3 test (RE conditional on SEM and AR(1)) after successful testing.
+
+Changes in Version 1.4-2
  o Set method="eigen" as default in bsktest, as claimed in the "Arguments" section of the docs bsktest.Rd (previous setting at NULL broke clmmtest()); fixed bsktest.Rd accordingly (Usage section).
 
 Changes in Version 1.4-0

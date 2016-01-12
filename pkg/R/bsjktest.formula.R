@@ -28,8 +28,7 @@ function(x, data, index=NULL, listw, test=c("C.1","C.2","C.3","J"), ...){
 
   }, C.3 = {
 
-    stop("C.3 test not yet available")
-    #bsjk = pbsjkREtest(formula=x, data=data, w=w, index=index, ...)
+    bsjk = pbsjkREtest(formula=x, data=data, w=w, index=index, ...)
 
   }, J = {
 
