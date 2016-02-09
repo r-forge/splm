@@ -1,4 +1,5 @@
-spfeml<-function(formula, data=list(), index=NULL, listw, listw2 = NULL, na.action, model = c("lag","error", "sarar"), effects = c('spfe','tpfe','sptpfe','pooling'), method= "eigen", quiet = TRUE, zero.policy = NULL, interval1 = NULL, interval2 = NULL, trs1 = NULL, trs2 = NULL, tol.solve = 1e-10, control = list(), legacy = FALSE, llprof = NULL, cl = NULL, Hess = FALSE, LeeYu = FALSE, ...){
+spfeml<-function(formula, data=list(), index=NULL, listw, listw2 = NULL, na.action, 
+model = c("lag","error", "sarar"), effects = c('spfe','tpfe','sptpfe','pooling'), method= "eigen", quiet = TRUE, zero.policy = NULL, interval1 = NULL, interval2 = NULL, trs1 = NULL, trs2 = NULL, tol.solve = 1e-10, control = list(), legacy = FALSE, llprof = NULL, cl = NULL, Hess = FALSE, LeeYu = FALSE, ...){
 
         # timings <- list()
        # .ptime_start <- proc.time()
@@ -102,7 +103,7 @@ con[(namc <- names(control))] <- control
   N<-length(unique(ind))
   n<-N
   ## det. max. group numerosity
-  T<-max(tapply(tind,ind,length))
+  time <-max(tapply(tind,ind,length))
 
   ## det. total number of obs. (robust vs. unbalanced panels)
   NT<-length(ind)
@@ -170,14 +171,14 @@ switch(model, lag = if (!quiet) cat("\n Spatial Lag Fixed Effects Model \n"),
 
 
   ## check whether the panel is balanced
-  balanced<-N*T==NT
+  balanced<-N*time==NT
   if(!balanced) stop("Estimation method unavailable for unbalanced panels")
 
 
-	indic<-seq(1,T)
+	indic<-seq(1,time)
 	inde<-as.numeric(rep(indic,each=N)) ####takes the first n observations
 	indic1<-seq(1,N)
-	inde1<-rep(indic1,T) ####takes observations 1,  n+1, 2n+1...
+	inde1<-rep(indic1,time) ####takes observations 1,  n+1, 2n+1...
   ### generates Wy if model=='lag'
   
   
@@ -186,7 +187,7 @@ assign("y",y, envir=env)
 assign("x",x, envir=env)
 assign("listw",listw, envir=env)
 assign("NT",NT, envir=env)
-assign("T",T, envir=env)
+assign("time",time, envir=env)
 assign("k",k, envir=env)
 assign("n",n, envir=env)
 
@@ -220,13 +221,13 @@ if (effects=="spfe" | effects=="sptpfe"){
 	ysms<-tapply(y,inde1,mean) ###for each cross-sectional unit takes the mean over the time periods
 	spms<-function(q) tapply(q,inde1,mean)
 	xsms<-apply(x,2,spms)
-	ysm<-rep(ysms,T)
+	ysm<-rep(ysms,time)
 	xsm<-matrix(,NT,k)
-	for (i in 1:k) xsm[,i]<-rep(xsms[,i],T)
+	for (i in 1:k) xsm[,i]<-rep(xsms[,i],time)
 
 if (model %in% c("lag", "sarar")){
 			wysms<-tapply(wy,inde1,mean)
-			wysm<-rep(wysms,T)
+			wysm<-rep(wysms,time)
 			assign("wysms",wysms, envir=env)
 			}
 			
@@ -259,10 +260,10 @@ if (effects=="sptpfe"){ ####generate the demeaned variables for both types of FE
 	for (i in 1:(k)) xmm[,i]<-rep(mean(x[,i]),NT)
 	xt<-x - xsm - xtm + xmm
 								}
-if(effects == 'pooling')	{
-	yt <- y
-	xt <- x
-}							
+# if(effects == 'pooling')	{
+	# yt <- y
+	# xt <- x
+# }							
 
 	wyt<-unlist(tapply(yt,inde, function(u) lag.listw(listw,u), simplify=TRUE))
 
