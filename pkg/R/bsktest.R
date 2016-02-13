@@ -20,7 +20,7 @@ function(x, data, index=NULL, listw,
          standardize=FALSE, method = "eigen", ...){
   
 switch(match.arg(test), LM1 = {
-
+    
     bsk = slm1test(x, data, index,  listw, standardize, ...)
 
   }, LM2 = {
@@ -54,7 +54,8 @@ switch(match.arg(test), LM1 = {
 `slm1test` <-
 function(formula, data, index=NULL, listw, standardize, ...){
     ## temporary switch because of bad results in SLM1
-    # if(standardize) stop("Standardized SLM1 test temporarily unavailable: \n use 'standardize=FALSE' for LM1 test instead")
+    # if(standardize) stop("Standardized SLM1 test temporarily unavailable:
+    # \n use 'standardize=FALSE' for LM1 test instead")
     
   if(!is.null(index)) { ####can be deleted when using the wrapper
     #require(plm)
