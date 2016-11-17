@@ -1,3 +1,6 @@
+Changes in Version 1.4-5
+ o Added rwtest() for the randomized CD-p procedure, with methods for formula, pseries and panelmodel.
+
 Changes in Version 1.4-4
  o Fixed clmmtest() in bsktest.R (now takes residuals for the restricted model from spreml(..., errors="sem", lag=F) instead of spfeml()). Temporarily disabled standardized LM tests SLM1 and SLM2; default set at 'standardize=FALSE'in main function.
 	
