@@ -1,9 +1,12 @@
+Changes in Version 1.4-6
+ o Added slmtest() for the (locally robust) LM test of spatial lag sub spatial error or spatial error sub spatial lag; with methods for formula and plm.
+
 Changes in Version 1.4-5
  o Added rwtest() for the randomized CD-p procedure, with methods for formula, pseries and panelmodel.
 
 Changes in Version 1.4-4
  o Fixed clmmtest() in bsktest.R (now takes residuals for the restricted model from spreml(..., errors="sem", lag=F) instead of spfeml()). Temporarily disabled standardized LM tests SLM1 and SLM2; default set at 'standardize=FALSE'in main function.
-	
+
 Changes in Version 1.4-3
  o Introduced Baltagi et al. C.3 test (RE conditional on SEM and AR(1)) after successful testing.
 

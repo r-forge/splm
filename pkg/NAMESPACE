@@ -25,7 +25,7 @@ importFrom(parallel, mclapply)
 export(bsktest, sphtest, bsjktest, vcov.splm,
 effects.splm, print.effects.splm, slag, 
 print.splm, spml, spgm, summary.splm, sphtest,
-listw2dgCMatrix, spreml, rwtest)
+listw2dgCMatrix, spreml, rwtest, slmtest)
 
 
 
@@ -44,3 +44,5 @@ S3method(slag, pseries)
 S3method(rwtest, formula)
 S3method(rwtest, panelmodel)
 S3method(rwtest, pseries)
+S3method(slmtest, formula)
+S3method(slmtest, plm)

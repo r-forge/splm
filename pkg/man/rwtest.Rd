@@ -55,7 +55,7 @@ rwtest(x, \dots)
  \item{order}{the order of neighbourhood to test for,}
  \item{mc}{the number of parallel threads to execute; defaults to 1
   (serial execution); is limited to the number of execution cores
-  actually available.}
+  actually available, and depends on operating system support.}
  \item{test}{the type of test statistic to be returned. One of 
    \itemize{
     \item \code{"rho"} for the average correlation coefficient,
@@ -115,6 +115,8 @@ An object of class \code{"htest"}.
  Pesaran, M.H. (2015), Testing Weak Cross--Sectional Dependence in Large
  Panels, \emph{Econometric Reviews}, \bold{34}(6-10), pp. 1089--1117. 
 }
+
+\author{Giovanni Millo}
 
 \examples{
 data(Produc, package = "plm")
