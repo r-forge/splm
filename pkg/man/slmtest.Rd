@@ -56,9 +56,13 @@ to \code{"pooling"} (no transformation).
 \value{
 an object of class \code{htest}
 }
-\references{Baltagi, B.H., Song, S.H., Jung B. and Koh, W. (2007)
-Testing panel data regression models with spatial and serial error correlation.
-\emph{Journal of Econometrics}, \bold{140}, 5-51.}
+
+\references{Anselin, L., Bera, A.K., Florax, R. and Yoon, M.J. (1996)
+Simple diagnostic tests for spatial dependence.
+\emph{Regional Science and Urban Economics}, \bold{26}(1), 77-104.
+Elhorst, J.P. (2014) Spatial Panel data Models, in Spatial Econometrics
+(Springer) 37-93.}
+
 \author{Giovanni Millo}
 %\seealso{\code{detest}}
 
@@ -66,12 +70,12 @@ Testing panel data regression models with spatial and serial error correlation.
 data(Produc, package="plm")
 data(usaww)
 fm <- log(gsp)~log(pcap)+log(pc)+log(emp)+unemp
-## robust LM test for spatial lag sub spatial error
+## robust LM test for spatial error sub spatial lag
 ## model on original data, pooling hypothesis
-slmtest(fm, data=Produc, listw = usaww, test="rlml")
+slmtest(fm, data=Produc, listw = usaww, test="rlme")
 ## model on within-transformed (time-demeaned) data,
 ## eliminates individual effects
-slmtest(fm, data=Produc, listw = usaww, test="rlml",
+slmtest(fm, data=Produc, listw = usaww, test="rlme",
   model="within")
 }
 
