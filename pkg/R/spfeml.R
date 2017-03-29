@@ -192,7 +192,7 @@ assign("k",k, envir=env)
 assign("n",n, envir=env)
 
 
-wy<-unlist(tapply(y,inde, function(u) lag.listw(listw,u, zero.policy = zero.policy), simplify=TRUE))
+wy <- unlist(tapply(y,inde, function(u) lag.listw(listw,u, zero.policy = zero.policy), simplify=TRUE))
 	
 
 #demeaning of the y and x variables depending both on model and effects
