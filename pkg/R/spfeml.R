@@ -29,10 +29,16 @@ con[(namc <- names(control))] <- control
 	  
 	  
 	  ## reorder data if needed
-  if(!is.null(index)) {
+  #if(!is.null(index)) {
     #require(plm)
-    data <- plm.data(data, index)
-    }
+  #  data <- plm.data(data, index)
+  #  }
+
+## data transform with pdata.frame (plm.data deprecated)
+  ## transform data if needed
+  if(!("pdata.frame" %in% class(data))) {
+    data <- pdata.frame(data, index)
+  }
 
   index <- data[,1]
   tindex <- data[,2]
