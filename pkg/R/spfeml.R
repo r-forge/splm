@@ -1,4 +1,5 @@
-spfeml <- function(formula, data=list(), index=NULL, listw, listw2 = NULL, na.action,
+spfeml <- function(formula, data=list(), index=NULL, listw, listw2 = NULL,
+                   na.action,
                    model = c("lag","error", "sarar"),
                    effects = c('spfe','tpfe','sptpfe','pooling'),
                    method= "eigen", quiet = TRUE, zero.policy = NULL,
@@ -100,8 +101,9 @@ spfeml <- function(formula, data=list(), index=NULL, listw, listw2 = NULL, na.ac
   tind<-tind[oo]
 
 
-    ## make sure that the model has no intercept if effects !=pooled
-    if (attr(attributes(model.frame(formula,data=data))$terms, "intercept") == 1) {
+    ## make sure that the model has no intercept if effects !=pooled # which is always the case here
+    #if (attr(attributes(model.frame(formula,data=data))$terms, "intercept") == 1) {
+    if (attr(terms(pmod), "intercept") == 1) {
   	x <- as.matrix(x[,-1, drop=FALSE])
         colnames(x)<-clnames[-1]
         dimnames(x)[[1]]<-rwnames
@@ -121,10 +123,9 @@ spfeml <- function(formula, data=list(), index=NULL, listw, listw2 = NULL, na.ac
     ## det. total number of obs. (robust vs. unbalanced panels)
     NT<-length(ind)
 
-
+    ## suppressed these for incompatibility with model.frame.plm
     mt<-terms(formula,data=data)
     mf<-lm(formula,data,method="model.frame")#,na.action=na.fail
-
     na.act<-attr(mf,'na.action')
 
 
