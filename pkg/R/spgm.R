@@ -42,7 +42,7 @@ twow <- TRUE
 
 
 	
-if(model == "within" && attr(terms(formula), "intercept") == 0 ) formula <- as.formula(paste(attr(terms(formula),"variables")[1+attr(terms(formula),"response")], paste(attr(terms(formula),"term.labels"), collapse="+"), sep="~"))
+if(model == "fixed" & !isTRUE(attr(terms(formula), "intercept")) ) formula <- as.formula(paste(attr(terms(formula),"variables")[1+attr(terms(formula),"response")], paste(attr(terms(formula),"term.labels"), collapse="+"), sep="~"))
 
 	
 
