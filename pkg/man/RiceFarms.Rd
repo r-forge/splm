@@ -41,7 +41,7 @@
   }
 }
 \source{
-    Journal of Applied Econometrics data archive : \url{http://wileyonlinelibrary.com/journal/jae}.
+    Journal of Applied Econometrics data archive.
 
 }
 \references{
