@@ -6,7 +6,7 @@ function (X, y, ind, tind, n, k, t., nT, w, w2, coef0 = rep(0, 4),
 {
 
     ## New KKP+SR estimator, Giovanni Millo 12/03/2013
-    ## structure:
+    ## structure: 
     ## a) specific part
     ## - set names, bounds and initial values for parms
     ## - define building blocks for likelihood and GLS as functions of parms
