@@ -103,7 +103,7 @@ function (X, y, ind, tind, n, k, t., nT, w, w2, coef0 = rep(0, 4),
     upper.bounds <- c(1e+09, 0.999, 0.999, 0.999)     # lag-specific line (idem)
 
     ## constraints as cA %*% theta + cB >= 0
-    ## equivalent to: phi>=0, -1<=(rho, lambda, psi)<=1
+    ## equivalent to: phi>=0, -1<=(psi, rho, lambda)<=1
     ## NB in maxLik() optimization cannot start at the boundary of the
     ## parameter space !
     cA <- cbind(c(1, rep(0,6)),
