@@ -23,15 +23,18 @@ importFrom(nlme, fdHess, lme)
 #  import(spatialreg)
 #}
 
-## check if we can simplify imports (to avoid dependencies like, e.g., gdata)
+## check if we can rationalize imports from spdep and spatialreg (also to avoid
+## problematic dependencies like, e.g., gdata)
 if (packageVersion("spdep") < 1.2) {
   import(spdep, except=c(do_ldet, eigen_setup, trW, impacts.gmsar, impacts))
   importFrom(spatialreg, do_ldet, eigen_setup, trW, impacts)
 } else {
-  import(spdep, except=c(set.ClusterOption, set.VerboseOption, set.mcOption, 
-    get.VerboseOption, get.coresOption, set.coresOption, set.ZeroPolicyOption, 
-    get.mcOption, get.ClusterOption, get.ZeroPolicyOption))
-  importFrom(spatialreg, impacts,
+  #import(spdep, except=c(set.ClusterOption, set.VerboseOption, set.mcOption, 
+   # get.VerboseOption, get.coresOption, set.coresOption, set.ZeroPolicyOption, 
+    #get.mcOption, get.ClusterOption, get.ZeroPolicyOption))
+    importFrom(spdep, mat2listw, listw2mat, lag.listw, nblag,
+               is.symmetric.nb, is.symmetric.glist, card)
+    importFrom(spatialreg, impacts,
              do_ldet, eigen_setup, trW,
              eigen_pre_setup, Matrix_setup, Matrix_J_setup, spam_setup,
              spam_update_setup, cheb_setup, mcdet_setup, LU_setup,
