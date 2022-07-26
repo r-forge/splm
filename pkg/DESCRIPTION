@@ -1,6 +1,6 @@
 Package: splm
 Title: Econometric Models for Spatial Panel Data
-Version: 1.6-1
+Version: 1.6-2
 Date: 2022-07-26
 Authors@R: c(person(given = "Giovanni", family = "Millo", role = c("aut", "cre"), email = "giovanni.millo@deams.units.it"),
              person(given = "Gianfranco", family = "Piras", role = c("aut"), email = "gpiras@mac.com"),

@@ -201,9 +201,6 @@ function (X, y, ind, tind, n, k, t., nT, w, w2, coef0 = rep(0, 4),
         solve(crossprod(X, sigma.1) %*% X)
 
     ## final vcov(errcomp)
-        #covTheta <- solve(-fdHess(myparms,
-    #                          function(x) -ll.c(x, y, X, n, t., w, w2, wy))$Hessian)
-    #                                              # lag-specific line: wy
     nvcovpms <- length(nam.errcomp) - 1            # lag-specific line: -1
     ## error handler here for singular Hessian cases
     covTheta <- try(solve(-myHessian), silent=TRUE)
