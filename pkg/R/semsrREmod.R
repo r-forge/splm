@@ -197,7 +197,7 @@ function (X, y, ind, tind, n, k, t., nT, w, w2, coef0 = rep(0, 4),
     nvcovpms <- length(nam.errcomp)
     ## error handler here for singular Hessian cases
     covTheta <- try(solve(-myHessian), silent=TRUE)
-    if(class(covTheta)[1] == "try-error") {
+    if(inherits(covTheta, "try-error")) {
         covTheta <- matrix(NA, ncol=nvcovpms,
                            nrow=nvcovpms)
         warning("Hessian matrix is not invertible")
