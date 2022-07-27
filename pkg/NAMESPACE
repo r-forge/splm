@@ -25,10 +25,10 @@ importFrom(nlme, fdHess, lme)
 
 ## check if we can rationalize imports from spdep and spatialreg (also to avoid
 ## problematic dependencies like, e.g., gdata)
-#if (packageVersion("spdep") < 1.2) {
-#  import(spdep, except=c(do_ldet, eigen_setup, trW, impacts.gmsar, impacts))
-#  importFrom(spatialreg, do_ldet, eigen_setup, trW, impacts)
-#} else {
+if (packageVersion("spdep") < 1.2) {
+  import(spdep, except=c(do_ldet, eigen_setup, trW, impacts.gmsar, impacts))
+  importFrom(spatialreg, do_ldet, eigen_setup, trW, impacts)
+} else {
     importFrom(spdep, mat2listw, listw2mat, lag.listw, nblag,
                is.symmetric.nb, is.symmetric.glist, card)
     importFrom(spatialreg, impacts,
@@ -38,7 +38,7 @@ importFrom(nlme, fdHess, lme)
              LU_prepermutate_setup, moments_setup,
              SE_classic_setup, SE_whichMin_setup, SE_interp_setup,
              as.spam.listw, get.ZeroPolicyOption)
-#}
+}
 
 
 importFrom(ibdreg, pchibar)
