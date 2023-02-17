@@ -143,6 +143,6 @@ stop("...\nUnknown method\n"))
     result$legacy <- FALSE
     result$listw_style <- NULL
     result$call <- match.call()
-
+    result$nfimpacts <- "lag_gm"
 result
 }

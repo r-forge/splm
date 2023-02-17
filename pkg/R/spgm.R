@@ -97,7 +97,8 @@ results$ef.sph<- effects
 results$legacy <- c(lag, spatial.error)
 results$endog <- endog
 results$est.meth <- "GM"
-class(results) <- c("splm")
+results$Durbin <- Durbin
+class(results) <- c("splm","splm_GM")
 results
 
 }
@@ -181,9 +182,15 @@ ZpZi<-solve(crossprod(Zp))
 
 
 names(biv)<-Znames
+#print(length(biv))
+#print(Znames)
+#print(dim(varb))
+colnames(varb) <- rownames(varb) <- Znames[-which(is.na(biv))] 
 
 if(any(is.na(biv))) biv<-biv[-which(is.na(biv))] 
-else	biv<-biv
+else	biv <- biv
+
+#print(length(biv))
 
 
 
