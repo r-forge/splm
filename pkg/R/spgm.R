@@ -65,7 +65,7 @@ if(!spatial.error){
 	                lag = lag, listw = listw, 
 	                lag.instruments = lag.instruments, Durbin = Durbin)
 	
-	
+	results$nfimpacts <- "lag_gm"
 	}
 
 
@@ -81,15 +81,18 @@ if(!lag) results <- sperrorgm(formula = formula, data = data, index = index,
                               optim.method = optim.method, pars = pars, Durbin = Durbin)
 #, initial.GMerror = initial.GMerror
 
-else results <- spsarargm(formula = formula, data = data, index = index, 
+else {
+  results <- spsarargm(formula = formula, data = data, index = index, 
                           listw = listw, listw2 = listw2,  
                           moments = moments, lag = lag, endog = endog, 
                           instruments = instruments, verbose = verbose, 
                           effects = effects, control = control, 
                           lag.instruments = lag.instruments, 
                           optim.method = optim.method, pars = pars, twow = twow, Durbin = Durbin)
+  results$nfimpacts <- "sarar_gm"
 
-	}
+}
+}
 #results$lag <- lag
 #results$error <- error
 results$call <- cl
@@ -98,7 +101,7 @@ results$legacy <- c(lag, spatial.error)
 results$endog <- endog
 results$est.meth <- "GM"
 results$Durbin <- Durbin
-class(results) <- c("splm","splm_GM")
+class(results) <- c("splm_GM", "splm")
 results
 
 }
@@ -1215,7 +1218,9 @@ model.data <- data.frame(cbind(y,as.matrix(x)))
     spmod <- list(coefficients=betaGLS, errcomp=  errcomp,
                 vcov=  covbeta, vcov.errcomp=NULL,
                 residuals=as.numeric(egls), fitted.values=fv,
-                sigma2=SGLS,type=type, rho=errcomp, model=model.data, logLik=NULL, coy=yt, cox=xt, rhs=k, type = type)
+                sigma2=SGLS,type=type, rho=errcomp, model=model.data,
+                logLik=NULL, coy=yt, cox=xt, rhs=k, type = type, 
+                nfimpacts = "sarar_gm")
   
 	}
 		}, 
