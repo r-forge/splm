@@ -67,8 +67,18 @@ function(listw,u,N,t){
 	# inde<-rep(ind,each=N)
 	NT<-N*t
 	
-	ub <- as.matrix(listw %*%  u)
-	ubb <- as.matrix(listw %*%  ub)
+	ub <- do.call(rbind, lapply(1:t, function(i) {
+	  idx <- ((i - 1) * N + 1):(i * N)
+	  listw %*% u[idx, ]
+	}))
+	
+	ubb <- do.call(rbind, lapply(1:t, function(i) {
+	  idx <- ((i - 1) * N + 1):(i * N)
+	  listw %*% ub[idx, ]
+	}))
+	
+	# ub <- as.matrix(listw %*%  u)
+	# ubb <- as.matrix(listw %*%  ub)
 
 # # ub<-lag.listwpanel(listw, u, inde)	
 	# ubb<-lag.listwpanel(listw, ub, inde)
@@ -93,7 +103,9 @@ function(listw,u,N,t){
 	ubbQ0ub<-crossprod(ubb,Q0ub)
 	uQ0ubb<-crossprod(u,Q0ubb)
 	# trwpw<-sum(unlist(listw$weights)^2)
-	trwpw <- sum(as.vector(listw)^2)/t
+	##check if this is correct (Abidi mail)
+	#dont divide by t
+	trwpw <- sum(as.vector(listw)^2)
 	
 	G1c<-(1/(N*(t-1)))*rbind(2*uQ0ub, 2*ubbQ0ub,(uQ0ubb+ubQ0ub) )
 	G2c<- (-1/(N*(t-1)))* rbind(ubQ0ub,ubbQ0ubb,ubQ0ubb)
@@ -109,12 +121,16 @@ function(listw,u,N,t){
 function(listw, u, N, t){
 	# ind<-seq(1,T)
 	# inde<-rep(ind,each=N)
-	NT<-N*t
+	NT <- N*t
 	# ub<-lag.listwpanel(listw, u, inde)
 	# ubb<-lag.listwpanel(listw, ub, inde)
-
-	ub <- as.matrix(listw %*%  u)
-	ubb <- as.matrix(listw %*%  ub)
+	
+	
+	ub <- matrix(listw %*% matrix(u, nrow = N, ncol = t), ncol = 1)
+	ubb <- matrix(listw %*% matrix(ub, nrow = N, ncol = t), ncol = 1)
+	
+#	ub <- as.matrix(listw %*%  u)
+#	ubb <- as.matrix(listw %*%  ub)
 	# print(ub)	
 	uu<-crossprod(u)
 	uub<-crossprod(u, ub)
@@ -127,7 +143,9 @@ function(listw, u, N, t){
 	ubbub<-crossprod(ubb, ub)
 
 	# trwpw<-sum(unlist(listw$weights)^2)
-	trwpw <- sum(as.vector(listw)^2)/t
+	#since listw now is n times n
+	trwpw <- sum(as.vector(listw)^2)
+	#trwpw <- sum(as.vector(listw)^2)/t
 	# print(trwpw)
 	G1c<-(1/(N*(t-1)))*rbind(2*uub, 2*ubbub,(uubb+ ubub))	
 	G2c<- (-1/(N*(t-1)))* rbind(ubub,ubbubb, ububb)
@@ -143,17 +161,23 @@ function(listw, u, N, t){
 
 
 `Ggsararsp` <-
-function (W, u, zero.policy = FALSE) 
+function (listw, u, N, t,  zero.policy = FALSE) 
 {
       n <- length(u)
       # tt<-matrix(0,n,1)
-      tr<-sum(W^2)
-      wu  <- as.matrix(W %*% u)
-      wwu <- as.matrix(W %*% wu)
+      tr<- sum(listw^2)
+      
+      
+      wu <- matrix(listw %*% matrix(u, nrow = N, ncol = t), ncol = 1)
+      wwu <- matrix(listw %*% matrix(wu, nrow = N, ncol = t), ncol = 1)
+      
+      
+     # wu  <- as.matrix(W %*% u)
+    #  wwu <- as.matrix(W %*% wu)
       
     	uu <- crossprod(u, u)
     	uwu <- crossprod(u, wu)
- 	uwpuw <- crossprod(wu, wu)
+ 	    uwpuw <- crossprod(wu, wu)
     	uwwu <- crossprod(u, wwu)
     	wwupwu <- crossprod(wwu, wu)
     	wwupwwu <- crossprod(wwu, wwu)
@@ -204,16 +228,19 @@ function(bigG, smallg, Q1u,Q1ub,Q1ubb, u, ub,ubb,N, TR){
 	g1<-rbind(uQ1u, ubQ1ub, uQ1ub)/N
 	GG<-rbind(cbind(bigG,rep(0,3)),G1c)	
 	gg<-rbind(smallg,g1)
-	out<-list(GG=GG,gg=gg)
+	out<-list(GG=as.matrix(GG), gg= as.matrix(gg))
 }
 
 
 `pwbetween` <-
 function(bigG, smallg, u, N, t,TR,listw){
 
-	ub<-as.matrix(listw %*% u)
-	ubb<-as.matrix(listw %*% ub)
-
+  
+  ub <- listw %*% u
+  ubb <- listw %*% ub
+  
+	#ub<-as.matrix(listw %*% u)
+	#ubb<-as.matrix(listw %*% ub)
 	uQ1u<-crossprod(u,u)
 	uQ1ub<-crossprod(u,ub)
 	ubbQ1ub<-crossprod(ubb,ub)
@@ -221,15 +248,17 @@ function(bigG, smallg, u, N, t,TR,listw){
 	uQ1ubb<-crossprod(u,ubb)
 	ubQ1ub<-crossprod(ub,ub)
 	ubQ1ubb<-crossprod(ub,ubb)
+
 	G1c1<-rbind(2*uQ1ub, 2*ubbQ1ub,  (uQ1ubb + ubQ1ub))/N
 	G1c2<-rbind(ubQ1ub, ubbQ1ubb, ubQ1ubb)/-N
 	G1c3<-rbind(1,TR/N,0)
 	G1c<-cbind(G1c1,G1c2,rep(0,3),G1c3)
 	g1<-rbind(uQ1u, ubQ1ub, uQ1ub)/N
+
 	GG<-rbind(cbind(bigG,rep(0,3)),G1c)
 	#print(GG)
 	gg<-rbind(smallg,g1)
-	out<-list(GG=GG,gg=gg)
+	out<-list(GG=as.matrix(GG), gg = as.matrix(gg))
 }
 
 

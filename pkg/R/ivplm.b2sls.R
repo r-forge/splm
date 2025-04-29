@@ -19,7 +19,13 @@ if(isTRUE(Durbin)  | inherits(Durbin, "formula")){
     
     colnmx <- colnames(X)
     colnamesbx <- paste("lag_", colnames(xdur), sep="")
-    wx <- listw %*% xdur
+    
+    wx <- do.call(rbind, lapply(1:t, function(i) {
+      idx <- ((i - 1) * N + 1):(i * N)
+      listw %*% xdur[idx, ]
+    }))
+    
+    #wx <- listw %*% xdur
     X <- cbind(X, wx)
     Xbetween <- panel.transformations(X, indic, type= "between")
     colnames(Xbetween) <- c(colnmx, colnamesbx)
@@ -40,16 +46,27 @@ if(isTRUE(Durbin)  | inherits(Durbin, "formula")){
     colnmx <- colnames(X)
     
     if(colnmx[1] == "(Intercept)"){
-    
-        wx <- listw %*% X[,-1]
+      
+      wx <- do.call(rbind, lapply(1:t, function(i) {
+        idx <- ((i - 1) * N + 1):(i * N)
+        listw %*% xdur[idx, ]
+      }))
+      
+        wx <- wx[,-1]
         colnameswx <- paste("lag_", colnames(X)[-1], sep = "")
         xdu <- cbind(xdu, wx)
         colnames(xdu) <- c(colnmx, colnameswx)
         
     }
     else{
+      
+      wx <- do.call(rbind, lapply(1:t, function(i) {
+        idx <- ((i - 1) * N + 1):(i * N)
+        listw %*% X[idx, ]
+      }))
+      
     
-      wx <- listw %*% X
+      #wx <- listw %*% X
       colnameswx <- paste("lag_", colnames(X), sep = "")
       xdu <- cbind(xdu, wx)
       colnames(xdu) <- c(colnmx, colnameswx)

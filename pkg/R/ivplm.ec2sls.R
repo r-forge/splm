@@ -24,7 +24,14 @@ if(isTRUE(Durbin)  | inherits(Durbin, "formula")){
     
     colnmx <- colnames(X)
     colnameswx <- paste("lag_", colnames(xdur), sep="")
-    wx <- listw %*% xdur
+    
+    wx <- do.call(rbind, lapply(1:t, function(i) {
+      idx <- ((i - 1) * N + 1):(i * N)
+      listw %*% xdur[idx, ]
+    }))
+    
+    
+    #wx <- listw %*% xdur
     X <- cbind(X, wx)
     
     transx   <- panel.transformations(X,indic, type= "both")
@@ -48,11 +55,23 @@ if(isTRUE(Durbin)  | inherits(Durbin, "formula")){
     colnmx <- colnames(X)
     
     if(colnames(X)[1] == "(Intercept)"){
-      wx <- listw %*% X[,-1]  
+      
+      wx <- do.call(rbind, lapply(1:t, function(i) {
+        idx <- ((i - 1) * N + 1):(i * N)
+        listw %*% X[idx, ]
+      }))
+      
+      wx <- wx[,-1]  
       colnameswx <- paste("lag_", colnames(X)[-1], sep="")
     }   
     else {
-      wx <- listw %*% X
+      
+      wx <- do.call(rbind, lapply(1:t, function(i) {
+        idx <- ((i - 1) * N + 1):(i * N)
+        listw %*% X[idx, ]
+      }))
+      
+      #wx <- listw %*% X
       colnameswx <- paste("lag_", colnames(X), sep="")
     }
     
@@ -133,9 +152,11 @@ res$type <- "ec2sls model without spatial lag"
 
 else{
 	
-     wy        <- listw %*%  Y
-     wywithin  <- listw %*% ywithin
-     wywithin  <- as.matrix(wywithin)
+  wy <- matrix(listw %*% matrix(Y, nrow = N, ncol = t), ncol = 1)
+     #wy        <- listw %*%  Y
+  wywithin <- matrix(listw %*% matrix(ywithin, nrow = N, ncol = t), ncol = 1)
+     #wywithin  <- listw %*% ywithin
+     #wywithin  <- as.matrix(wywithin)
      colnames(wywithin)<-"lambda"
   	 wybetween <- listwnn %*% as.matrix(ybetween)
      colnames(wybetween) <- ("lambda")
@@ -150,11 +171,37 @@ if(is.null(endog)){
 
   if(twow){
     
-    WXwithin <- listw %*%  Xwithin
-    WWXwithin <- listw %*% WXwithin
-    W2Xwithin <- listw2 %*%  Xwithin
-    W2WXwithin <- listw2 %*% WXwithin
-    W2WWXwithin <- listw2 %*% WWXwithin
+    
+    WXwithin <- do.call(rbind, lapply(1:t, function(i) {
+      idx <- ((i - 1) * N + 1):(i * N)
+      listw %*% Xwithin[idx, ]
+    }))
+    
+    WWXwithin <- do.call(rbind, lapply(1:t, function(i) {
+      idx <- ((i - 1) * N + 1):(i * N)
+      listw %*% WXwithin[idx, ]
+    }))
+    
+    W2Xwithin <- do.call(rbind, lapply(1:t, function(i) {
+      idx <- ((i - 1) * N + 1):(i * N)
+      listw2 %*% Xwithin[idx, ]
+    }))
+    
+    W2WXwithin <- do.call(rbind, lapply(1:t, function(i) {
+      idx <- ((i - 1) * N + 1):(i * N)
+      listw2 %*% WXwithin[idx, ]
+    }))
+    
+    W2WWXwithin <- do.call(rbind, lapply(1:t, function(i) {
+      idx <- ((i - 1) * N + 1):(i * N)
+      listw2 %*% WWXwithin[idx, ]
+    }))
+    
+    #WXwithin <- listw %*%  Xwithin
+    #WWXwithin <- listw %*% WXwithin
+    #W2Xwithin <- listw2 %*%  Xwithin
+    #W2WXwithin <- listw2 %*% WXwithin
+    #W2WWXwithin <- listw2 %*% WWXwithin
     
     WXbetween <- listwnn %*%  Xbetween
     WWXbetween <- listwnn %*% WXbetween
@@ -168,8 +215,19 @@ if(is.null(endog)){
   }
   else{
     
-    WXwithin <- listw %*%  Xwithin
-    WWXwithin <- listw %*% WXwithin
+    WXwithin <- do.call(rbind, lapply(1:t, function(i) {
+      idx <- ((i - 1) * N + 1):(i * N)
+      listw %*% Xwithin[idx, ]
+    }))
+    
+    WWXwithin <- do.call(rbind, lapply(1:t, function(i) {
+      idx <- ((i - 1) * N + 1):(i * N)
+      listw %*% WXwithin[idx, ]
+    }))
+    
+    
+    #WXwithin <- listw %*%  Xwithin
+    #WWXwithin <- listw %*% WXwithin
     Hwithin <-cbind(as.matrix(WXwithin), as.matrix(WWXwithin))
     
     WXbetween <- listwnn %*%  Xbetween
@@ -219,11 +277,37 @@ for (i in 1:ncol(Hbetween)) Hbetweennt[,i]<-rep(Hbetween[,i], t)
 
 if(twow){
   
-  WXwithin <- listw %*%  Xwithin
-  WWXwithin <- listw %*% WXwithin
-  W2Xwithin <- listw2 %*%  Xwithin
-  W2WXwithin <- listw2 %*% WXwithin
-  W2WWXwithin <- listw2 %*% WWXwithin
+  WXwithin <- do.call(rbind, lapply(1:t, function(i) {
+    idx <- ((i - 1) * N + 1):(i * N)
+    listw %*% Xwithin[idx, ]
+  }))
+  
+  WWXwithin <- do.call(rbind, lapply(1:t, function(i) {
+    idx <- ((i - 1) * N + 1):(i * N)
+    listw %*% WXwithin[idx, ]
+  }))
+  
+  W2Xwithin <- do.call(rbind, lapply(1:t, function(i) {
+    idx <- ((i - 1) * N + 1):(i * N)
+    listw2 %*% Xwithin[idx, ]
+  }))
+  
+  W2WXwithin <- do.call(rbind, lapply(1:t, function(i) {
+    idx <- ((i - 1) * N + 1):(i * N)
+    listw2 %*% WXwithin[idx, ]
+  }))
+  
+  W2WWXwithin <- do.call(rbind, lapply(1:t, function(i) {
+    idx <- ((i - 1) * N + 1):(i * N)
+    listw2 %*% WWXwithin[idx, ]
+  }))
+  
+  
+  #WXwithin <- listw %*%  Xwithin
+  #WWXwithin <- listw %*% WXwithin
+  #W2Xwithin <- listw2 %*%  Xwithin
+  #W2WXwithin <- listw2 %*% WXwithin
+  #W2WWXwithin <- listw2 %*% WWXwithin
   
   WXbetween <- listwnn %*%  Xbetween
   WWXbetween <- listwnn %*% WXbetween
@@ -237,8 +321,19 @@ if(twow){
 }
 else{
   
-  WXwithin <- listw %*%  Xwithin
-  WWXwithin <- listw %*% WXwithin
+  WXwithin <- do.call(rbind, lapply(1:t, function(i) {
+    idx <- ((i - 1) * N + 1):(i * N)
+    listw %*% Xwithin[idx, ]
+  }))
+  
+  WWXwithin <- do.call(rbind, lapply(1:t, function(i) {
+    idx <- ((i - 1) * N + 1):(i * N)
+    listw %*% WXwithin[idx, ]
+  }))
+  
+  
+  #WXwithin <- listw %*%  Xwithin
+  #WWXwithin <- listw %*% WXwithin
   Hwithin <-cbind(Hwithin, as.matrix(WXwithin), as.matrix(WWXwithin))
   
   WXbetween <- listwnn %*%  Xbetween

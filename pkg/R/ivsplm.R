@@ -55,17 +55,17 @@ if(isTRUE(lag) | isTRUE(lag.instruments) | isTRUE(Durbin) | inherits(Durbin, "fo
 
 #### creating the block diagonal matrix for the lag model and for additional instruments
 
-  I_T <- Diagonal(t)
-  Ws  <- kronecker(I_T, listw)
+#  I_T <- Diagonal(t)
+ # Ws  <- kronecker(I_T, listw)
   
-  if(twow)  W2  <- kronecker(I_T, listw2)
-  else      W2  <- NULL
+  if(twow)  listw2  <- listw2
+  else      listw2  <- NULL
 
   
 }
 else{
-  Ws <- NULL
-  W2  <- NULL
+  listw <- NULL
+  listw2  <- NULL
 }
   
 	#if not lag, check if there are endogenous 
@@ -82,14 +82,42 @@ if(!lag && is.null(endog)) stop("No endogenous variables specified. Please use p
     if(lag.instruments){
       
       instruments <- as.matrix(lm(instruments, data, na.action = na.fail, method = "model.frame"))  
-      winst <- Ws %*% instruments
-      wwinst <- Ws %*% winst
+      
+      winst <- do.call(rbind, lapply(1:t, function(i) {
+        idx <- ((i - 1) * N + 1):(i * N)
+        listw %*% instruments[idx, ]
+      }))
+      wwinst <- do.call(rbind, lapply(1:t, function(i) {
+        idx <- ((i - 1) * N + 1):(i * N)
+        listw %*% winst[idx, ]
+      }))
+      
+      
+      #winst <- Ws %*% instruments
+      #wwinst <- Ws %*% winst
       
       if(twow){
-      W2 <- kronecker(I_T, listw2)
-      w2inst <-   Ws %*% instruments
-      w2ws.inst <- W2 %*% winst
-      w2ww.inst <- W2 %*% wwinst
+        
+        w2inst <- do.call(rbind, lapply(1:t, function(i) {
+          idx <- ((i - 1) * N + 1):(i * N)
+          listw2 %*% instruments[idx, ]
+        }))
+        
+        w2ws.inst <- do.call(rbind, lapply(1:t, function(i) {
+          idx <- ((i - 1) * N + 1):(i * N)
+          listw2 %*% winst[idx, ]
+        }))
+        
+        w2ww.inst <- do.call(rbind, lapply(1:t, function(i) {
+          idx <- ((i - 1) * N + 1):(i * N)
+          listw2 %*% wwinst[idx, ]
+        }))
+        
+        
+      #W2 <- kronecker(I_T, listw2)
+      #w2inst <-   Ws %*% instruments
+      #w2ws.inst <- W2 %*% winst
+      #w2ww.inst <- W2 %*% wwinst
       instruments <- cbind(instruments, winst, wwinst, w2inst, w2ws.inst, w2ww.inst)
       }
       
@@ -109,28 +137,28 @@ switch(method,
 w2sls = {
 
   	result <- ivplm.w2sls(Y = y, X = x, H = instruments, endog = endog, 
-	                      twow = twow, lag = lag, listw = Ws, listw2 = W2,
+	                      twow = twow, lag = lag, listw = listw, listw2 = listw2,
 	                      lag.instruments = lag.instruments,
 	                      t = t, N = N, NT = NT, 
 	                      Durbin = Durbin, xdur = xdur)
 	},
 b2sls = {
 	result <- ivplm.b2sls(Y = y, X = x, H = instruments, endog = endog, 
-	                      twow = twow, lag = lag, listw = Ws, listw2 = W2,
+	                      twow = twow, lag = lag, listw = listw, listw2 = listw2,
 	                      lag.instruments = lag.instruments,
 	                      t = t, N = N, NT = NT, 
 	                      Durbin = Durbin, xdur = xdur)
 	},
 ec2sls = {
 	result <- ivplm.ec2sls(Y = y, X = x, H = instruments, endog = endog, 
-	                       twow = twow, lag = lag, listw = Ws, listw2 = W2,
+	                       twow = twow, lag = lag, listw = listw, listw2 = listw2,
 	                       lag.instruments = lag.instruments,
 	                       t = t, N = N, NT = NT, 
 	                       Durbin = Durbin, xdur = xdur)
 	},
 g2sls = {
 	result <-ivplm.g2sls(Y = y, X = x, H = instruments, endog = endog, 
-	                     twow = twow, lag = lag, listw = Ws, listw2 = W2,
+	                     twow = twow, lag = lag, listw = listw, listw2 = listw2,
 	                     lag.instruments = lag.instruments,
 	                     t = t, N = N, NT = NT, 
 	                     Durbin = Durbin, xdur = xdur)
