@@ -152,9 +152,9 @@ data(Produc)
 data(usaww)
 ########SPATIAL LAG MODEL######
 #no space no endog: error use plm
-\dontrun{GM_lag_b2sls <- spgm(log(gsp) ~ log(pcap) + log(pc) + unemp, data=Produc,
+\dontrun{try(GM_lag_b2sls <- spgm(log(gsp) ~ log(pcap) + log(pc) + unemp, data=Produc,
                      lag = FALSE, spatial.error = FALSE, method = "b2sls",
-                     listw = usaww)}
+                     listw = usaww))}
 #no space but endog 
 GM_b2sls_e <- spgm(log(gsp) ~  log(pc) + unemp, data=Produc,
                        lag = FALSE, spatial.error = FALSE, endog = ~ log(pcap),
